@@ -10,25 +10,30 @@ using System.Threading;
 using System.Windows.Forms;
 using Engine;
 
-namespace GameCFinal
+namespace WrathOfTheRuined
 {
     public partial class GameScreen : Form
     {
         private Player player;
-        private Quests quests;
-        public int prog = 0;
+        private Quest quests;
+        public int progress = 0;
         public int path = 0;
         public bool slaughter = false;
         public bool LQ1 = false;
         public bool LQ2 = false;
         public bool DQ1 = false;
         public bool DQ2 = false;
+        public bool VQ1 = false;
+        public bool VQ2 = false;
+        public bool FQ1 = false;
+        public bool FQ2 = false;
+
         Music GameScreenMusic = new Music();
         public GameScreen()
         {
             InitializeComponent();
             player = new Player(1, 1, 1, 1);
-            quests = new Quests();
+            quests = new Quest();
 
 
             GetNameInput();
@@ -58,7 +63,7 @@ namespace GameCFinal
 
         private void BtnContinue_Click(object sender, EventArgs e)
         {
-            switch (prog)
+            switch (progress)
             {
                 case 0:
                     GameTutorial();
@@ -259,10 +264,15 @@ namespace GameCFinal
             TbMain.Text = "You are walking in the wilderness and an enemy approaches." + Environment.NewLine + "You draw your weapon";
             Creature enemy = new Creature(1, 0, 0, 0);
             Combat(player, enemy);
-            prog++;
+            progress++;
             TbMain.Text = "Will you protect your family, or will you tremble as your cowardess takes hold of you?" + Environment.NewLine +
                 "You arm yourself with what scraps your family has left and you head off to the first town Lancaster. Do you help the locals out of the kindness of your heart, or for power and money?" + Environment.NewLine;
-            Lancaster();
+            Town(progress);
+        }
+
+        public void Town(int progress)
+        {
+
         }
 
         public void Lancaster()
@@ -514,7 +524,7 @@ namespace GameCFinal
                     TbMain.Text = "You have already killed everyone. There is nothing left.";
                     TbMain.AppendText(Environment.NewLine + "You move on as there is no one left to do anything with." + Environment.NewLine + "(Press Continue");
                     slaughter = false;
-                    prog++;
+                    progress++;
                 }          
             }
             else if (CbChoice.SelectedIndex == 3)
@@ -524,7 +534,7 @@ namespace GameCFinal
                 CbChoice.Focus();
                 CbChoice.SelectedIndex = -1;
                 slaughter = false;
-                prog++;
+                progress++;
             }
 
             else
@@ -800,7 +810,7 @@ namespace GameCFinal
                 {
                     TbMain.Text = "You have already killed everyone. There is nothing left";
                     TbMain.AppendText(Environment.NewLine + "You move on as there is no one left to do anything with" + Environment.NewLine + "(Press Continue)");
-                    prog++;
+                    progress++;
                 }
             }
             else if (CbChoice.SelectedIndex == 3)
@@ -810,7 +820,7 @@ namespace GameCFinal
                 CbChoice.Focus();
                 CbChoice.SelectedIndex = -1;
                 path = 0;
-                prog++;
+                progress++;
             }
 
             else
@@ -931,7 +941,7 @@ namespace GameCFinal
             }
             else
                 TbMain.Text = "The foe encountered in the wilderness defeated you, you hang your head low whilst walking towards the village within eyeshot";
-            prog++;
+            progress++;
         }
 
         public int Trader(int Gold)

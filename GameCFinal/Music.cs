@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Media;
 
-namespace GameCFinal
+namespace WrathOfTheRuined
 {
     public class Music
     {

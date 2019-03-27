@@ -1,4 +1,4 @@
-﻿namespace GameCFinal
+﻿namespace WrathOfTheRuined
 {
     partial class ChangeStanceForm
     {
