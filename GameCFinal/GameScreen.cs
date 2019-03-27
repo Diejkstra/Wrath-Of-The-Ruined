@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using Engine;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Windows.Forms;
-using Engine;
 
 namespace WrathOfTheRuined
 {
@@ -17,18 +10,14 @@ namespace WrathOfTheRuined
         private Player player;
         private Quest quests;
         public int progress = 0;
+        public int townLoc = 0;             //Used to track where you are in town. 0 = Town Square, 1 = Questboard, 2 = Leaving town
         public int path = 0;
-        public bool slaughter = false;
-        public bool LQ1 = false;
-        public bool LQ2 = false;
-        public bool DQ1 = false;
-        public bool DQ2 = false;
-        public bool VQ1 = false;
-        public bool VQ2 = false;
-        public bool FQ1 = false;
-        public bool FQ2 = false;
+        public bool[] inQuest = new bool[2];          //Array tracking what quest you are currently in. Used for menu navigation.
+        public bool[] townSlaughtered = new bool[4];  //Array tracking which towns are slaughtered. townID matched the array.
+        public bool[] questsComplete = new bool[8];   //Array tracking which quests are complete. questID matches the array.
+        
 
-        Music GameScreenMusic = new Music();
+    Music GameScreenMusic = new Music();
         public GameScreen()
         {
             InitializeComponent();
@@ -61,7 +50,7 @@ namespace WrathOfTheRuined
             Application.Exit();
         }
 
-        private void BtnContinue_Click(object sender, EventArgs e)
+        private void BtnContinue_Click1(object sender, EventArgs e)
         {
             switch (progress)
             {
@@ -267,413 +256,151 @@ namespace WrathOfTheRuined
             progress++;
             TbMain.Text = "Will you protect your family, or will you tremble as your cowardess takes hold of you?" + Environment.NewLine +
                 "You arm yourself with what scraps your family has left and you head off to the first town Lancaster. Do you help the locals out of the kindness of your heart, or for power and money?" + Environment.NewLine;
-            Town(progress);
         }
 
-        public void Town(int progress)
-        {
-
-        }
 
         public void Lancaster()
         {
-            
-            if (CbChoice.SelectedIndex == 0 && path < 9) //Quest Board
-            {
-                CbChoice.Items.Clear();
-                CbChoice.Update();
-                CbChoice.ResetText();
-                TbMain.Text = "You look around....";
-                TbMain.Focus();
-                path = 10;
-                
+            Town Lancaster = new Town(0);
+            BtnContinue.Click -= BtnContinue_Click1;
+            BtnContinue.Click += BtnContinue_Click1;
 
-                CbChoice.Items.Add("The Case of the Lost Teddy"); //10
-                CbChoice.Items.Add("Abandoned Dog"); //11
-                CbChoice.Items.Add("I dont feel like questing");//12                                
-            }
-            else if (path + CbChoice.SelectedIndex == 12)
-            {
-                path = 0;
-                CbChoice.SelectedIndex = -1;
-                TbMain.Text = "You decide the quests ahead are not worth the time or effort" + Environment.NewLine + "(Press Continue)";
-            }
-            
-            else if(path + CbChoice.SelectedIndex == 11)
-            {
-                if (!LQ2)
-                {
+            lblXP.Text = "XP:" + player.ExperiencePoints.ToString();
+            lblGold.Text = "Gold:" + player.Gold.ToString();
+            lblGBP.Text = "GBP:" + player.GBP.ToString();
+            lblLoc.Text = Lancaster.townName;
+            TbMain.Text = "You are standing in the small town of Lancaster.";
 
+            ActionBox.Items.Clear();
+            ActionBox.Items.Add("Check Quest Board");
+            ActionBox.Items.Add("Visit the blacksmith");
+            ActionBox.Items.Add("Slaughter the town");
+            ActionBox.Items.Add("Leave town");
 
-                    TbMain.Text = "You find a dog in the middle of the road. It looks abandoned";
-                    CbChoice.Items.Clear();
-                    CbChoice.Update();
-                    CbChoice.ResetText();
-                    TbMain.Focus();
-                    path = 17;
-                    CbChoice.Items.Add("See if you can return it to its owner.");//17
-                    CbChoice.Items.Add("...You are a little hungry");//18
-                    CbChoice.Items.Add("Who cares. It's just a dog");//19
-                }
-                else
-                {
-                    TbMain.Text = "This quest has already been completed/disabled" + Environment.NewLine + "(Press continue)";
-                    path = -1;
-                    CbChoice.SelectedIndex = -1;
-                    CbChoice.Enabled = false;
-                }
-            }
-            else if(path + CbChoice.SelectedIndex == 17)
-            {
-                TbMain.Text = "You found the owner and he gave you some gold. +5 Gold, +2 GBP" + Environment.NewLine + "(Press Continue)";
-                path = -1;
-                CbChoice.SelectedIndex = -1;
-                player.GBP += 2;
-                lblGBP.Text = "GBP: " + player.GBP.ToString();
-                player.Gold += 5;
-                lblGold.Text = "Gold: " + player.Gold.ToString();
-                LQ2 = true;
-            }
-            else if(path +CbChoice.SelectedIndex == 18)
-            {
-                path = -1;
-                CbChoice.SelectedIndex = -1;
-                TbMain.Text = "You really ate someones dog.... -5 GBP" + Environment.NewLine + "(Press Continue)";
-                player.GBP -= 5;
-                lblGBP.Text = "GBP: " + player.GBP.ToString();
-                LQ2 = true;
-            }
-            else if(path + CbChoice.SelectedIndex == 19)
-            {
-                path = -1;
-                CbChoice.SelectedIndex = -1;
-                TbMain.Text = "You don't have time for stray dogs." + Environment.NewLine + "(Press Continue)";
-                LQ2 = true;
-            }
-
-            else if (path + CbChoice.SelectedIndex == 10)
-            {
-                if (!LQ1)
-                {
-
-
-                    TbMain.Text = "Hey, there is this little girl crying because she lost her teddy bear, what do you do?";
-                    CbChoice.Items.Clear();
-                    CbChoice.Update();
-                    CbChoice.ResetText();
-                    TbMain.Focus();
-                    path = 13;
-                    CbChoice.Items.Add("Help her look for it"); //13
-                    CbChoice.Items.Add("Ignore her, its not your problem");//14
-                    CbChoice.Items.Add("Only look if she gives you gold");//15
-                    CbChoice.Items.Add(".........kill her?!?");//16
-
-                }
-                else
-                {
-                    TbMain.Text = "This quest has already been selected/disabled" + Environment.NewLine + "(Press Continue)";
-                    path = -1;
-                    CbChoice.SelectedIndex = -1;
-                }
-            }
-
-            else if (path + CbChoice.SelectedIndex == 13)
-            {
-                TbMain.Text = "Thanks Mister." + Environment.NewLine + " You find the teddy bear in town. What do you do now?";
-                CbChoice.Items.Clear();
-                CbChoice.Update();
-                CbChoice.ResetText();
-                TbMain.Focus();
-                path = 20;
-                CbChoice.Items.Add("Return the bear.");//20
-                CbChoice.Items.Add("Keep the bear.");//21
-            }
-            else if(path + CbChoice.SelectedIndex == 20)
-            {
-                path = -1;
-                LQ1 = !LQ1;
-                CbChoice.SelectedIndex = -1;
-                TbMain.Text = "You return the bear to the little girl and her dad slips you five gold for making his daughter happy. +1 GBP, +5 Gold" + Environment.NewLine + "(Press Continue)";
-                player.Gold += 5;
-                player.GBP += 1;
-                lblGBP.Text = "GBP: " + player.GBP.ToString();
-                lblGold.Text = "Gold: " + player.Gold.ToString();
-            }
-            else if( path + CbChoice.SelectedIndex == 21)
-            {
-                path = -1;
-                CbChoice.SelectedIndex = -1;
-                TbMain.Text = "You kept the bear you selfish man. -1 GBP" + Environment.NewLine + "(Press Continue)";
-                player.GBP -= 1;
-                lblGBP.Text = "GBP: " + player.GBP.ToString();
-                LQ1 = !LQ1;
-            }
-
-            else if(path + CbChoice.SelectedIndex == 14)
-            {
-                player.GBP -= 1;
-                TbMain.AppendText(Environment.NewLine + "People notice you didnt help the girl. -1 GBP" + Environment.NewLine + "(Press Continue)");
-                lblGBP.Text = "GBP: "+player.GBP.ToString();
-                path = -1;
-                CbChoice.SelectedIndex = -1;
-                LQ1 = !LQ1;
-            }
-
-            else if (path + CbChoice.SelectedIndex == 15)
-            {
-                TbMain.Text = "She only has 2 gold and is saving to buy her dad a present." + Environment.NewLine + "Are you sure you want to extort her?";
-                path = 22;
-                CbChoice.Items.Clear();
-                CbChoice.Update();
-                CbChoice.ResetText();
-                TbMain.Focus();
-                CbChoice.Items.Add("Take the gold for the teddy bear anyway");//22
-                CbChoice.Items.Add("Give her the teddy bear for free");//23
-            }
-            else if(path + CbChoice.SelectedIndex == 22)
-            {
-                TbMain.Text = "You trade the teddy bear for two gold. This is how the real world works, and you have taught her a valuable lesson." + Environment.NewLine + "(Press Continue)";
-                path = -1;
-                LQ1 = !LQ1;
-                CbChoice.SelectedIndex = -1;
-                player.Gold += 2;
-                lblGold.Text = "Gold: " + player.Gold.ToString();
-            }
-            else if(path + CbChoice.SelectedIndex == 23)
-            {
-                TbMain.Text = "You give her the teddy bear for free. +1 GBP" + Environment.NewLine + "(Press Continue)";
-                path = -1;
-                CbChoice.SelectedIndex = -1;
-                LQ1 = !LQ1;
-                player.GBP += 1;
-                lblGBP.Text = "GBP :" + player.Gold.ToString();
-            }
-
-            else if (path + CbChoice.SelectedIndex == 16)
-            {
-                TbMain.AppendText(Environment.NewLine + "Her Parents come to protect her!" +Environment.NewLine + "What do you do?");
-                CbChoice.Items.Clear();
-                CbChoice.Update();
-                CbChoice.ResetText();
-                TbMain.Focus();
-                CbChoice.Items.Add("Kill them too");//24
-                CbChoice.Items.Add("Run away");//25
-                path = 24;
-
-            }
-            else if (path + CbChoice.SelectedIndex == 24)
-            {
-                Creature parent = new Creature(2,2,1,1);
-                parent.Health = parent.currentHealth = 50;
-                parent.GoldDrop = 10;
-                if (Combat(player, parent) == 1)
-                    TbMain.Text = "You manage to fend off the parents." + Environment.NewLine + "(Press Continue)";
-                else
-                    TbMain.Text = "You ran away from some parents..." + Environment.NewLine + "This does not bode well...";
-
-                path = -1;
-                CbChoice.SelectedIndex = -1;
-                LQ1 = !LQ1;
-            }
-            else if (path + CbChoice.SelectedIndex == 25)
-            {
-                TbMain.Text = "You tried to kill a kid and ran. Really...";
-                player.GBP -= 3;
-                path = -1;
-                CbChoice.SelectedIndex = -1;
-                LQ1 = !LQ1;
-                lblGBP.Text = "GBP: " + player.GBP.ToString();
-            }
-
-            else if(CbChoice.SelectedIndex == 1)
-            {
-                MessageBox.Show("WIP :(");
-            }
-            else if (CbChoice.SelectedIndex == 2)
-            {
-                if (!slaughter)
-                {
-                    TbMain.Text = "You brace yourself as the town prepares to battle.";
-                    Creature town = new Creature(1, 1, 1, 1);
-                    town.currentHealth = town.Health = 120;
-                    town.GoldDrop = 50;
-                    if (Combat(player, town) == 1)
-                    {
-                        TbMain.Text = "You chose to kill everyone in sight. They left you with new equipment and some gold.";
-                        player.sword.AssignSwordStats(4);
-                        player.staff.AssignStaffStats(4);
-                        player.armor.AssignArmorStats(4);
-                        slaughter = true;
-                        LQ1 = !LQ1;
-                        LQ2 = !LQ2;
-                        
-                    }
-                    else
-                    {
-                        TbMain.Text = "You chose to run, the town now dislikes you and no longer trusts you. You can no longer do quests in this town. -5 GBP" + Environment.NewLine + "(Press Continue)";
-                        LQ1 = !LQ1;
-                        LQ2 = !LQ2;
-                        player.GBP -= 5;
-                        lblGBP.Text = "GBP: " + player.GBP.ToString();
-                    }
-                    path = -1;
-                    CbChoice.SelectedIndex = -1;
-                }
-                else
-                {
-                    TbMain.Text = "You have already killed everyone. There is nothing left.";
-                    TbMain.AppendText(Environment.NewLine + "You move on as there is no one left to do anything with." + Environment.NewLine + "(Press Continue");
-                    slaughter = false;
-                    progress++;
-                }          
-            }
-            else if (CbChoice.SelectedIndex == 3)
-            {
-                TbMain.Text = "Lancaster was but one step on your journey, so you decide to continue on your quest." + Environment.NewLine + "(Press Continue)";
-                //MessageBox.Show(prog.ToString());
-                CbChoice.Focus();
-                CbChoice.SelectedIndex = -1;
-                slaughter = false;
-                progress++;
-            }
-
-            else
-            {
-                TbMain.Text = "You are in the main square of Lancaster." + Environment.NewLine;
-                lblLoc.Show();
-                lblLoc.Text = "Lancaster";
-                TbMain.AppendText("Your oppurtunites are vast, what shall you decide to do?");
-                CbChoice.Items.Clear();
-                CbChoice.Items.Add("Check out the Quest Board");// 10
-                CbChoice.Items.Add("Buy some Equipment"); //11
-                CbChoice.Items.Add("Slaughter the Town"); //12
-                CbChoice.Items.Add("Leave the town"); //13                   
-            }
-            
         }
        
         public void Doveport()
         {
               
             
-            if(CbChoice.SelectedIndex == 0 && path < 9) //Quest Board
+            if(ActionBox.SelectedIndex == 0 && path < 9) //Quest Board
             {
-                CbChoice.Items.Clear();
-                CbChoice.Update();
-                CbChoice.ResetText();
+                ActionBox.Items.Clear();
+                ActionBox.Update();
+                ActionBox.ResetText();
                 TbMain.Text = "You look around....";
                 TbMain.Focus();
                 path = 10;
 
 
-                CbChoice.Items.Add("Blacksmith In Need"); //10
-                CbChoice.Items.Add("The Future of Doveport"); //11
-                CbChoice.Items.Add("I dont feel like questing");//12                                
+                ActionBox.Items.Add("Blacksmith In Need"); //10
+                ActionBox.Items.Add("The Future of Doveport"); //11
+                ActionBox.Items.Add("I dont feel like questing");//12                                
             }
-            else if(CbChoice.SelectedIndex + path == 12)
+            else if(ActionBox.SelectedIndex + path == 12)
             {
                 path = 0;
-                CbChoice.SelectedIndex = -1;
+                ActionBox.SelectedIndex = -1;
                 TbMain.Text = "You decide the quests ahead are not worth the time or effort" + Environment.NewLine + "(Press Continue)";
             }
 
-            else if(CbChoice.SelectedIndex + path == 10)
+            else if(ActionBox.SelectedIndex + path == 10)
             {
-                if(!DQ1)
+                if(!questsComplete[2])
                 {
                     TbMain.Text = "You see a man being beaten in the middle of the village, what do you do?";
-                    CbChoice.Items.Clear();
-                    CbChoice.Update();
-                    CbChoice.ResetText();
+                    ActionBox.Items.Clear();
+                    ActionBox.Update();
+                    ActionBox.ResetText();
                     TbMain.Focus();
                     path = 13;
-                    CbChoice.Items.Add("Help the man"); //13 16,17
-                    CbChoice.Items.Add("Ignore the man");//14
-                    CbChoice.Items.Add("Join in");//15
+                    ActionBox.Items.Add("Help the man"); //13 16,17
+                    ActionBox.Items.Add("Ignore the man");//14
+                    ActionBox.Items.Add("Join in");//15
                 }
                 else
                 {
                     TbMain.Text = "This quest has already been selected/disabled" + Environment.NewLine + "(Press Continue)";
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
+                    ActionBox.SelectedIndex = -1;
                 }
 
             }
-            else if (CbChoice.SelectedIndex + path == 13)
+            else if (ActionBox.SelectedIndex + path == 13)
             {
                 TbMain.Text = "Do you fight to kill? or Incapacitate?";
-                CbChoice.Items.Clear();
-                CbChoice.Update();
-                CbChoice.ResetText();
+                ActionBox.Items.Clear();
+                ActionBox.Update();
+                ActionBox.ResetText();
                 TbMain.Focus();
                 path = 16;
-                CbChoice.Items.Add("Incapacitate them");//16
-                CbChoice.Items.Add("Kill them");//17
+                ActionBox.Items.Add("Incapacitate them");//16
+                ActionBox.Items.Add("Kill them");//17
             }
-            else if(CbChoice.SelectedIndex + path == 16)
+            else if(ActionBox.SelectedIndex + path == 16)
             {
                 TbMain.AppendText("Thanks for helping me, my guy. You earned a discount at my store.'" + Environment.NewLine + "(Press Continue");
                 player.GBP += 8;
                 lblGBP.Text = "GBP: " + player.GBP.ToString();
                 path = -1;
-                CbChoice.SelectedIndex = -1;
-                DQ1 = true;
+                ActionBox.SelectedIndex = -1;
+                questsComplete[2] = true;
             }
-            else if (CbChoice.SelectedIndex + path == 17)
+            else if (ActionBox.SelectedIndex + path == 17)
             {
                 TbMain.AppendText("You didn't have to kill them, but Thanks for saving me" + Environment.NewLine + "(Press Continue");
                 player.GBP += 5;
                 lblGBP.Text = "GBP: " + player.GBP.ToString();
                 path = -1;
-                CbChoice.SelectedIndex = -1;
-                DQ1 = true;
+                ActionBox.SelectedIndex = -1;
+                questsComplete[2] = true;
             }
-            else if (CbChoice.SelectedIndex + path == 14)
+            else if (ActionBox.SelectedIndex + path == 14)
             {
                 TbMain.Text = "Its not your problem. He probably deserved it";
                 path = -1;
-                CbChoice.SelectedIndex = -1;
-                DQ1 = true;
+                ActionBox.SelectedIndex = -1;
+                questsComplete[2] = true;
             }
-            else if (CbChoice.SelectedIndex + path == 15)
+            else if (ActionBox.SelectedIndex + path == 15)
             {
                 TbMain.Text = "He must have done something to have angered these people. Do you just beat him up or kill him?";
-                CbChoice.Items.Clear();
-                CbChoice.Update();
-                CbChoice.ResetText();
+                ActionBox.Items.Clear();
+                ActionBox.Update();
+                ActionBox.ResetText();
                 TbMain.Focus();
-                CbChoice.Items.Add("Beat him up"); //18
-                CbChoice.Items.Add("Kill him"); //19
+                ActionBox.Items.Add("Beat him up"); //18
+                ActionBox.Items.Add("Kill him"); //19
                 path = 18;
             }
-            else if (CbChoice.SelectedIndex + path == 18)
+            else if (ActionBox.SelectedIndex + path == 18)
             {
                 TbMain.AppendText("'How could you beat me up like that. Im telling everyone in town you did this'");
                 player.GBP += 8;
                 lblGBP.Text = "GBP: " + player.GBP.ToString();
                 path = -1;
-                CbChoice.SelectedIndex = -1;
-                DQ1 = true;
+                ActionBox.SelectedIndex = -1;
+                questsComplete[2] = true;
             }
-            else if (CbChoice.SelectedIndex + path == 19)
+            else if (ActionBox.SelectedIndex + path == 19)
             {
                 TbMain.AppendText("Oh no. It looks like those guys didn't want him dead. You wanna kill them, or get out");
-                CbChoice.Items.Clear();
-                CbChoice.Update();
-                CbChoice.ResetText();
-                CbChoice.Items.Add("Get outta dodge");//20
-                CbChoice.Items.Add("Fight 'em");//21
+                ActionBox.Items.Clear();
+                ActionBox.Update();
+                ActionBox.ResetText();
+                ActionBox.Items.Add("Get outta dodge");//20
+                ActionBox.Items.Add("Fight 'em");//21
                 path = 20;
             }
-            else if (CbChoice.SelectedIndex + path == 20)
+            else if (ActionBox.SelectedIndex + path == 20)
             {
                 TbMain.Text = "You ran away, probably for the better";
                 path = -1;
-                CbChoice.SelectedIndex = -1;
-                DQ1 = true;
+                ActionBox.SelectedIndex = -1;
+                questsComplete[2] = true;
 
             }
-            else if (CbChoice.SelectedIndex + path == 21)
+            else if (ActionBox.SelectedIndex + path == 21)
             {
                 Creature enemy = new Creature(2,2,2,2);
                 enemy.GoldDrop += 30;
@@ -683,8 +410,8 @@ namespace WrathOfTheRuined
                     player.GBP -= 5;
                     lblGBP.Text = "GBP: " + player.GBP.ToString();
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
-                    DQ1 = true;
+                    ActionBox.SelectedIndex = -1;
+                    questsComplete[2] = true;
                 }
                 else
                 {
@@ -692,33 +419,33 @@ namespace WrathOfTheRuined
                     player.GBP -= 10;
                     lblGBP.Text = "GBP: " + player.GBP.ToString();
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
-                    DQ1 = true;
+                    ActionBox.SelectedIndex = -1;
+                    questsComplete[2] = true;
                 }
 
             }
 
-            else if (CbChoice.SelectedIndex + path == 11)
+            else if (ActionBox.SelectedIndex + path == 11)
             {
-                if (!DQ2)
+                if (!questsComplete[3])
                 {
                     TbMain.Text = "These bandits are terrorizing the town and someone is offering moeny to stop them. You up for it?";
-                    CbChoice.Items.Clear();
-                    CbChoice.Update();
-                    CbChoice.ResetText();
+                    ActionBox.Items.Clear();
+                    ActionBox.Update();
+                    ActionBox.ResetText();
                     TbMain.Focus();
                     path = 22;
-                    CbChoice.Items.Add("Destroy the bandits");//22
-                    CbChoice.Items.Add("Maybe the bandits will offer me money to help them"); //23
+                    ActionBox.Items.Add("Destroy the bandits");//22
+                    ActionBox.Items.Add("Maybe the bandits will offer me money to help them"); //23
                 }
                 else
                 {
                     TbMain.Text = "This quest has already been selected/disabled" + Environment.NewLine + "(Press Continue)";
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
+                    ActionBox.SelectedIndex = -1;
                 }
             }
-            else if (CbChoice.SelectedIndex + path == 22)
+            else if (ActionBox.SelectedIndex + path == 22)
             {
                 Creature bandit = new Creature(2,3,3,4);
                 bandit.GoldDrop = 40;
@@ -729,8 +456,8 @@ namespace WrathOfTheRuined
                     player.GBP += 10;
                     lblGBP.Text = "GBP: " + player.GBP.ToString();
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
-                    DQ2 = true;
+                    ActionBox.SelectedIndex = -1;
+                    questsComplete[3] = true;
                 }
                 else
                 {
@@ -738,12 +465,12 @@ namespace WrathOfTheRuined
                     player.GBP += 5;
                     lblGBP.Text = "GBP: " + player.GBP.ToString();
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
-                    DQ2 = true;
+                    ActionBox.SelectedIndex = -1;
+                    questsComplete[3] = true;
                 }
 
             }
-            else if (CbChoice.SelectedIndex + path == 23)
+            else if (ActionBox.SelectedIndex + path == 23)
             {
                 TbMain.Text = "Nope, now they want to kill you" + Environment.NewLine + "(Press Continue)";
                 Creature bandit = new Creature(2, 3, 3, 4);
@@ -755,8 +482,8 @@ namespace WrathOfTheRuined
                     player.GBP += 10;
                     lblGBP.Text = "GBP: " + player.GBP.ToString();
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
-                    DQ2 = true;
+                    ActionBox.SelectedIndex = -1;
+                    questsComplete[3] = true;
                 }
                 else
                 {
@@ -764,21 +491,21 @@ namespace WrathOfTheRuined
                     player.GBP += 5;
                     lblGBP.Text = "GBP: " + player.GBP.ToString();
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
-                    DQ2 = true;
+                    ActionBox.SelectedIndex = -1;
+                    questsComplete[3] = true;
                 }
 
             }
 
 
 
-            else if (CbChoice.SelectedIndex == 1)
+            else if (ActionBox.SelectedIndex == 1)
             {
                 MessageBox.Show("WIP :(");
             }
-            else if (CbChoice.SelectedIndex == 2)
+            else if (ActionBox.SelectedIndex == 2)
             {
-                if (!slaughter)
+                if (!townSlaughtered[1])
                 {
                     TbMain.Text = "You brace yourself as the town prepares to battle";
                     Creature townDoveport = new Creature(2, 4, 4, 3);
@@ -790,21 +517,21 @@ namespace WrathOfTheRuined
                         player.sword.AssignSwordStats(7);
                         player.staff.AssignStaffStats(7);
                         player.armor.AssignArmorStats(7);
-                        slaughter = true;
-                        DQ1 = !DQ1;
-                        DQ2 = !DQ2;
+                        townSlaughtered[1] = true;
+                        questsComplete[2] = true;
+                        questsComplete[3] = true;
 
                     }
                     else
                     {
                         TbMain.Text = "You chose to run and the town dislikes you and no longer trusts you, -5 GBP and you can no longer do quests in this town" + Environment.NewLine + "(Press Continue)";
-                        DQ1 = !DQ1;
-                        DQ2 = !DQ2;
+                        questsComplete[2] = true;
+                        questsComplete[3] = true;
                         player.GBP -= 5;
                         lblGBP.Text = "GBP: " + player.GBP.ToString();
                     }
                     path = -1;
-                    CbChoice.SelectedIndex = -1;
+                    ActionBox.SelectedIndex = -1;
                 }
                 else
                 {
@@ -813,27 +540,27 @@ namespace WrathOfTheRuined
                     progress++;
                 }
             }
-            else if (CbChoice.SelectedIndex == 3)
+            else if (ActionBox.SelectedIndex == 3)
             {
                 TbMain.Text = "Doveport has served you nicely, but you decide that you should continue on your journey." + Environment.NewLine + "(Press Continue)";
                 //MessageBox.Show(prog.ToString());
-                CbChoice.Focus();
-                CbChoice.SelectedIndex = -1;
+                ActionBox.Focus();
+                ActionBox.SelectedIndex = -1;
                 path = 0;
                 progress++;
             }
 
             else
             {
-                CbChoice.SelectedIndex = -1;
+                ActionBox.SelectedIndex = -1;
                 TbMain.Text = "You are standing in downtown Doveport.";
                 lblLoc.Text = "Doveport";
 
-                CbChoice.Items.Clear();
-                CbChoice.Items.Add("Check out the Quest Board");// 10
-                CbChoice.Items.Add("Buy some Equipment"); //11
-                CbChoice.Items.Add("Slaughter the Town"); //12
-                CbChoice.Items.Add("Leave the town"); //13   
+                ActionBox.Items.Clear();
+                ActionBox.Items.Add("Check out the Quest Board");// 10
+                ActionBox.Items.Add("Buy some Equipment"); //11
+                ActionBox.Items.Add("Slaughter the Town"); //12
+                ActionBox.Items.Add("Leave the town"); //13   
             }
 
 
@@ -851,7 +578,7 @@ namespace WrathOfTheRuined
 
         public void RoyalPalace()
         {
-            CbChoice.SelectedIndex = -1;
+            ActionBox.SelectedIndex = -1;
             
             lblLoc.Text = "Royal Palace";
 
@@ -950,6 +677,5 @@ namespace WrathOfTheRuined
             return Gold;
         }
 
-        
     }
 }
