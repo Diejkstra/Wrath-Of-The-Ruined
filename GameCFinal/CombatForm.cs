@@ -17,10 +17,5 @@ namespace WrathOfTheRuined
         {
             InitializeComponent();
         }
-
-        public void btnPlayer_Click(object sender, EventArgs e)
-        {
-            
-        }
     }
 }

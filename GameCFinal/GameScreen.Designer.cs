@@ -119,7 +119,7 @@
             this.BtnContinue.TabIndex = 8;
             this.BtnContinue.Text = "Continue";
             this.BtnContinue.UseVisualStyleBackColor = true;
-            this.BtnContinue.Click += new System.EventHandler(this.BtnContinue_Click1);
+            this.BtnContinue.Click += new System.EventHandler(this.OutsideTownContinueClick);
             // 
             // lblLoc
             // 
