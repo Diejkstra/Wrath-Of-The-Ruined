@@ -45,7 +45,8 @@ namespace Engine
                     BaseSwordDamage = 10;
                     SwordName = "Bronze Sword";
                     MaxSwordDamage = BaseSwordDamage + (SwordID - 1);
-                    SwordName += " +" + (SwordID - 1).ToString();
+                    if (SwordID != 6)
+                        SwordName += " +" + (SwordID - 6).ToString();
                     break;
                 case 12:
                 case 13:
@@ -56,7 +57,8 @@ namespace Engine
                     BaseSwordDamage = 20;
                     SwordName = "Iron Sword";
                     MaxSwordDamage = BaseSwordDamage + (SwordID - 7);
-                    SwordName += " +" + (SwordID - 7).ToString();
+                    if (SwordID != 12)
+                        SwordName += " +" + (SwordID - 12).ToString();
                     break;
                 case 18:
                 case 19:
@@ -67,7 +69,8 @@ namespace Engine
                     BaseSwordDamage = 30;
                     SwordName = "Steel Sword";
                     MaxSwordDamage = BaseSwordDamage + (SwordID - 13);
-                    SwordName += " +" + (SwordID - 13).ToString();
+                    if (SwordID != 18)
+                        SwordName += " +" + (SwordID - 18).ToString();
                     break;
                 case 24:
                 case 25:
@@ -78,17 +81,18 @@ namespace Engine
                     BaseSwordDamage = 40;
                     SwordName = "Silver Sword";
                     MaxSwordDamage = BaseSwordDamage + (SwordID - 19);
-                    SwordName += " +" + (SwordID - 19).ToString();
+                    if (SwordID != 24)
+                        SwordName += " +" + (SwordID - 24).ToString();
                     break;
                 case 1000:
                     BaseSwordDamage = 999;
                     MaxSwordDamage = 1000;
-                    SwordName = "Diet Pepsi";
+                    SwordName = "WireShark";
                     break;
                 case 1001:
                     BaseSwordDamage = 999;
                     MaxSwordDamage = 1000;
-                    SwordName = "Go to Help Night";
+                    SwordName = "Go To Help Night";
                     break;
                 default:
                     SwordName = "Error";

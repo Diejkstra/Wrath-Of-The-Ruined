@@ -36,7 +36,7 @@ namespace WrathOfTheRuined
             if (player.Name == "Tom")
             {
                 player.sword.AssignSwordStats(1001);
-                player.staff.AssignStaffStats(1001);
+                player.staff.AssignStaffStats(1000);
                 player.armor.AssignArmorStats(1001);
                 player.Gold = 50000;
                 player.GBP = 100000;
@@ -168,50 +168,65 @@ namespace WrathOfTheRuined
 
             void InsideTownContinueClick(object sender, EventArgs e)
             {
-                switch (ActionBox.SelectedIndex)
+                if (!townSlaughtered[Town.TownID])
                 {
-                    case 0:
-                        BtnContinue.Click -= InsideTownContinueClick;
-                        BtnContinue.Click += QuestBoardContinueClick;
+                    switch (ActionBox.SelectedIndex)
+                    {
+                        case 0:
+                            BtnContinue.Click -= InsideTownContinueClick;
+                            BtnContinue.Click += QuestBoardContinueClick;
 
-                        TbMain.Text = "You check out the quest board.";
+                            TbMain.Text = "You check out the quest board.";
 
-                        ActionBox.Items.Clear();
-                        ActionBox.Items.Add(Town.Quest1.name);
-                        ActionBox.Items.Add(Town.Quest2.name);
-                        ActionBox.Items.Add("Leave Quest Board");
-                        break;
-                    case 1:
-                        TbMain.Text = "Seems like the blacksmith isn't here right now.";
-                        ActionBox.Items.Clear();
-                        ActionBox.SelectedIndex = -1;
-                        break;
-                    case 2:
-                        TbMain.Text = "You decide to slaughter the town.";
-                        ActionBox.Items.Clear();
-                        ActionBox.SelectedIndex = -1;
-                        break;
-                    case 3:
-                        TbMain.Text = Town.DepartureString;
-                        ActionBox.Items.Clear();
-                        ActionBox.SelectedIndex = -1;
-                        progress++;
-                        BtnContinue.Click -= InsideTownContinueClick;
-                        BtnContinue.Click += OutsideTownContinueClick;
-                        break;
-                    default:
-                        lblPlayerXP.Text = player.ExperiencePoints.ToString();
-                        lblPlayerGold.Text = player.Gold.ToString();
-                        lblPlayerGBP.Text = player.GBP.ToString();
-                        lblLoc.Text = Town.Name;
-                        TbMain.Text = "You are standing in the " + Town.Descriptor + " of " + Town.Name + ".";
+                            ActionBox.Items.Clear();
+                            ActionBox.Items.Add(Town.Quest1.name);
+                            ActionBox.Items.Add(Town.Quest2.name);
+                            ActionBox.Items.Add("Leave Quest Board");
+                            break;
+                        case 1:
+                            TbMain.Text = "Seems like the blacksmith isn't here right now.";
+                            ActionBox.Items.Clear();
+                            ActionBox.SelectedIndex = -1;
+                            break;
+                        case 2:
+                            TbMain.Text = "You decide to slaughter the town.";
+                            ActionBox.Items.Clear();
+                            ActionBox.SelectedIndex = -1;
+                            break;
+                        case 3:
+                            TbMain.Text = Town.DepartureString;
+                            ActionBox.Items.Clear();
+                            ActionBox.SelectedIndex = -1;
+                            progress++;
+                            BtnContinue.Click -= InsideTownContinueClick;
+                            BtnContinue.Click += OutsideTownContinueClick;
+                            break;
+                        default:
+                            lblPlayerXP.Text = player.ExperiencePoints.ToString();
+                            lblPlayerGold.Text = player.Gold.ToString();
+                            lblPlayerGBP.Text = player.GBP.ToString();
+                            lblLoc.Text = Town.Name;
+                            TbMain.Text = "You are standing in the " + Town.Descriptor + " of " + Town.Name + ".";
 
-                        ActionBox.Items.Clear();
-                        ActionBox.Items.Add("Check Quest Board");
-                        ActionBox.Items.Add("Visit the blacksmith");
-                        ActionBox.Items.Add("Slaughter everyone");
-                        ActionBox.Items.Add("Leave");
-                        break;
+                            ActionBox.Items.Clear();
+                            ActionBox.Items.Add("Check Quest Board");
+                            ActionBox.Items.Add("Visit the blacksmith");
+                            ActionBox.Items.Add("Slaughter everyone");
+                            ActionBox.Items.Add("Leave");
+                            break;
+                    }
+                }
+                else
+                {
+                    lblPlayerXP.Text = player.ExperiencePoints.ToString();
+                    lblPlayerGold.Text = player.Gold.ToString();
+                    lblPlayerGBP.Text = player.GBP.ToString();
+                    lblLoc.Text = Town.Name;
+                    TbMain.Text = "You are standing in the remains of " + Town.Name + ".";
+                    ActionBox.Items.Clear();
+                    ActionBox.SelectedIndex = -1;
+                    progress++;
+                    BtnContinue.Click += OutsideTownContinueClick;
                 }
             }
 
@@ -688,6 +703,177 @@ namespace WrathOfTheRuined
                             switch (ActionBox.SelectedIndex)
                             {
                                 case 0:
+                                    TbMain.Text = "You head east towards the bandit camp, and it takes 15 minutes to arrive. The bandits have not seen you yet and they do not look friendly.";
+                                    ActionBox.Items.Clear();
+                                    ActionBox.Items.Add("Walk into camp");
+                                    ActionBox.Items.Add("Kill the bandits");
+                                    ActionBox.Items.Add("Walk back to town");
+                                    ActionBox.SelectedIndex = -1;
+                                    BtnContinue.Click -= Quest3Start;
+                                    BtnContinue.Click += Quest3Click1;
+                                    void Quest3Click1(object sender_1, EventArgs e_1)
+                                    {
+                                        switch (ActionBox.SelectedIndex)
+                                        {
+                                            case 0:
+                                                TbMain.Text = "Walking into camp, you try to act as freindly as possible, and this goes fairly well. One of the bandit guardsman tells you to halt, and asks you why you're here.";
+                                                ActionBox.Items.Clear();
+                                                ActionBox.Items.Add("Kill the bandits");
+                                                ActionBox.Items.Add("Pay the bandits (-500 gp)");
+                                                ActionBox.Items.Add("Ask to join the bandits");
+                                                ActionBox.SelectedIndex = -1;
+                                                BtnContinue.Click -= Quest3Click1;
+                                                BtnContinue.Click -= Quest3Click2;
+                                                void Quest3Click2(object sender_2, EventArgs e_2)
+                                                {
+                                                    switch (ActionBox.SelectedIndex)
+                                                    {
+                                                        case 0:
+                                                            Creature bandit1 = new Creature(5, 0, 1);
+                                                            Creature bandit2 = new Creature(5, 0, 2);
+                                                            Creature bandit3 = new Creature(7, 0, 1);
+                                                            Creature bandit4 = new Creature(7, 0, 2);
+                                                            Creature bandit5 = new Creature(11, 0, 2);
+                                                            Creature bandit6 = new Creature(11, 0, 3);
+                                                            Creature bandit7 = new Creature(15, 0, 3);
+                                                            Creature banditLeader = new Creature(20, 0, 3);
+
+                                                            TbMain.Text = "You pull out yor blade, and the guardsman charges at you, screaming. This alerts the rest of the camp to your motive. A very difficult battle against over half a dozen bandits has started.";
+                                                            ActionBox.Items.Clear();
+                                                            bool killedEnough = false;
+                                                            int result1 = Combat(player, bandit1);
+                                                            if (result1 != 2)
+                                                                result1 = Combat(player, bandit2);
+                                                            if (result1 != 2)
+                                                                result1 = Combat(player, bandit3);
+                                                            if (result1 != 2)
+                                                            {
+                                                                result1 = Combat(player, bandit4);
+                                                                killedEnough = true;
+                                                            }
+                                                            if (result1 != 2)
+                                                                result1 = Combat(player, bandit5);
+                                                            if (result1 != 2)
+                                                                result1 = Combat(player, bandit6);
+                                                            if (result1 != 2)
+                                                                result1 = Combat(player, bandit7);
+                                                            if (result1 != 2)
+                                                                result1 = Combat(player, banditLeader);
+                                                            if( result1 != 2)
+                                                            {
+                                                                TbMain.Text = "Despite all odds, you manage to kill every last bandit. This should take care of the bandit problem. After searching the camp for some extra gold, you walk back to town with the good news." + Environment.NewLine + "+150 Gold, +50GBP" + Environment.NewLine + "Quest Complete";
+                                                                ActionBox.Items.Clear();
+                                                                ActionBox.SelectedIndex = -1;
+                                                                questsComplete[3] = true;
+                                                                player.Gold += 150;
+                                                                player.GBP += 50;
+                                                                BtnContinue.Click -= Quest3Click2;
+                                                                BtnContinue.Click += InsideTownContinueClick;
+                                                            }
+                                                            else
+                                                            {
+                                                                if(killedEnough)
+                                                                {
+                                                                    TbMain.Text = "Sometime during the battle, you decide this might not end well for you. However, you managed to kill a few of them before needing to run away. When you get to town, you tell the guards the bandit camp has seen some losses, and shouldn't pose a great threat to Doveport for the time being. The guards thank you for the help." + Environment.NewLine + "+25 GBP" + Environment.NewLine + "Quest Complete";
+                                                                    ActionBox.Items.Clear();
+                                                                    ActionBox.SelectedIndex = -1;
+                                                                    questsComplete[3] = true;
+                                                                    player.GBP += 25;
+                                                                    BtnContinue.Click -= Quest3Click2;
+                                                                    BtnContinue.Click += InsideTownContinueClick;
+                                                                }
+                                                                else 
+                                                                {
+                                                                    TbMain.Text = "Sometime during the battle, you decide this might not end well for you. Using your better judgement, you run back to town. After arriving back in town, you alert the guards that the bandits are angry. It seems Doveport's days are numbererd." + Environment.NewLine + "+5 GBP" + Environment.NewLine + "Quest Complete";
+                                                                    ActionBox.Items.Clear();
+                                                                    ActionBox.SelectedIndex = -1;
+                                                                    player.GBP += 5;
+                                                                    questsComplete[3] = true;
+                                                                    BtnContinue.Click -= Quest3Click2;
+                                                                    BtnContinue.Click += InsideTownContinueClick;
+                                                                }
+                                                            }
+                                                            break;
+                                                        case 1:
+                                                            if (player.Gold >= 500)
+                                                            {
+                                                                TbMain.Text = "You pull out a large gold pouch, and toss it towards the camp. 500 gold pieces slam into the dirt, and the guardsman drops everything to start grabbing the gold. A mini frenzy has broken loose, which causes the bandit leader to appear. He thanks you for the donation, and tells you the bandit camp will move on from Doveport. You start the walk home, slightly saddened by the loss of gold." + Environment.NewLine + "-500 Gold, +50GBP" + Environment.NewLine + "Quest Complete";
+                                                                ActionBox.SelectedIndex = -1;
+                                                                questsComplete[3] = true;
+                                                                player.Gold -= 500;
+                                                                player.GBP += 50;
+                                                                BtnContinue.Click -= Quest3Click2;
+                                                                BtnContinue.Click += InsideTownContinueClick;
+                                                            }
+                                                            else
+                                                            {
+                                                                TbMain.Text = "Feeling around inside your coin purse, you can't seem to find 500 gold. Perhaps it was in your other pair of pants...";
+                                                                ActionBox.SelectedIndex = -1;
+                                                            }
+                                                            break;
+                                                        case 2:
+                                                            TbMain.Text = "The bandit guardsman is confused by this, but tells you to wait there. He comes back with the bandit leader, and he looks you over. The leader seems impressed, and allows you to join in the raid on Doveport, which will take place tonight. You spend the rest of the day preparing for the raid. At around 2:00 AM, the band sets off towards Doveport, and begins the pillage.";
+                                                            Creature citizen1 = new Creature(3, 0, 1);
+                                                            Creature citizen2 = new Creature(5, 0, 1);
+                                                            Creature citizen3 = new Creature(7, 0, 1);
+                                                            Creature guard1 = new Creature(11, 0, 2);
+                                                            Creature guard2 = new Creature(11, 0, 2);
+                                                            int result2 = Combat(player, citizen1);
+                                                            if (result2 != 2)
+                                                                result2 = Combat(player, citizen2);
+                                                            if (result2 != 2)
+                                                                result2 = Combat(player, guard1);
+                                                            if (result2 != 2)
+                                                                result2 = Combat(player, citizen3);
+                                                            if (result2 != 2)
+                                                                result2 = Combat(player, guard2);
+                                                            if (result2 != 2)
+                                                            {
+                                                                TbMain.Text = "After the siege is over, most of the townsfolk have fled to Lancastor, or have died protecting their belongings. The nine of you scrounge around and come up with enough gold to split about 400 gold each, and 750 for the leader. You and the bandits then part ways, having taken everything this town has to offer." + Environment.NewLine + "+400 Gold, -75GBP" + Environment.NewLine + "Quest Complete";
+                                                                ActionBox.Items.Clear();
+                                                                ActionBox.SelectedIndex = -1;
+                                                                questsComplete[3] = true;
+                                                                player.Gold += 400;
+                                                                player.GBP -= 75;
+                                                                townSlaughtered[1] = true;
+                                                                BtnContinue.Click -= Quest3Click2;
+                                                                BtnContinue.Click += InsideTownContinueClick;
+                                                            }
+                                                            else
+                                                            {
+                                                                TbMain.Text = "For whatever reason, you have fled from Doveport, and cannot bring yourself to look behind you.";
+                                                                ActionBox.Items.Clear();
+                                                                ActionBox.SelectedIndex = -1;
+                                                                questsComplete[3] = true;
+                                                                player.GBP -= 50;
+                                                                townSlaughtered[1] = true;
+                                                                progress++;
+                                                                BtnContinue.Click -= Quest3Click2;
+                                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                            }
+                                                            ActionBox.Items.Clear();
+                                                            break;
+                                                    }
+                                                }
+                                                break;
+                                            case 1:
+                                                ActionBox.Items.Clear();
+                                                ActionBox.Items.Add("");
+                                                ActionBox.SelectedIndex = 0;
+                                                BtnContinue.Click -= Quest3Click1;
+                                                BtnContinue.Click -= Quest3Click2;
+                                                BtnContinue.PerformClick();
+                                                break;
+                                            case 2:
+                                                TbMain.Text = "You decide to head back to town, now is not the time to deal with the bandits.";
+                                                ActionBox.Items.Clear();
+                                                ActionBox.Items.Add("Walk back");
+                                                ActionBox.SelectedIndex = 0;
+                                                BtnContinue.Click -= Quest3Click1;
+                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                break;
+                                        }
+                                    }
                                     break;
                                 case 1:
                                     TbMain.Text = "You can't solve every problem you come across, maybe the guards can handle this one.";
