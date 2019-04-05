@@ -13,7 +13,7 @@ namespace Engine
         public string Name { get; set; }
         
 
-        public Player(int stance, int SwordID, int StaffID, int ArmorID) : base(stance, SwordID, StaffID, ArmorID)
+        public Player(int SwordID, int StaffID, int ArmorID) : base(SwordID, StaffID, ArmorID)
         {
             Gold = 100;
             ExperiencePoints = 0;

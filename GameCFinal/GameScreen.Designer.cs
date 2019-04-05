@@ -28,47 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblXP = new System.Windows.Forms.Label();
-            this.lblGold = new System.Windows.Forms.Label();
-            this.lblGBP = new System.Windows.Forms.Label();
+            this.lblPlayerXP = new System.Windows.Forms.Label();
+            this.lblPlayerGold = new System.Windows.Forms.Label();
+            this.lblPlayerGBP = new System.Windows.Forms.Label();
             this.DgQuests = new System.Windows.Forms.DataGridView();
             this.TbMain = new System.Windows.Forms.RichTextBox();
             this.ActionBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.BtnContinue = new System.Windows.Forms.Button();
             this.lblLoc = new System.Windows.Forms.Label();
+            this.lblXP = new System.Windows.Forms.Label();
+            this.lblGold = new System.Windows.Forms.Label();
+            this.lblGBP = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.DgQuests)).BeginInit();
             this.SuspendLayout();
             // 
-            // lblXP
+            // lblPlayerXP
             // 
-            this.lblXP.AutoSize = true;
-            this.lblXP.Location = new System.Drawing.Point(15, 19);
-            this.lblXP.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblXP.Name = "lblXP";
-            this.lblXP.Size = new System.Drawing.Size(35, 13);
-            this.lblXP.TabIndex = 0;
-            this.lblXP.Text = "label1";
+            this.lblPlayerXP.AutoSize = true;
+            this.lblPlayerXP.Location = new System.Drawing.Point(52, 19);
+            this.lblPlayerXP.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblPlayerXP.Name = "lblPlayerXP";
+            this.lblPlayerXP.Size = new System.Drawing.Size(60, 13);
+            this.lblPlayerXP.TabIndex = 0;
+            this.lblPlayerXP.Text = "lblPlayerXP";
             // 
-            // lblGold
+            // lblPlayerGold
             // 
-            this.lblGold.AutoSize = true;
-            this.lblGold.Location = new System.Drawing.Point(15, 32);
-            this.lblGold.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblGold.Name = "lblGold";
-            this.lblGold.Size = new System.Drawing.Size(35, 13);
-            this.lblGold.TabIndex = 1;
-            this.lblGold.Text = "label1";
+            this.lblPlayerGold.AutoSize = true;
+            this.lblPlayerGold.Location = new System.Drawing.Point(52, 32);
+            this.lblPlayerGold.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblPlayerGold.Name = "lblPlayerGold";
+            this.lblPlayerGold.Size = new System.Drawing.Size(68, 13);
+            this.lblPlayerGold.TabIndex = 1;
+            this.lblPlayerGold.Text = "lblPlayerGold";
             // 
-            // lblGBP
+            // lblPlayerGBP
             // 
-            this.lblGBP.AutoSize = true;
-            this.lblGBP.Location = new System.Drawing.Point(15, 45);
-            this.lblGBP.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblGBP.Name = "lblGBP";
-            this.lblGBP.Size = new System.Drawing.Size(35, 13);
-            this.lblGBP.TabIndex = 2;
-            this.lblGBP.Text = "label1";
+            this.lblPlayerGBP.AutoSize = true;
+            this.lblPlayerGBP.Location = new System.Drawing.Point(52, 45);
+            this.lblPlayerGBP.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblPlayerGBP.Name = "lblPlayerGBP";
+            this.lblPlayerGBP.Size = new System.Drawing.Size(68, 13);
+            this.lblPlayerGBP.TabIndex = 2;
+            this.lblPlayerGBP.Text = "lblPlayerGBP";
             // 
             // DgQuests
             // 
@@ -129,22 +132,52 @@
             this.lblLoc.Name = "lblLoc";
             this.lblLoc.Size = new System.Drawing.Size(35, 13);
             this.lblLoc.TabIndex = 9;
-            this.lblLoc.Text = "label2";
+            this.lblLoc.Text = "lblLoc";
+            // 
+            // lblXP
+            // 
+            this.lblXP.AutoSize = true;
+            this.lblXP.Location = new System.Drawing.Point(15, 19);
+            this.lblXP.Name = "lblXP";
+            this.lblXP.Size = new System.Drawing.Size(24, 13);
+            this.lblXP.TabIndex = 10;
+            this.lblXP.Text = "XP:";
+            // 
+            // lblGold
+            // 
+            this.lblGold.AutoSize = true;
+            this.lblGold.Location = new System.Drawing.Point(15, 32);
+            this.lblGold.Name = "lblGold";
+            this.lblGold.Size = new System.Drawing.Size(32, 13);
+            this.lblGold.TabIndex = 11;
+            this.lblGold.Text = "Gold:";
+            // 
+            // lblGBP
+            // 
+            this.lblGBP.AutoSize = true;
+            this.lblGBP.Location = new System.Drawing.Point(15, 45);
+            this.lblGBP.Name = "lblGBP";
+            this.lblGBP.Size = new System.Drawing.Size(32, 13);
+            this.lblGBP.TabIndex = 12;
+            this.lblGBP.Text = "GBP:";
             // 
             // GameScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(519, 484);
+            this.Controls.Add(this.lblGBP);
+            this.Controls.Add(this.lblGold);
+            this.Controls.Add(this.lblXP);
             this.Controls.Add(this.lblLoc);
             this.Controls.Add(this.BtnContinue);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ActionBox);
             this.Controls.Add(this.TbMain);
             this.Controls.Add(this.DgQuests);
-            this.Controls.Add(this.lblGBP);
-            this.Controls.Add(this.lblGold);
-            this.Controls.Add(this.lblXP);
+            this.Controls.Add(this.lblPlayerGBP);
+            this.Controls.Add(this.lblPlayerGold);
+            this.Controls.Add(this.lblPlayerXP);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "GameScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -159,14 +192,17 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblXP;
-        private System.Windows.Forms.Label lblGold;
-        private System.Windows.Forms.Label lblGBP;
+        private System.Windows.Forms.Label lblPlayerXP;
+        private System.Windows.Forms.Label lblPlayerGold;
+        private System.Windows.Forms.Label lblPlayerGBP;
         private System.Windows.Forms.DataGridView DgQuests;
         private System.Windows.Forms.RichTextBox TbMain;
         private System.Windows.Forms.ComboBox ActionBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button BtnContinue;
         private System.Windows.Forms.Label lblLoc;
+        private System.Windows.Forms.Label lblXP;
+        private System.Windows.Forms.Label lblGold;
+        private System.Windows.Forms.Label lblGBP;
     }
 }

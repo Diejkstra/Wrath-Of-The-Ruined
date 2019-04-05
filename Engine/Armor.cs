@@ -16,6 +16,10 @@ namespace Engine
             ArmorID = ID;
             switch (ID)
             {
+                case -1:
+                    ArmorName = "None";
+                    ArmorPoints = 0;
+                    break;
                 case 0:
                     ArmorName = "Cloth Armor";
                     ArmorPoints = 10;
@@ -36,8 +40,12 @@ namespace Engine
                     ArmorName = "Steel Plate Armor";
                     ArmorPoints = 50;
                     break;
-                case 421:
-                    ArmorName = "player.armor.toms_god_armor";
+                case 1000:
+                    ArmorName = "Black T-Shirt";
+                    ArmorPoints = 1001;
+                    break;
+                case 1001:
+                    ArmorName = "Short Sleeve T-Shirt with a DSU logo";
                     ArmorPoints = 1001;
                     break;
                 default:

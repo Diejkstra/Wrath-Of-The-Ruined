@@ -6,46 +6,46 @@ namespace Engine
 {
     public class Town
     {
-        public string name { get; set; }
-        public string descriptor { get; set; }
-        public string desctription { get; set; }
-        public string departureString { get; set; }
-        public int townID { get; set; }
-        public Quest quest1 = new Quest();
-        public Quest quest2 = new Quest();
+        public string Name { get; set; }
+        public string Descriptor { get; set; }
+        public string Description { get; set; }
+        public string DepartureString { get; set; }
+        public int TownID { get; set; }
+        public Quest Quest1 = new Quest();
+        public Quest Quest2 = new Quest();
 
         public Town (int ID)
         {
-            townID = ID;
+            TownID = ID;
             switch (ID)
             {
                 case 0:
-                    name = "Lancaster";
-                    descriptor = "small town";
-                    departureString = "You decide to head for greener pastures.";
-                    quest1.SetQuest(0);
-                    quest2.SetQuest(1);
+                    Name = "Lancaster";
+                    Descriptor = "small town";
+                    DepartureString = "You decide to head for greener pastures.";
+                    Quest1.SetQuest(0);
+                    Quest2.SetQuest(1);
                     break;
                 case 1:
-                    name = "Doveport";
-                    descriptor = "town";
-                    departureString = "Doveport has given everything it has to offer, and have you decided to move on.";
-                    quest1.SetQuest(2);
-                    quest2.SetQuest(3);
+                    Name = "Doveport";
+                    Descriptor = "town";
+                    DepartureString = "Doveport has given everything it has to offer, and have you decided to move on.";
+                    Quest1.SetQuest(2);
+                    Quest2.SetQuest(3);
                     break;
                 case 2:
-                    name = "Venzor";
-                    descriptor = "bustling city";
-                    departureString = "You decide to close the distance to the Royal Palace once again.";
-                    quest1.SetQuest(4);
-                    quest2.SetQuest(5);
+                    Name = "Venzor";
+                    Descriptor = "bustling city";
+                    DepartureString = "You decide to close the distance to the Royal Palace once again.";
+                    Quest1.SetQuest(4);
+                    Quest2.SetQuest(5);
                     break;
                 case 3:
-                    name = "Fallholt";
-                    descriptor = "royal city";
-                    departureString = "The time has come, you start walking towards the entrance of the Royal Palace.";
-                    quest1.SetQuest(6);
-                    quest2.SetQuest(7);
+                    Name = "Fallholt";
+                    Descriptor = "royal city";
+                    DepartureString = "The time has come, you start walking towards the entrance of the Royal Palace.";
+                    Quest1.SetQuest(6);
+                    Quest2.SetQuest(7);
                     break;
             }
         }

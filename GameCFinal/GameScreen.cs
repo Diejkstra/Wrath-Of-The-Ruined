@@ -2,15 +2,15 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace WrathOfTheRuined
 {
     public partial class GameScreen : Form
     {
         private Player player;
-        private Quest quests;
         public int progress = 0;
-        public int townLoc = 0;             //Used to track where you are in town. 0 = Town Square, 1 = Questboard, 2 = Leaving town
         public int path = 0;
         public bool[] townSlaughtered = new bool[4];  //Array tracking which towns are slaughtered. townID matched the array.
         public bool[] questsComplete = new bool[8];   //Array tracking which quests are complete. questID matches the array.
@@ -20,11 +20,28 @@ namespace WrathOfTheRuined
         public GameScreen()
         {
             InitializeComponent();
-            player = new Player(1, 1, 1, 1);
-            quests = new Quest();
 
-
+            player = new Player(1, 1, 1);
             GetNameInput();
+
+            if (player.Name == "Tully")
+            {
+                player.sword.AssignSwordStats(1000);
+                player.staff.AssignStaffStats(1000);
+                player.armor.AssignArmorStats(1000);
+                player.Gold = 50000;
+                player.GBP = 100000;
+            }
+
+            if (player.Name == "Tom")
+            {
+                player.sword.AssignSwordStats(1001);
+                player.staff.AssignStaffStats(1001);
+                player.armor.AssignArmorStats(1001);
+                player.Gold = 50000;
+                player.GBP = 100000;
+            }
+
             GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
             //actual game code
             TbMain.Text = "Hello " + player.Name + ". You have been asleep for a long time. Have you forgotten who you are? You are a proud member of the Vanin race. I hope you know how to survive." + Environment.NewLine +
@@ -37,11 +54,10 @@ namespace WrathOfTheRuined
 
         private void Game_Load(object sender, EventArgs e)
         {
-            lblXP.Text = "XP:" + player.ExperiencePoints.ToString();
-            lblGold.Text = "Gold:" + player.Gold.ToString();
-            lblGBP.Text = "GBP:" + player.GBP.ToString();
+            lblPlayerXP.Text = player.ExperiencePoints.ToString();
+            lblPlayerGold.Text = player.Gold.ToString();
+            lblPlayerGBP.Text = player.GBP.ToString();
             lblLoc.Text = "Wilderness";
-            //lblLoc.Hide();
         }
 
         public void GetNameInput()
@@ -73,19 +89,19 @@ namespace WrathOfTheRuined
                     Town(0);
                     break;
                 case 2:
-                    Wilderness(0);
+                    Wilderness(1);
                     break;
                 case 3:
                     Town(1);
                     break;
                 case 4:
-                    Wilderness(2);
+                    Wilderness(5);
                     break;
                 case 5:
                     Town(2);
                     break;
                 case 6:
-                    Wilderness(4);
+                    Wilderness(8);
                     break;
                 case 7:
                     Town(3);
@@ -98,161 +114,44 @@ namespace WrathOfTheRuined
 
         public int Combat(Player player, Creature enemy)
         {
-            CombatForm combatF = new CombatForm();
             GameScreenMusic.StopMusic(GameScreenMusic.soundplayer);
             Music CombatMusic = new Music();
             CombatMusic.soundplayer = CombatMusic.StartMusic("Battle");
-            Random rng = new Random();
-
-            player.stance.ChangeStance(player, 2);
-            enemy.stance.ChangeStance(enemy, 2);
-
-            MessageBox.Show("An enemy approaches, you draw your weapon...");
-            CombatRefresh();
-
-            combatF.CbPlayerCombat.Items.Add("1. Attack");
-            combatF.CbPlayerCombat.Items.Add("2. Change Stance");
-            combatF.CbPlayerCombat.Items.Add("3. Magic");
-            combatF.CbPlayerCombat.Items.Add("4. Use Item");
-            combatF.CbPlayerCombat.Items.Add("5. Run Away");
-
-            while (player.currentHealth > 0 && enemy.currentHealth > 0)
+            Hide();
+            CombatForm combatF = new CombatForm();
+            int result = combatF.StartCombat(player, enemy);
+            CombatMusic.StopMusic(CombatMusic.soundplayer);
+            if (result == 0)
             {
-                if (combatF.ShowDialog() == DialogResult.OK)
-                {
-                    fight();
-                    CombatRefresh();
-                    if (combatF.CbPlayerCombat.SelectedIndex == 4)
-                    {
-                        CombatMusic.StopMusic(CombatMusic.soundplayer);
-                        GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
-                        return 2;
-                    }
-                }
-                if (player.currentHealth > 0 && enemy.currentHealth <= 0)
-                {
-                    player.currentHealth = player.Health;
-                    player.Gold += enemy.GoldDrop;
-                    player.Strength +=  (enemy.Strength / 5);
-                    player.Intellect += (enemy.Intellect / 5);
-                    lblGold.Text = "Gold: " + player.Gold.ToString();
-                    CombatMusic.StopMusic(CombatMusic.soundplayer);
-                    GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
-                    return 1;
-                }
-                else if (player.currentHealth <= 0 && enemy.currentHealth > 0)
-                {
-                    CombatMusic.StopMusic(CombatMusic.soundplayer);
-                    GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("GameOver");
-                    MessageBox.Show("Game Over!");
-                    Application.Exit();
-                    return 0;
-                }
+                GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("GameOver");
+                MessageBox.Show("You have died, Game Over.");
+                Application.Restart();
             }
-            return -1; //Error if this is returned
-
-
-            void fight()
+            else if(result == 1 || result == 2)
             {
-                if (player.currentHealth > 0 && enemy.currentHealth > 0)
-                {
-                    if (combatF.CbPlayerCombat.SelectedIndex == 0)
-                    {
-                        enemy.currentHealth = enemy.currentHealth - Convert.ToInt32(Math.Round(player.stance.stanceDMG * (100 - enemy.stance.totalArmor) * .01));
-                    }
-                    else if (combatF.CbPlayerCombat.SelectedIndex == 1)
-                    {
-                        Change_Stance();
-                    }
-                    else if (combatF.CbPlayerCombat.SelectedIndex == 2)
-                    {
-                        enemy.currentHealth = enemy.currentHealth - Convert.ToInt32(Math.Round(player.stance.stanceMGK * (100 - enemy.stance.totalMR) * .01));
-                    }
-                    else if (combatF.CbPlayerCombat.SelectedIndex == 3)
-                    {
-                        MessageBox.Show("WIP :(");
-                    }
-                    else if (combatF.CbPlayerCombat.SelectedIndex == 4)
-                    {
-                        MessageBox.Show("Only Cowards run away!");
-                        int GoldLost = rng.Next(1, 15);
-                        MessageBox.Show("As you ran away you dropped " + GoldLost + " Gold.");
-                        player.Gold -= GoldLost;
-                        lblGold.Text = "Gold: " + player.Gold.ToString();
-                        player.currentHealth = player.Health;
-                    }
-                }
-                
-                                    
-                
-                if (enemy.currentHealth > 0 && (combatF.CbPlayerCombat.SelectedIndex == 0 || combatF.CbPlayerCombat.SelectedIndex == 2 ) )
-                {
-                    if (player.stance.stanceNum == 3)
-                    {
-                        if (player.Endurance >= 10)
-                            player.Endurance -= 10;
-                        player.stance.ChangeStance(player, player.stance.stanceNum);
-                    }
-                    if (player.stance.stanceNum == 1)
-                    {
-                        if (player.Endurance <= 90)
-                            player.Endurance += 10;
-                        player.stance.ChangeStance(player, player.stance.stanceNum);
-                    }
-                    player.currentHealth = player.currentHealth - Convert.ToInt32(Math.Round((enemy.stance.stanceDMG * (100 - player.stance.totalArmor) * .01)));
-                    enemy.stance.ChangeStance(enemy, rng.Next(1, 4));
-                }
-                
-                return;
+                Show();
+                GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
             }
-
-            void CombatRefresh()
-            {
-                combatF.lblPlayerArmor.Text = player.AP.ToString();
-                combatF.lblPlayerDamage.Text = player.PDamage.ToString();
-                combatF.lblPlayerHealth.Text = player.currentHealth.ToString();
-                combatF.lblEnemyHealth.Text = enemy.currentHealth.ToString();
-                combatF.lblEnemyDamage.Text = enemy.PDamage.ToString();
-                combatF.lblEnemyArmor.Text = enemy.AP.ToString();
-                combatF.lblEnemyStance.Text = enemy.stance.stanceName;
-                combatF.lblPlayerStance.Text = player.stance.stanceName;
-            }
-
-            void Change_Stance()
-            {
-                ChangeStanceForm ChangeStance = new ChangeStanceForm();
-                if (ChangeStance.ShowDialog(this) == DialogResult.OK)
-                {
-                    if (ChangeStance.stanceChange == 1)
-                        player.stance.ChangeStance(player, 1);
-                    else if (ChangeStance.stanceChange == 2)
-                        player.stance.ChangeStance(player, 2);
-                    else if (ChangeStance.stanceChange == 3)
-                        player.stance.ChangeStance(player, 3);
-                }
-                ChangeStance.Dispose();
-            }
-
-            
+            return result;
         }
 
         public void GameTutorial()
         {
             MessageBox.Show("Welcome to Wrath of the Ruined. This is a tutorial to teach you the basics of of the game.", "Tutorial");
-            lblXP.BackColor = Color.GreenYellow;
-            lblGold.BackColor = Color.Gold;
-            lblGBP.BackColor = Color.SkyBlue;
+            lblPlayerXP.BackColor = Color.GreenYellow;
+            lblPlayerGold.BackColor = Color.Gold;
+            lblPlayerGBP.BackColor = Color.SkyBlue;
             MessageBox.Show("Highlighted in Green is your XP counter. As you progress you will gain XP." + Environment.NewLine +
                 Environment.NewLine + "Yellow is your amount of Gold. You can use gold to buy items from shops in towns." + Environment.NewLine +
                 Environment.NewLine + "Blue is your Good Boy Points counter. The more Good Boy Points you have, the more honorable you are.", "Tutorial");
-            lblXP.BackColor = Color.Transparent;
-            lblGold.BackColor = Color.Transparent;
-            lblGBP.BackColor = Color.Transparent;
+            lblPlayerXP.BackColor = Color.Transparent;
+            lblPlayerGold.BackColor = Color.Transparent;
+            lblPlayerGBP.BackColor = Color.Transparent;
             lblLoc.BackColor = Color.Red;
             MessageBox.Show("Highlighted in Red is your current location.", "Tutorial");
             lblLoc.BackColor = Color.Transparent;
             TbMain.Text = "You are walking in the wilderness and an enemy approaches." + Environment.NewLine + "You draw your weapon";
-            Creature enemy = new Creature(1, 0, 0, 0);
+            Creature enemy = new Creature(0, 0, 0);
             Combat(player, enemy);
             progress++;
             TbMain.Text = "Will you protect your family, or will you tremble as your cowardess takes hold of you?" + Environment.NewLine +
@@ -278,8 +177,8 @@ namespace WrathOfTheRuined
                         TbMain.Text = "You check out the quest board.";
 
                         ActionBox.Items.Clear();
-                        ActionBox.Items.Add(Town.quest1.name);
-                        ActionBox.Items.Add(Town.quest2.name);
+                        ActionBox.Items.Add(Town.Quest1.name);
+                        ActionBox.Items.Add(Town.Quest2.name);
                         ActionBox.Items.Add("Leave Quest Board");
                         break;
                     case 1:
@@ -293,7 +192,7 @@ namespace WrathOfTheRuined
                         ActionBox.SelectedIndex = -1;
                         break;
                     case 3:
-                        TbMain.Text = Town.departureString;
+                        TbMain.Text = Town.DepartureString;
                         ActionBox.Items.Clear();
                         ActionBox.SelectedIndex = -1;
                         progress++;
@@ -301,11 +200,11 @@ namespace WrathOfTheRuined
                         BtnContinue.Click += OutsideTownContinueClick;
                         break;
                     default:
-                        lblXP.Text = "XP:" + player.ExperiencePoints.ToString();
-                        lblGold.Text = "Gold:" + player.Gold.ToString();
-                        lblGBP.Text = "GBP:" + player.GBP.ToString();
-                        lblLoc.Text = Town.name;
-                        TbMain.Text = "You are standing in the " + Town.descriptor + " of " + Town.name + ".";
+                        lblPlayerXP.Text = player.ExperiencePoints.ToString();
+                        lblPlayerGold.Text = player.Gold.ToString();
+                        lblPlayerGBP.Text = player.GBP.ToString();
+                        lblLoc.Text = Town.Name;
+                        TbMain.Text = "You are standing in the " + Town.Descriptor + " of " + Town.Name + ".";
 
                         ActionBox.Items.Clear();
                         ActionBox.Items.Add("Check Quest Board");
@@ -322,13 +221,13 @@ namespace WrathOfTheRuined
                 switch (ActionBox.SelectedIndex)
                 {
                     case 0:
-                        if(!questsComplete[Town.quest1.ID])
+                        if(!questsComplete[Town.Quest1.ID])
                         {
-                            TbMain.Text = Town.quest1.startString;
+                            TbMain.Text = Town.Quest1.startString;
                             ActionBox.Items.Clear();
                             BtnContinue.Click -= QuestBoardContinueClick;
                             ActionBox.SelectedIndex = -1;
-                            StartQuest(Town.quest1.ID);
+                            StartQuest(Town.Quest1.ID);
                             ActionBox.SelectedIndex = -1;
                         }
                         else
@@ -342,13 +241,13 @@ namespace WrathOfTheRuined
                         }
                         break;
                     case 1:
-                        if (!questsComplete[Town.quest2.ID])
+                        if (!questsComplete[Town.Quest2.ID])
                         {
-                            TbMain.Text = Town.quest2.startString;
+                            TbMain.Text = Town.Quest2.startString;
                             ActionBox.Items.Clear();
                             BtnContinue.Click -= QuestBoardContinueClick;
                             ActionBox.SelectedIndex = -1;
-                            StartQuest(Town.quest2.ID);
+                            StartQuest(Town.Quest2.ID);
                             ActionBox.SelectedIndex = -1;
                         }
                         else
@@ -362,7 +261,7 @@ namespace WrathOfTheRuined
                         }
                         break;
                     case 2:
-                        TbMain.Text = "You decide to leave the quest board, and walk back to center of this " + Town.descriptor + ".";
+                        TbMain.Text = "You decide to leave the quest board, and walk back to center of this " + Town.Descriptor + ".";
                         ActionBox.Items.Clear();
                         BtnContinue.Click -= QuestBoardContinueClick;
                         BtnContinue.Click += InsideTownContinueClick;
@@ -599,7 +498,7 @@ namespace WrathOfTheRuined
                                                             ActionBox.Items.Add("Talk to them");
                                                             ActionBox.Items.Add("Drag them outside");
                                                             ActionBox.SelectedIndex = -1;
-                                                            BtnContinue.Click -= Quest2Click1;
+                                                            BtnContinue.Click -= Quest2Click2;
                                                             BtnContinue.Click += Quest2Click4;
                                                             void Quest2Click4(object sender_3, EventArgs e_3)
                                                             {
@@ -619,14 +518,28 @@ namespace WrathOfTheRuined
                                                                             switch (ActionBox.SelectedIndex)
                                                                             {
                                                                                 case 0:
-                                                                                    TbMain.Text = "";
+                                                                                    TbMain.Text = "Obviously the leader thug has never learned how to properly vent his feelings. You give him 50 gold pieces in the hopes that his family can make use of it. The other two men explain that they're employee's of the poor blacksmith, and this donation means a lot to them. They promise to put the money to good use, and then they leave the bar, hopefully to go back to work." + Environment.NewLine + Environment.NewLine + "Upon returning to the original blacksmith, you tell him of the other blacksmith's inability to attract business. The blacksmith thinks about this, and tosses out a few ideas to help his competitor, one being a merger between the two. He gives you money to cover the donation, and some more on top of it, because the problem seems to have been solved." + Environment.NewLine + "+50 Gold, +15 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                    ActionBox.Items.Clear();
+                                                                                    ActionBox.SelectedIndex = -1;
+                                                                                    questsComplete[2] = true;
+                                                                                    player.Gold += 50;
+                                                                                    player.GBP += 15;
+                                                                                    BtnContinue.Click -= Quest2Click5;
+                                                                                    BtnContinue.Click += InsideTownContinueClick;
                                                                                     break;
                                                                                 case 1:
-                                                                                    TbMain.Text = "";
+                                                                                    TbMain.Text = "Obviously the leader thug has never learned how to properly vent his feelings. You tell him that instead of sitting at the bar, or beating up the competition, they should probably be working if his family business is really failing. The man thinks about it, and reluctantly agrees with you. The three men leave the bar, clearly still angry, but hopefully they can clear their heads and get back to honest work." + Environment.NewLine + Environment.NewLine + "Upon returning to the original blacksmith, he is happy to hear that they are back to work, but fears he may still be beaten up in the future. Either way, the problem is solved in the short term. He hands you some gold in thanks, and returns to his work." + Environment.NewLine + "+75 Gold, +10 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                    ActionBox.Items.Clear(); ;
+                                                                                    ActionBox.SelectedIndex = -1;
+                                                                                    questsComplete[2] = true;
+                                                                                    player.Gold += 75;
+                                                                                    player.GBP += 10;
+                                                                                    BtnContinue.Click -= Quest2Click5;
+                                                                                    BtnContinue.Click += InsideTownContinueClick;
                                                                                     break;
                                                                                 case 2:
                                                                                     BtnContinue.Click -= Quest2Click5;
-                                                                                    BtnContinue.Click += Quest2Click3;
+                                                                                    BtnContinue.Click += Quest2Click4;
                                                                                     ActionBox.SelectedIndex = 1;
                                                                                     BtnContinue.PerformClick();
                                                                                     break;
@@ -634,12 +547,94 @@ namespace WrathOfTheRuined
                                                                         }
                                                                                     break;
                                                                     case 1:
+                                                                        TbMain.Text = "You walk closer to the three men. You grab the closest one by his jacket, and drag him outside. The other two are clearly not happy with this, and jump from their seats. However, you were quick enough to pull him outside, and thus the other two have followed you outside.";
+                                                                        ActionBox.Items.Clear();
+                                                                        ActionBox.Items.Add("Beat them up");
+                                                                        ActionBox.Items.Add("Kill them");
+                                                                        ActionBox.SelectedIndex = -1;
+                                                                        BtnContinue.Click -= Quest2Click4;
+                                                                        BtnContinue.Click += Quest2Click6;
+                                                                        void Quest2Click6(object sender_4, EventArgs e_4)
+                                                                        {
+                                                                            switch (ActionBox.SelectedIndex)
+                                                                            {
+                                                                                case 0:
+                                                                                    TbMain.Text = "You start kicking the one on the ground. This casues one of the two thugs that are standing to run at you, fists swinging. The one that was being kicked has no strength left to fight, but the other two thugs put up a good fight. At the end of the brawl, the three thugs lay nearly motionless on the ground. Seems like they got the message." + Environment.NewLine + Environment.NewLine + "Upon telling the blacksmith of the news, he seems slightly worried, but nonetheless glad the threat has been taken care of. He pays you some gold, and continues with his work." + Environment.NewLine + "+75 Gold, +5GBP" + Environment.NewLine + "Quest Complete";
+                                                                                    ActionBox.Items.Clear();
+                                                                                    ActionBox.SelectedIndex = -1;
+                                                                                    questsComplete[2] = true;
+                                                                                    player.Gold += 75;
+                                                                                    player.GBP += 5;
+                                                                                    BtnContinue.Click -= Quest2Click6;
+                                                                                    BtnContinue.Click += InsideTownContinueClick;
+                                                                                    break;
+                                                                                case 1:
+                                                                                    TbMain.Text = "You pull out your weapon and swiftly execute the man on the ground. This alarms the other two, and they pull out their daggers.";
+                                                                                    ActionBox.Items.Clear();
+                                                                                    ActionBox.SelectedIndex = -1;
+                                                                                    BtnContinue.Click -= Quest2Click6;
+                                                                                    BtnContinue.Click += Quest2Click7;
+                                                                                    void Quest2Click7(object sender_5, EventArgs e_5)
+                                                                                    {
+                                                                                        Creature thug1 = new Creature(3, -1, 0);
+                                                                                        Creature thug2 = new Creature(5, -1, 1);
+                                                                                        int combatresult = Combat(player, thug1);
+                                                                                        if( combatresult == 1)
+                                                                                        {
+                                                                                            combatresult = Combat(player, thug2);
+                                                                                            if ( combatresult == 1 )
+                                                                                            {
+                                                                                                BtnContinue.Click -= Quest2Click7;
+                                                                                                TbMain.Text = "After killing the thugs, you run from the bar back to the blacksmith. The blacksmith looks horrified that you are covered in blood. He never meant for you to kill them. Frightened, he tosses his coin pouch at you, and pushes you outside and locks the door behind you." + Environment.NewLine + "+150 Gold, -30GBP";
+                                                                                                questsComplete[2] = true;
+                                                                                                player.Gold += 150;
+                                                                                                player.GBP -= 30;
+                                                                                                BtnContinue.Click += InsideTownContinueClick;
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                BtnContinue.Click -= Quest2Click7;
+                                                                                                TbMain.Text = "Having ran from the last thug, you return to the blacksmith. You tell him that they attacked you, but you managed to kill two before needing to run away. He thanks you for trying to help him, but did not wish for you to kill anyone. However, given that you said they attacked you, he understands. He gives you some gold for trying." + Environment.NewLine + "+100 Gold, -20GBP";
+                                                                                                questsComplete[2] = true;
+                                                                                                player.Gold += 100;
+                                                                                                player.GBP -= 20;
+                                                                                                BtnContinue.Click += InsideTownContinueClick;
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            BtnContinue.Click -= Quest2Click7;
+                                                                                            TbMain.Text = "Having ran from the last two thugs, you return to the blacksmith. You tell him that they attacked you, but you managed to kill one before needing to run away. He thanks you for trying to help him, but did not wish for you to kill anyone. However, given that you said they attacked you, he understands. He gives you some gold for trying." + Environment.NewLine + "+50 Gold, -10GBP";
+                                                                                            questsComplete[2] = true;
+                                                                                            player.Gold += 50;
+                                                                                            player.GBP -= 10;
+                                                                                            BtnContinue.Click += InsideTownContinueClick;
+                                                                                        }
+                                                                                    }
+                                                                                    break;
+                                                                            }
+                                                                        }
                                                                         break;
                                                                 }
                                                             }
                                                             break;
                                                         case 1:
-                                                            break;
+                                                            TbMain.Text = "He is saddened, but understands, this is quite a lot to ask of someone. He sighs, and goes back to his work." + Environment.NewLine + "Quest Complete";
+                                                            ActionBox.Items.Clear();
+                                                            ActionBox.SelectedIndex = -1;
+                                                            questsComplete[2] = true;
+                                                            BtnContinue.Click -= Quest2Click2;
+                                                            BtnContinue.Click += Quest2Click8;
+                                                            void Quest2Click8(object sender_3, EventArgs e_3)
+                                                            {
+                                                                ActionBox.Items.Add("");
+                                                                ActionBox.Items.Add("");
+                                                                BtnContinue.Click -= Quest2Click8;
+                                                                BtnContinue.Click += InsideTownContinueClick;
+                                                                ActionBox.SelectedIndex = 1;
+                                                                BtnContinue.PerformClick();
+                                                            }
+                                                            break; 
                                                     }
                                                 }
                                                 break;
@@ -805,28 +800,28 @@ namespace WrathOfTheRuined
 
             TbMain.Text = "The time is now. You have geared up, gained some cash, and are ready to remove the threat to your family." + Environment.NewLine + "You'll have to fight your way through to the king. Do you still have the strength to manage?";
 
-            Creature noble = new Creature(1, 1, 1, 1);
+            Creature noble = new Creature(1, 1, 1);
             if(Combat(player, noble) != 1)
             {
                 TbMain.Text = "You have failed your people.";
                 MessageBox.Show("Thank you for playing!");
-                Application.Exit();
+                Application.Restart();
             }
 
-            Creature knight = new Creature(1, 2, 1, 2);
+            Creature knight = new Creature(2, 1, 2);
             if(Combat(player, knight) != 1)
             {
                 TbMain.Text = "You have failed your people";
                 MessageBox.Show("Thank you for playing!");
-                Application.Exit();
+                Application.Restart();
             }
 
-            Creature protector = new Creature(1, 2, 2, 1);
+            Creature protector = new Creature(2, 2, 1);
             if(Combat(player, protector)!=1)
             {
                 TbMain.Text = "You have failed your people";    
                 MessageBox.Show("Thank you for playing!");
-                Application.Exit();
+                Application.Restart();
             }
 
             TbMain.Text = "You have arrived at the throne room. Inside you see the king and his royal protector. They king glances at you and speaks." + Environment.NewLine + "'You've made it this far, but I'm afriad this is where your story ends.'";
@@ -835,8 +830,8 @@ namespace WrathOfTheRuined
             {
                 TbMain.Text = "'Since you have fought honorably in my towns, I shall fight you myself.'" + Environment.NewLine + "Strike against the king and carve your legacy in stone!";
 
-                Creature king = new Creature(1, 8, 8, 9);
-                king.currentHealth = king.Health = 75;
+                Creature king = new Creature(8, 8, 9);
+                king.CurrentHP = king.MaxHP = 75;
 
                 if (Combat(player, king) == 1)
                 {
@@ -848,14 +843,14 @@ namespace WrathOfTheRuined
 
                 }
                 MessageBox.Show("Thank you for playing!");
-                Application.Exit();
+                Application.Restart();
             }
             else if(player.GBP < 0 && path < 3)
             {
                 TbMain.Text = "'You are nothing but scum. I will not give you the gift of fighting me. Royal Protector, Remove him.'" + Environment.NewLine + "Strike against the Protector the King hides behind!";
 
-                Creature royalProtector = new Creature(1, 6, 5, 3);
-                royalProtector.currentHealth = royalProtector.Health = 120;
+                Creature royalProtector = new Creature(20, 20, 5);
+                royalProtector.CurrentHP = royalProtector.MaxHP = 120;
                 if (Combat(player, royalProtector) == 1)
                 {
                     TbMain.Text = "You have vanquished the royal protector as the king ran away in fear. You can take the crown by force and rule over the people." + Environment.NewLine + "How will you rule over the people? Will your thirst for blood cloud your judgement, or will you bring peace to the land?";
@@ -867,28 +862,46 @@ namespace WrathOfTheRuined
 
                 }
                 MessageBox.Show("Thanks for playing!");
-                Application.Exit();
+                Application.Restart();
             }        
         }
 
         public void Wilderness( int difficulty )
         {
-            Random rng = new Random();
-            Creature bandit = new Creature(3, rng.Next(player.sword.SwordID - 2 + difficulty, player.sword.SwordID + 2 + difficulty), rng.Next(player.staff.StaffID - 2 + difficulty, player.staff.StaffID + 2 + difficulty), player.armor.ArmorID - 2 + difficulty)
+            Random rand = new Random();
+            int type = rand.Next(0,3); // 0 Magic enemy, 1 Melee enemy, 2 both
+            int setEnemySword = rand.Next(difficulty, 3 * difficulty);
+            if (setEnemySword > 29)
+                setEnemySword = 29;
+            int setEnemyStaff = rand.Next(difficulty, 3 * difficulty);
+            if (setEnemyStaff > 29)
+                setEnemyStaff = 29;
+            int setEnemyArmor = difficulty;
+            if (setEnemyArmor > 4)
+                setEnemyArmor = 4;
+
+            switch (type)
             {
-                GoldDrop = 30
+                case 0:
+                    setEnemySword = -1;
+                    break;
+                case 1:
+                    setEnemyStaff = -1;
+                    break;
+            }
+            
+
+            Creature enemy = new Creature(setEnemySword, setEnemyStaff, setEnemyArmor)
+            {
+                GoldDrop = 30 + ( difficulty * 5 )
             };
             lblLoc.Text = "Wilderness";
-            int outcome = Combat(player, bandit);
-            if (outcome == 1)
+            int result = Combat(player, enemy);
+            if (result == 1)
             {
-                TbMain.Text = "You traversed through the wilderness, defeated a foe and collected their gear, and are now in sight of a town.";
-
-                player.sword.AssignSwordStats(player.sword.SwordID + rng.Next(1, 4));
-                player.armor.AssignArmorStats(player.armor.ArmorID + rng.Next(1, 4));
-                player.staff.AssignStaffStats(player.staff.StaffID + rng.Next(1, 4));
+                TbMain.Text = "You traversed through the wilderness, defeated a foe, and are now in sight of a town.";
             }
-            else if ( outcome == 2 )
+            else if ( result == 2 )
                 TbMain.Text = "You ran away from the enemy, and manage to make it to the next town.";
             else
                 TbMain.Text = "The foe encountered in the wilderness has defeated you but spared your life. You hang your head low whilst walking towards the nearest town.";
@@ -900,6 +913,5 @@ namespace WrathOfTheRuined
 
             return Gold;
         }
-
     }
 }

@@ -17,6 +17,11 @@ namespace Engine
         {
             switch (StaffID)
             {
+                case -1:
+                    BaseStaffDamage = 0;
+                    StaffName = "None";
+                    MaxStaffDamage = 3;
+                    break;
                 case 0:
                 case 1:
                 case 2:
@@ -73,10 +78,15 @@ namespace Engine
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 19);
                     StaffName += "+" + (StaffID - 19).ToString();
                     break;
-                case 9342:
+                case 1000:
                     BaseStaffDamage = 999;
                     MaxStaffDamage = 1000;
-                    StaffName = "W9342";
+                    StaffName = "WireShark";
+                    break;
+                case 1001:
+                    BaseStaffDamage = 999;
+                    MaxStaffDamage = 1000;
+                    StaffName = "Diet Mtn Dew";
                     break;
                 default:
                     StaffName = "Error";
