@@ -11,8 +11,8 @@ namespace Engine
         public int SwordID { get; set; }
         public int BaseSwordDamage { get; set; } //dagger = 1, bronze = 10, etc
         public int MaxSwordDamage { get; set; }  //dagger = 5, dagger+5 = 10, bronze = 5, bent+5 = 10, etc.
+        public int Price { get; set; }
 
-               
 
         public void AssignSwordStats(int ID)
         {
@@ -23,6 +23,7 @@ namespace Engine
                     BaseSwordDamage = 0;
                     SwordName = "None";
                     MaxSwordDamage = 3;
+                    Price = 0;
                     break;
                 case 0:
                 case 1:
@@ -35,6 +36,7 @@ namespace Engine
                     MaxSwordDamage = BaseSwordDamage + SwordID;
                     if (SwordID != 0)
                         SwordName += " +" + SwordID.ToString();
+                    Price = 5 + SwordID;
                     break;
                 case 6:
                 case 7:
@@ -47,6 +49,7 @@ namespace Engine
                     MaxSwordDamage = BaseSwordDamage + (SwordID - 1);
                     if (SwordID != 6)
                         SwordName += " +" + (SwordID - 6).ToString();
+                    Price = 15 + SwordID;
                     break;
                 case 12:
                 case 13:
@@ -59,6 +62,7 @@ namespace Engine
                     MaxSwordDamage = BaseSwordDamage + (SwordID - 7);
                     if (SwordID != 12)
                         SwordName += " +" + (SwordID - 12).ToString();
+                    Price = 30 + SwordID;
                     break;
                 case 18:
                 case 19:
@@ -71,6 +75,7 @@ namespace Engine
                     MaxSwordDamage = BaseSwordDamage + (SwordID - 13);
                     if (SwordID != 18)
                         SwordName += " +" + (SwordID - 18).ToString();
+                    Price = 50 + SwordID;
                     break;
                 case 24:
                 case 25:
@@ -83,13 +88,14 @@ namespace Engine
                     MaxSwordDamage = BaseSwordDamage + (SwordID - 19);
                     if (SwordID != 24)
                         SwordName += " +" + (SwordID - 24).ToString();
+                    Price = 150 + SwordID;
                     break;
-                case 1000:
+                case 100:
                     BaseSwordDamage = 999;
                     MaxSwordDamage = 1000;
-                    SwordName = "WireShark";
+                    SwordName = "Wireshark";
                     break;
-                case 1001:
+                case 200:
                     BaseSwordDamage = 999;
                     MaxSwordDamage = 1000;
                     SwordName = "Go To Help Night";
@@ -98,8 +104,6 @@ namespace Engine
                     SwordName = "Error";
                     break;
             }
-
         }
-
     }
 }

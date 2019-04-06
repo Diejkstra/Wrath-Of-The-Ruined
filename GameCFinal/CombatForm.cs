@@ -109,6 +109,8 @@ namespace WrathOfTheRuined
                     else if (CbPlayerCombat.SelectedIndex == 4)
                     {
                         int GoldLost = rand.Next(1, 15);
+                        if (GoldLost > player.Gold)
+                            GoldLost = player.Gold;
                         MessageBox.Show("As you ran away you dropped " + GoldLost + " Gold.");
                         player.Gold -= GoldLost;
                         player.CurrentHP = player.MaxHP;

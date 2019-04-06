@@ -10,6 +10,7 @@ namespace Engine
         public int StaffID { get; set; }
         public int BaseStaffDamage { get; set; }
         public int MaxStaffDamage { get; set; }
+        public int Price { get; set; }
 
         public void AssignStaffStats(int StaffID)
         {
@@ -19,6 +20,7 @@ namespace Engine
                     BaseStaffDamage = 0;
                     StaffName = "None";
                     MaxStaffDamage = 3;
+                    Price = 0;
                     break;
                 case 0:
                 case 1:
@@ -31,6 +33,7 @@ namespace Engine
                     MaxStaffDamage = BaseStaffDamage + StaffID;
                     if (StaffID != 0)
                         StaffName += " +" + StaffID.ToString();
+                    Price = 5 + StaffID;
                     break;
                 case 6:
                 case 7:
@@ -43,6 +46,7 @@ namespace Engine
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 1);
                     if (StaffID != 6)
                         StaffName += " +" + (StaffID - 6).ToString();
+                    Price = 15 + StaffID;
                     break;
                 case 12:
                 case 13:
@@ -55,6 +59,7 @@ namespace Engine
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 7);
                     if (StaffID != 12)
                         StaffName += " +" + (StaffID - 12).ToString();
+                    Price = 30 + StaffID;
                     break;
                 case 18:
                 case 19:
@@ -67,6 +72,7 @@ namespace Engine
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 13);
                     if (StaffID != 18)
                         StaffName += " +" + (StaffID - 18).ToString();
+                    Price = 50 + StaffID;
                     break;
                 case 24:
                 case 25:
@@ -79,8 +85,9 @@ namespace Engine
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 19);
                     if (StaffID != 24)
                         StaffName += " +" + (StaffID - 24).ToString();
+                    Price = 150 + StaffID;
                     break;
-                case 1000:
+                case 100:
                     BaseStaffDamage = 999;
                     MaxStaffDamage = 1000;
                     StaffName = "Yes";
