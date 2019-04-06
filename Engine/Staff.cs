@@ -10,13 +10,18 @@ namespace Engine
         public int StaffID { get; set; }
         public int BaseStaffDamage { get; set; }
         public int MaxStaffDamage { get; set; }
-
-
+        public int Price { get; set; }
 
         public void AssignStaffStats(int StaffID)
         {
             switch (StaffID)
             {
+                case -1:
+                    BaseStaffDamage = 0;
+                    StaffName = "None";
+                    MaxStaffDamage = 3;
+                    Price = 0;
+                    break;
                 case 0:
                 case 1:
                 case 2:
@@ -27,7 +32,8 @@ namespace Engine
                     StaffName = "Oak Staff";
                     MaxStaffDamage = BaseStaffDamage + StaffID;
                     if (StaffID != 0)
-                        StaffName += "+" + StaffID.ToString();
+                        StaffName += " +" + StaffID.ToString();
+                    Price = 5 + StaffID;
                     break;
                 case 6:
                 case 7:
@@ -38,7 +44,9 @@ namespace Engine
                     BaseStaffDamage = 10;
                     StaffName = "Willow Staff";
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 1);
-                    StaffName += "+" + (StaffID - 1).ToString();
+                    if (StaffID != 6)
+                        StaffName += " +" + (StaffID - 6).ToString();
+                    Price = 15 + StaffID;
                     break;
                 case 12:
                 case 13:
@@ -49,7 +57,9 @@ namespace Engine
                     BaseStaffDamage = 20;
                     StaffName = "Maple Staff";
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 7);
-                    StaffName += "+" + (StaffID - 7).ToString();
+                    if (StaffID != 12)
+                        StaffName += " +" + (StaffID - 12).ToString();
+                    Price = 30 + StaffID;
                     break;
                 case 18:
                 case 19:
@@ -60,7 +70,9 @@ namespace Engine
                     BaseStaffDamage = 30;
                     StaffName = "Mahogany Staff";
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 13);
-                    StaffName += "+" + (StaffID - 13).ToString();
+                    if (StaffID != 18)
+                        StaffName += " +" + (StaffID - 18).ToString();
+                    Price = 50 + StaffID;
                     break;
                 case 24:
                 case 25:
@@ -71,12 +83,14 @@ namespace Engine
                     BaseStaffDamage = 40;
                     StaffName = "Yew Staff";
                     MaxStaffDamage = BaseStaffDamage + (StaffID - 19);
-                    StaffName += "+" + (StaffID - 19).ToString();
+                    if (StaffID != 24)
+                        StaffName += " +" + (StaffID - 24).ToString();
+                    Price = 150 + StaffID;
                     break;
-                case 9342:
+                case 100:
                     BaseStaffDamage = 999;
                     MaxStaffDamage = 1000;
-                    StaffName = "W9342";
+                    StaffName = "Yes";
                     break;
                 default:
                     StaffName = "Error";

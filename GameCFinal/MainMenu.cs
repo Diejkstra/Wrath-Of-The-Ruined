@@ -23,8 +23,6 @@ namespace WrathOfTheRuined
             btnNewGame.BackColor = opac;
             btnQuit.BackColor = opac;
             MenuMusic.soundplayer = MenuMusic.StartMusic("MainMenu");
-            
-            
         }
 
         private void BtnLoadGame_Click(object sender, EventArgs e)
@@ -42,7 +40,7 @@ namespace WrathOfTheRuined
         {
             MenuMusic.StopMusic(MenuMusic.soundplayer);
             GameScreen game = new GameScreen();
-            this.Hide();
+            Hide();
             game.Show();
         }
 
@@ -50,7 +48,7 @@ namespace WrathOfTheRuined
         {
             MessageBox.Show("Martin Erck" + Environment.NewLine +
                 "Hunter Lippert" + Environment.NewLine +
-                "Micheal Moore" + Environment.NewLine +
+                "Michael Moore" + Environment.NewLine +
                 "John Prosper", "Credits");
         }
     }
