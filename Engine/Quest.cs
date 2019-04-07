@@ -37,7 +37,7 @@ namespace Engine
                     startString = "The guards have requested that someone deal with the band of bandits camped out just east of town. The request specifies that the bandits are asking for a large sum of gold before they leave town.";
                     break;
                 case 4:
-                    name = "PIZZA THYME";
+                    name = "Pizza Thyme";
                     townID = 2;
                     startString = "The local bakery has asked someone to deliver a large round food item, the classic Venzorian Pizza Pie, to someone in the next village over.";
                     break;
@@ -52,9 +52,9 @@ namespace Engine
                     startString = "One of the citizens posted a rumor about an affair between a certain noble and a peasent, a crime punishable with death in this city.";
                     break;
                 case 7:
-                    name = "Wire Fraud";
+                    name = "Armando De Santo";
                     townID = 3;
-                    startString = "A wanted poster of a noble by the name of Armando 'Silence' De Santo is posted, with a reward of 250 gold pieces, dead or alive.";
+                    startString = "A wanted poster of a noble by the name of Armando 'Silence' De Santo is posted, with a reward of 2500 gold pieces, dead or alive.";
                     break;
             }
         }

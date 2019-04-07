@@ -11,7 +11,6 @@ namespace WrathOfTheRuined
     {
         private Player player;
         public int progress = 0;
-        public int path = 0;
         public bool[] townSlaughtered = new bool[4];  //Array tracking which towns are slaughtered. townID matched the array.
         public bool[] questComplete = new bool[8];   //Array tracking which quests are complete. questID matches the array.
 
@@ -1115,6 +1114,83 @@ namespace WrathOfTheRuined
                             switch (ActionBox.SelectedIndex)
                             {
                                 case 0:
+                                    TbMain.Text = "The journey into the Casadosa Mountains is not one you really wanted to go on, but considering the threat to Venzor, you see it as your civic duty to help them. After 30 minutes of walking, you finally reach the base of the mountains, and start the hike. After 25 more minutes of walking, you finally see a bear by a cave entrance.";
+                                    ActionBox.Items.Clear();
+                                    ActionBox.Items.Add("Approach the cave");
+                                    ActionBox.Items.Add("Walk back to Venzor");
+                                    ActionBox.SelectedIndex = -1;
+                                    BtnContinue.Click -= Quest5Start;
+                                    BtnContinue.Click += Quest5Click1;
+                                    void Quest5Click1(object sender_1, EventArgs e_1)
+                                    {
+                                        switch (ActionBox.SelectedIndex)
+                                        {
+                                            case 0:
+                                                TbMain.Text = "You slowly approach the cave. You scent alerts the bears to your presence, and three bears start charging at you.";
+                                                ActionBox.Items.Clear();
+                                                ActionBox.Items.Add("Run Away");
+                                                ActionBox.Items.Add("Attack the Bears");
+                                                ActionBox.SelectedIndex = -1;
+                                                BtnContinue.Click -= Quest5Click1;
+                                                BtnContinue.Click += Quest5Click2;
+                                                void Quest5Click2 ( object sender_2, EventArgs e_2)
+                                                {
+                                                    switch (ActionBox.SelectedIndex)
+                                                    {
+                                                        case 0:
+                                                            TbMain.Text = "After seeing them charge at you, the logical thing to do is to run, right? You start sprinting down the mountain and eventually make it back to Venzor. The bears, thankfully, didn't follow.";
+                                                            ActionBox.Items.Clear();
+                                                            ActionBox.SelectedIndex = -1;
+                                                            BtnContinue.Click -= Quest5Click2;
+                                                            BtnContinue.Click += OutsideTownContinueClick;
+                                                            break;
+                                                        case 1:
+                                                            Creature Bear1 = new Creature(30, -1, -1);
+                                                            Creature Bear2 = new Creature(30, -1, -1);
+                                                            Creature Bear3 = new Creature(30, -1, -1);
+                                                            Bear1.MaxHP = 450;
+                                                            Bear2.MaxHP = 450;
+                                                            Bear3.MaxHP = 450;
+                                                            Bear1.CurrentHP = Bear1.MaxHP;
+                                                            Bear2.CurrentHP = Bear2.MaxHP;
+                                                            Bear3.CurrentHP = Bear3.MaxHP;
+
+                                                            int result = Combat(player, Bear1);
+                                                            if(result != 2)
+                                                                Combat(player, Bear2);
+                                                            if (result != 2)
+                                                                Combat(player, Bear3);
+                                                            if(result != 2)
+                                                            {
+                                                                TbMain.Text = "You cut down the bears, and their huge bodies lay slumped in the dirt. Searching the cave, you find the remains of a few hikers, almost all of their belongings clawed and ruined. You decide to head back into the city and let them know that the bears are taken care of." + Environment.NewLine + "+30 GBP" + Environment.NewLine + "Quest Complete";
+                                                                player.GBP += 30;
+                                                                questComplete[5] = true;
+                                                                ActionBox.Items.Clear();
+                                                                ActionBox.SelectedIndex = -1;
+                                                                BtnContinue.Click -= Quest5Click2;
+                                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                            }
+                                                            else
+                                                            {
+                                                                TbMain.Text = "During the battle against the bears, it suddenly dawned on you that this may not be a battle that ends happily for anyone. You run back to Venzor as fast as possible, and the bears don't follow.";
+                                                                ActionBox.Items.Clear();
+                                                                ActionBox.SelectedIndex = -1;
+                                                                BtnContinue.Click -= Quest5Click2;
+                                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                            }
+                                                            break;
+                                                    }
+                                                }
+                                                break;
+                                            case 1:
+                                                TbMain.Text = "The bears seem content, and you don't think its a good idea to disturb them right now.";
+                                                ActionBox.Items.Clear();
+                                                ActionBox.SelectedIndex = -1;
+                                                BtnContinue.Click -= Quest5Click1;
+                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                break;
+                                        }
+                                    }
                                     break;
                                 case 1:
                                     TbMain.Text = "The hikers probably disturbed the bears before the bears even attacked them. Who are you to kill them for defending their home?";
@@ -1137,8 +1213,264 @@ namespace WrathOfTheRuined
                             switch (ActionBox.SelectedIndex)
                             {
                                 case 0:
+                                    TbMain.Text = "The guards thank you for letting them know, and the couple will be handled approproiately. The guard hands you 25 gold as a reward." + Environment.NewLine + "+25 Gold, -10 GBP" + Environment.NewLine + "Quest Complete";
+                                    player.Gold += 25;
+                                    player.GBP -= 10;
+                                    lblPlayerGBP.Text = player.GBP.ToString();
+                                    lblPlayerGold.Text = player.Gold.ToString();
+                                    questComplete[6] = true;
+                                    ActionBox.Items.Clear();
+                                    ActionBox.SelectedIndex = -1;
+                                    BtnContinue.Click -= Quest6Start;
+                                    BtnContinue.Click += OutsideTownContinueClick;
                                     break;
                                 case 1:
+                                    TbMain.Text = "Asking around downtown, you find some people that help point you in the right direction. One of the young lovers works to the west, outside of the city limits. Eventually, you find one of the young lovers, as described by the citizens at his work. He seems to be an apprentice tanner.";
+                                    ActionBox.Items.Clear();
+                                    ActionBox.Items.Add("Talk to him");
+                                    ActionBox.Items.Add("Kill Him");
+                                    ActionBox.SelectedIndex = -1;
+                                    BtnContinue.Click -= Quest6Start;
+                                    BtnContinue.Click += Quest6Click1;
+                                    void Quest6Click1(object sender_1, EventArgs e_1)
+                                    {
+                                        switch (ActionBox.SelectedIndex)
+                                        {
+                                            case 0:
+                                                TbMain.Text = "You start to speak with him, and tell him to...";
+                                                ActionBox.Items.Clear();
+                                                ActionBox.Items.Add("Leave the noblewoman alone");
+                                                ActionBox.Items.Add("Continue with the relationship");
+                                                ActionBox.Items.Add("Tell you where his lover lives");
+                                                ActionBox.SelectedIndex = -1;
+                                                BtnContinue.Click -= Quest6Click1;
+                                                BtnContinue.Click += Quest6Click2;
+                                                void Quest6Click2(object sender_2, EventArgs e_2)
+                                                {
+                                                    switch (ActionBox.SelectedIndex)
+                                                    {
+                                                        case 0:
+                                                            TbMain.Text = "He refuses, this is the love of his life you're talking about, and he knows it's worth it, even if he himself dies for the relationship.";
+                                                            ActionBox.SelectedIndex = -1;
+                                                            break;
+                                                        case 1:
+                                                            TbMain.Text = "He breathes a sigh of relief. While a bit confused as to why you are here just to tell him this, he is happy that you haven't killed him. You tell each other goodbye, and make you way back to town." + Environment.NewLine + "+15 GBP" + Environment.NewLine + "Quest Complete";
+                                                            ActionBox.Items.Clear();
+                                                            ActionBox.SelectedIndex = -1;
+                                                            break;
+                                                        case 2:
+                                                            TbMain.Text = "He refuses at first, but eventually, he tells you where she lives. He asks you to spare her life. Eventually, you find the noblewoman's home in the city. It's quite densely populated here, with many buildings every which way; a crime here most certainly be noticed.";
+                                                            ActionBox.Items.Clear();
+                                                            ActionBox.Items.Add("Sneak into the house");
+                                                            ActionBox.Items.Add("Knock on the door");
+                                                            ActionBox.SelectedIndex = -1;
+                                                            BtnContinue.Click -= Quest6Click2;
+                                                            BtnContinue.Click += Quest6Click3;
+                                                            void Quest6Click3(object sender_3, EventArgs e_3)
+                                                            {
+                                                                switch (ActionBox.SelectedIndex)
+                                                                {
+                                                                    case 0:
+                                                                        TbMain.Text = "Looking around the outside of the house, you notice the building directly next to it may grant you access to the second floor. Luckily, that building seems to be vacant. After breaking in and climbing to the second floor, you leap across the gap to the noblewoman's house. Peering in, you see she is in her room, and she is writing letters.";
+                                                                        ActionBox.Items.Clear();
+                                                                        ActionBox.Items.Add("Talk to her");
+                                                                        ActionBox.Items.Add("Kill her");
+                                                                        ActionBox.SelectedIndex = -1;
+                                                                        BtnContinue.Click -= Quest6Click3;
+                                                                        BtnContinue.Click += Quest6Click4;
+                                                                        void Quest6Click4(object sender_4, EventArgs e_4)
+                                                                        {
+                                                                            switch (ActionBox.SelectedIndex)
+                                                                            {
+                                                                                case 0:
+                                                                                    TbMain.Text = "You walk into her room, and before you can say anything, she screams. This alerts the maid downstairs, and you can hear here coming up the stairs.";
+                                                                                    ActionBox.Items.Clear();
+                                                                                    ActionBox.Items.Add("Calm her down");
+                                                                                    ActionBox.Items.Add("Tell her to forget the tanner");
+                                                                                    ActionBox.Items.Add("Kill her");
+                                                                                    ActionBox.SelectedIndex = -1;
+                                                                                    BtnContinue.Click -= Quest6Click4;
+                                                                                    BtnContinue.Click += Quest6Click6;
+                                                                                    void Quest6Click6(object sender_5, EventArgs e_5)
+                                                                                    {
+                                                                                        switch (ActionBox.SelectedIndex)
+                                                                                        {
+                                                                                            case 0:
+                                                                                                TbMain.Text = "You explain why you're here as fast as you can, in an attempt to calm her down, but to no avail. The maid comes into the room, armed with a dagger. The maid lunges at you with the dagger, and you very easily disarm her. After this, you tell the noblewoman to...";
+                                                                                                ActionBox.Items.Clear();
+                                                                                                ActionBox.Items.Add("Continue the relationship");
+                                                                                                ActionBox.Items.Add("Stop the relationship");
+                                                                                                ActionBox.SelectedIndex = -1;
+                                                                                                BtnContinue.Click -= Quest6Click6;
+                                                                                                BtnContinue.Click += Quest6Click7;
+                                                                                                void Quest6Click7(object sender_6, EventArgs e_6)
+                                                                                                {
+                                                                                                    switch (ActionBox.SelectedIndex)
+                                                                                                    {
+                                                                                                        case 0:
+                                                                                                            TbMain.Text = "In a very confusing turn of events, you tell the noblewoman that she should continue the relationship with the tanner. She seems happy that you aren't going to kill her, but is still angry that you broke into her home. With this, you go to the balcony, and jump to the vacant building. While not the most elegent solution, you seem content with the outcome." + Environment.NewLine + " + 10 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                                            player.GBP += 10;
+                                                                                                            lblPlayerGBP.Text = player.GBP.ToString();
+                                                                                                            questComplete[6] = true;
+                                                                                                            ActionBox.Items.Clear();
+                                                                                                            BtnContinue.Click -= Quest6Click7;
+                                                                                                            BtnContinue.Click += OutsideTownContinueClick;
+                                                                                                            break;
+                                                                                                        case 1:
+                                                                                                            TbMain.Text = "You politely remind the noblewoman the consequences of her actions if she chooses to continue with her relationship. This frightens the noblewoman and the maid again. And with this, you go to the balcony and jump to the vacant building. Upon further reflection, you realize you told the noblewoman what she already knew, but only after breaking into her home." + Environment.NewLine + "-3 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                                            player.GBP -= 3;
+                                                                                                            lblPlayerGBP.Text = player.GBP.ToString();
+                                                                                                            questComplete[6] = true;
+                                                                                                            ActionBox.Items.Clear();
+                                                                                                            BtnContinue.Click -= Quest6Click7;
+                                                                                                            BtnContinue.Click += OutsideTownContinueClick;
+                                                                                                            break;
+                                                                                                    }
+                                                                                                }
+                                                                                                break;
+                                                                                            case 1:
+                                                                                                TbMain.Text = "In an attempt to end this quickly, you tell her to forget about the tanner. Hearing the maid approach, you run to the balcony and jump to the vacant building. Hopefully she forgets about the tanner, it is probably best for the both of them." + Environment.NewLine + "+5 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                                player.GBP += 5;
+                                                                                                lblPlayerGBP.Text = player.GBP.ToString();
+                                                                                                questComplete[6] = true;
+                                                                                                ActionBox.Items.Clear();
+                                                                                                BtnContinue.Click -= Quest6Click6;
+                                                                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                                                                break;
+                                                                                            case 2:
+                                                                                                TbMain.Text = "Seeing no other choice, you bring out your weapon, and kill the noblewoman. In a few more seconds, the maid appears. However, by the time this happens, you are already outside running away." + Environment.NewLine + "-25 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                                player.GBP -= 25;
+                                                                                                lblPlayerGBP.Text = player.GBP.ToString();
+                                                                                                questComplete[6] = true;
+                                                                                                ActionBox.Items.Clear();
+                                                                                                BtnContinue.Click -= Quest6Click6;
+                                                                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                                                                break;
+                                                                                        }
+                                                                                    }
+                                                                                    break;
+                                                                                case 1:
+                                                                                    TbMain.Text = "As quietly as possible, you pull out your weapon, and approach the noblewoman. In just a few seconds, you change the color of her desk to a dark shade of crimson. Having finished what you came here to do, you scrounge around for some extra spending money, and then leave the way you came in. The tanner will find out about this crime, but for now, you're safe." + Environment.NewLine + "+250 Gold, -25 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                    player.Gold += 250;
+                                                                                    player.GBP -= 25;
+                                                                                    lblPlayerGold.Text = player.Gold.ToString();
+                                                                                    lblPlayerGBP.Text = player.GBP.ToString();
+                                                                                    questComplete[6] = true;
+                                                                                    ActionBox.Items.Clear();
+                                                                                    BtnContinue.Click -= Quest6Click4;
+                                                                                    BtnContinue.Click += OutsideTownContinueClick;
+                                                                                    break;
+                                                                            }
+                                                                        }
+                                                                        break;
+                                                                    case 1:
+                                                                        TbMain.Text = "You approach the front door, and knock. The maid appears and asks you what business you have here.";
+                                                                        ActionBox.Items.Clear();
+                                                                        ActionBox.Items.Add("Ask to see the noblewoman");
+                                                                        ActionBox.Items.Add("Kill her");
+                                                                        ActionBox.SelectedIndex = -1;
+                                                                        BtnContinue.Click -= Quest6Click3;
+                                                                        BtnContinue.Click += Quest6Click5;
+                                                                        void Quest6Click5(object sender_4, EventArgs e_4)
+                                                                        {
+                                                                            switch (ActionBox.SelectedIndex)
+                                                                            {
+                                                                                case 0:
+                                                                                    TbMain.Text = "Politely as possible, you ask to see the head of the house. The maid asks why do you want to see the noblewoman. You reply saying its about the tannery across town. She seems to understand what this means, and walks upstairs to grab the noblewoman. When she finally comes downstairs, she greets you. You tell her to...";
+                                                                                    ActionBox.Items.Clear();
+                                                                                    ActionBox.Items.Add("Continue the relationship");
+                                                                                    ActionBox.Items.Add("Stop the relationship");
+                                                                                    ActionBox.SelectedIndex = -1;
+                                                                                    BtnContinue.Click -= Quest6Click5;
+                                                                                    BtnContinue.Click += Quest6Click8;
+                                                                                    void Quest6Click8(object sender_5, EventArgs e_5)
+                                                                                    {
+                                                                                        switch (ActionBox.SelectedIndex)
+                                                                                        {
+                                                                                            case 0:
+                                                                                                TbMain.Text = "She's happy that you support her relationship with the tanner, but she did not ask for your advice. With this, she shuts the door on you, and you walk back to the center of the city." + Environment.NewLine + "+15 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                                ActionBox.Items.Clear();
+                                                                                                player.GBP += 15;
+                                                                                                lblGBP.Text = player.GBP.ToString();
+                                                                                                questComplete[6] = true;
+                                                                                                ActionBox.Items.Clear();
+                                                                                                BtnContinue.Click -= Quest6Click8;
+                                                                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                                                                break;
+                                                                                            case 1:
+                                                                                                TbMain.Text = "She is clearly saddened by the thought of ending the relationship with the tanner, but knows it's probably the safest for the two of them. She thanks you for your time, and shuts the door, and you walk back to the center of the city." + Environment.NewLine + "+15 GBP" + Environment.NewLine + "Quest Complete";
+                                                                                                ActionBox.Items.Clear();
+                                                                                                player.GBP += 15;
+                                                                                                lblGBP.Text = player.GBP.ToString();
+                                                                                                questComplete[6] = true;
+                                                                                                ActionBox.Items.Clear();
+                                                                                                BtnContinue.Click -= Quest6Click8;
+                                                                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                                                                break;
+                                                                                        }
+                                                                                    }
+                                                                                    break;
+                                                                                case 1:
+                                                                                    TbMain.Text = "Pulling out your weapon, you stab and cover her mouth at the same time. However, as you are in the front door, facing a fairly busy street, someone sees this happen, and screams. Your cover is blown, and you are confronted by Fallholtian guards.";
+                                                                                    Creature Guard1 = new Creature(20, -1, 4);
+                                                                                    Creature Guard2 = new Creature(20, -1, 4);
+                                                                                    Creature Guard3 = new Creature(20, -1, 4);
+                                                                                    BtnContinue.Click -= Quest6Click5;
+                                                                                    BtnContinue.Click += Quest6Click9;
+                                                                                    ActionBox.Items.Clear();
+                                                                                    ActionBox.Items.Add("Enter combat");
+                                                                                    ActionBox.SelectedIndex = 0;
+                                                                                    void Quest6Click9(object sender_5, EventArgs e_5)
+                                                                                    {
+                                                                                        BtnContinue.Click -= Quest6Click9;
+                                                                                        int result = Combat(player, Guard1);
+                                                                                        if (result != 2)
+                                                                                            result = Combat(player, Guard2);
+                                                                                        if (result != 2)
+                                                                                            result = Combat(player, Guard3);
+                                                                                        if(result != 2)
+                                                                                        {
+                                                                                            TbMain.Text = "After killing the guards, you run from the scene of the crime. Hopefully the noblewoman learns a valuable lesson from this." + Environment.NewLine + "-50 GBP" + Environment.NewLine + "Quest Complete"; ;
+                                                                                            player.GBP -= 50;
+                                                                                            lblPlayerGBP.Text = player.GBP.ToString();
+                                                                                            questComplete[6] = true;
+                                                                                            ActionBox.Items.Clear();
+                                                                                            ActionBox.SelectedIndex = -1;
+                                                                                            BtnContinue.Click += OutsideTownContinueClick;
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            TbMain.Text = "After seeing more guards round the corner, you figure its time to leave. You push the guard you were locked in combat with to the ground, and head in a dead sprint to the outskirts of town, and lay low for a day or two. Hopefully the noblewoman has learned something from this." + Environment.NewLine + "-40 GBP" + Environment.NewLine + "Quest Complete"; ;
+                                                                                            player.GBP -= 40;
+                                                                                            lblPlayerGBP.Text = player.GBP.ToString();
+                                                                                            questComplete[6] = true;
+                                                                                            ActionBox.Items.Clear();
+                                                                                            ActionBox.SelectedIndex = -1;
+                                                                                            BtnContinue.Click += OutsideTownContinueClick;
+                                                                                        }
+                                                                                    }
+                                                                                    break;
+                                                                            }
+                                                                        }
+                                                                        break;
+                                                                }
+                                                            }
+                                                            break;
+                                                    }
+                                                }
+                                                break;
+                                            case 1:
+                                                TbMain.Text = "You pull out your weapon, and the young tanner is obviously frightened by this. He stops curing the animal skins to bring out his dagger. However, in his haste to pull out his dagger, he lets go and flings it across the room. Seeing an opportunity to teach him a lesson, you strike quickly. The noblewoman should have know better than this, but you have done the noblewoman a favor. You walk back into the city." + Environment.NewLine + "-25 GBP" + Environment.NewLine + "Quest Complete";
+                                                player.GBP -= 25;
+                                                lblPlayerGBP.Text = player.GBP.ToString();
+                                                questComplete[6] = true;
+                                                ActionBox.Items.Clear();
+                                                ActionBox.SelectedIndex = -1;
+                                                BtnContinue.Click -= Quest6Click1;
+                                                BtnContinue.Click += OutsideTownContinueClick;
+                                                break;
+                                        }
+                                    }
                                     break;
                                 case 2:
                                     TbMain.Text = "The last thing you want to do is spend time looking into a rumor.";
@@ -1151,7 +1483,7 @@ namespace WrathOfTheRuined
                             }
                         }
                         break;
-                    case 7:     //Wire Fraud
+                    case 7:     //Armado De Santo
                         BtnContinue.Click += Quest7Start;
                         ActionBox.Items.Add("Search for Armando De Santo");
                         ActionBox.Items.Add("Ignore the poster");
@@ -1160,6 +1492,50 @@ namespace WrathOfTheRuined
                             switch (ActionBox.SelectedIndex)
                             {
                                 case 0:
+                                    TbMain.Text = "2500 is quite the sum of gold, you decide it is worth looking into. Searching for a criminial on the run is not an easy task, but you figure that it can't be that hard. After over six days of working with the local bounty hunters and guards, you eventually track De Santo back to Lancaster. You and a team of well equipped bounty hunters take to the road to apprehend De Santo. Just as you learned back in Fallholt, De Santo and a couple of his lackeys have holed up in a barn outside of Lancaster, not too far from your own family farm. You and your team approach the barn, and begin the attack.";
+                                    ActionBox.Items.Clear();
+                                    ActionBox.Items.Add("Find and Apprehend De Santo");
+                                    ActionBox.SelectedIndex = 0;
+                                    BtnContinue.Click -= Quest7Start;
+                                    BtnContinue.Click += Quest7Click1;
+                                    void Quest7Click1(object sender_1, EventArgs e_1)
+                                    {
+                                        Creature lackey1 = new Creature(20, -1, 4);
+                                        Creature lackey2 = new Creature(24, -1, 4);
+                                        Creature lackey3 = new Creature(26, -1, 4);
+                                        Creature Armando = new Creature(29, -1, 5);
+                                        int result = Combat(player, lackey1);
+                                        if(result != 2)
+                                            result = Combat(player, lackey2);
+                                        if (result != 2)
+                                            result = Combat(player, lackey3);
+                                        if (result != 2)
+                                            result = Combat(player, Armando);
+                                        if (result != 2)
+                                        {
+                                            TbMain.Text = "After a long and arduous battle, De Santo lays dead on the ground. Numerous other bodies lay dead, including one of your teammates. However, the menace that has been Armando has finally been silenced. The team takes everything they can from the barn, which was about 500 gold, and splits it evenly between the four of you. After telling the guards that Armando has been slain, the guards also give your team the reward, which is split up evenly." + Environment.NewLine + "+750 Gold, +100 GBP" + Environment.NewLine + "Quest Complete";
+                                            ActionBox.Items.Clear();
+                                            ActionBox.SelectedIndex = -1;
+                                            progress = 1;
+                                            questComplete[7] = true;
+                                            player.Gold += 750;
+                                            player.GBP += 100;
+                                            lblPlayerGold.Text = player.Gold.ToString();
+                                            lblPlayerGBP.Text = player.GBP.ToString();
+                                            BtnContinue.Click -= Quest7Click1;
+                                            BtnContinue.Click += OutsideTownContinueClick;
+                                        }
+                                        else
+                                        {
+                                            TbMain.Text = "Looking around you, you see that this is a losing battle. You rally whats left of the team, and run back into town. Knowing that their location has been compromised, Armando and his gang are sure to relocate, and who knows where they'll go this time..." + Environment.NewLine + "Quest Complete";
+                                            ActionBox.Items.Clear();
+                                            ActionBox.SelectedIndex = -1;
+                                            progress = 1;
+                                            questComplete[7] = true;
+                                            BtnContinue.Click -= Quest7Click1;
+                                            BtnContinue.Click += OutsideTownContinueClick;
+                                        }
+                                    }
                                     break;
                                 case 1:
                                     TbMain.Text = "Now is not the time for bounty hunting anyway.";
@@ -1174,81 +1550,86 @@ namespace WrathOfTheRuined
                         break;
                 }
             }
-
         }
 
         public void RoyalPalace()
         {
             ActionBox.SelectedIndex = -1;
-            
+
             lblLoc.Text = "Royal Palace";
 
             TbMain.Text = "The time is now. You have geared up, gained some cash, and are ready to remove the threat to your family." + Environment.NewLine + "You'll have to fight your way through to the king. Do you still have the strength to manage?";
 
             Creature noble = new Creature(1, 1, 1);
-            if(Combat(player, noble) != 1)
+            if (Combat(player, noble) != 2)
             {
-                TbMain.Text = "You have failed your people.";
-                MessageBox.Show("Thank you for playing!");
-                Application.Restart();
-            }
-
-            Creature knight = new Creature(2, 1, 2);
-            if(Combat(player, knight) != 1)
-            {
-                TbMain.Text = "You have failed your people";
-                MessageBox.Show("Thank you for playing!");
-                Application.Restart();
-            }
-
-            Creature protector = new Creature(2, 2, 1);
-            if(Combat(player, protector)!=1)
-            {
-                TbMain.Text = "You have failed your people";    
-                MessageBox.Show("Thank you for playing!");
-                Application.Restart();
-            }
-
-            TbMain.Text = "You have arrived at the throne room. Inside you see the king and his royal protector. They king glances at you and speaks." + Environment.NewLine + "'You've made it this far, but I'm afriad this is where your story ends.'";
-
-            if (player.GBP >= 0)
-            {
-                TbMain.Text = "'Since you have fought honorably in my towns, I shall fight you myself.'" + Environment.NewLine + "Strike against the king and carve your legacy in stone!";
-
-                Creature king = new Creature(8, 8, 9);
-                king.CurrentHP = king.MaxHP = 75;
-
-                if (Combat(player, king) == 1)
+                Creature knight = new Creature(2, 1, 2);
+                if (Combat(player, knight) != 2)
                 {
-                    TbMain.Text = "You have done it! You have defeated the king and can rule in his stead." + Environment.NewLine + "How will you rule over the people? Will you maintain your honor and generosity, or will you make them pay in blood for the genocide of the Vanins?";
+                    Creature protector = new Creature(2, 2, 1);
+                    if (Combat(player, protector) != 1)
+                    {
+                        TbMain.Text = "You have arrived at the throne room. Inside you see the king and his royal protector. The king glances at you and speaks." + Environment.NewLine + "'You've made it this far, but I'm afriad this is where your journey ends.'";
+                        // Continue Button
+
+                        if (player.GBP >= 0)
+                        {
+                            TbMain.Text = "'Since you have fought honorably in my kingdom, I shall fight you myself.'" + Environment.NewLine + "Strike against the king and carve your legacy in stone!";
+
+                            Creature king = new Creature(29, 29, 5);
+                            king.CurrentHP = king.MaxHP = 250;
+
+                            if (Combat(player, king) != 2)
+                            {
+                                TbMain.Text = "You have done it! You have defeated the king and can rule in his stead." + Environment.NewLine + "How will you rule over the people? Will you maintain your honor and generosity, or will you make them pay in blood for the genocide of the Vanins?";
+                                MessageBox.Show("Thank you for playing!");
+                                Application.Restart();
+                            }
+                            else
+                            {
+                                TbMain.Text = "";
+                                MessageBox.Show("Thank you for playing!");
+                                Application.Restart();
+                            }
+                        }
+                        else if (player.GBP < 0)
+                        {
+                            TbMain.Text = "'You are nothing but scum. I will not give you the gift of fighting me. Royal Protector, Remove him.'";
+
+                            Creature royalProtector = new Creature(29, 29, 5);
+                            if (Combat(player, royalProtector) != 2)
+                            {
+                                TbMain.Text = "You have vanquished the royal protector as the king ran away in fear. You can take the crown by force and rule over the people." + Environment.NewLine + "How will you rule over the people? Will your thirst for blood cloud your judgement, or will you bring peace to the land?";
+                            }
+                            else
+                            {
+                                MessageBox.Show("In the final moments, you couldn't kill the royal protector, and ran away. Game over.");
+                            }
+                            MessageBox.Show("Thank you for playing!");
+                            Application.Restart();
+                        }
+                    }
+                    else
+                    {
+                        //ran away fighting the protector
+                        MessageBox.Show("Thank you for playing!");
+                        Application.Restart();
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Game Over" + Environment.NewLine + "Your people have perished because you were weak.");
-
+                    //ran away fighting the knight
+                    MessageBox.Show("Thank you for playing!");
+                    Application.Restart();
                 }
+
+            }
+            else
+            {
+                //ran away on fighting the noble
                 MessageBox.Show("Thank you for playing!");
                 Application.Restart();
             }
-            else if(player.GBP < 0 && path < 3)
-            {
-                TbMain.Text = "'You are nothing but scum. I will not give you the gift of fighting me. Royal Protector, Remove him.'" + Environment.NewLine + "Strike against the Protector the King hides behind!";
-
-                Creature royalProtector = new Creature(20, 20, 5);
-                royalProtector.CurrentHP = royalProtector.MaxHP = 120;
-                if (Combat(player, royalProtector) == 1)
-                {
-                    TbMain.Text = "You have vanquished the royal protector as the king ran away in fear. You can take the crown by force and rule over the people." + Environment.NewLine + "How will you rule over the people? Will your thirst for blood cloud your judgement, or will you bring peace to the land?";
-                    path = 3;
-                }
-                else
-                {
-                    MessageBox.Show("Game Over" + Environment.NewLine + "Your people have perished because you were weak.");
-
-                }
-                MessageBox.Show("Thanks for playing!");
-                Application.Restart();
-            }        
         }
 
         public void Wilderness( int difficulty )

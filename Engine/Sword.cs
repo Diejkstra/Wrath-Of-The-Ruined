@@ -90,6 +90,12 @@ namespace Engine
                         SwordName += " +" + (SwordID - 24).ToString();
                     Price = 150 + SwordID;
                     break;
+                case 30:
+                    BaseSwordDamage = 15;
+                    SwordName = "Claws";
+                    MaxSwordDamage = 20;
+                    Price = 0;
+                    break;
                 case 100:
                     BaseSwordDamage = 999;
                     MaxSwordDamage = 1000;
