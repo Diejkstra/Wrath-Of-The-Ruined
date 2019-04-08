@@ -9,12 +9,12 @@ namespace Engine
         public int AP { get; set; } //Base Armor Points
         public int MR { get; set; } //Base Magic Resist
         public int MaxHP { get; set; }
+        public int CurrentHP { get; set; }
         public int PDamage { get; set; } //physical damage
+        public int MDamage { get; set; } //magic damage
+        public int Strength { get; set; }
         public int Intellect { get; set; }
         public int Endurance { get; set; }
-        public int Strength { get; set; }
-        public int MDamage { get; set; } //magic damage
-        public int CurrentHP { get; set; }
         public int GoldDrop { get; set; }
         public Stance stance;
         public Sword sword;
