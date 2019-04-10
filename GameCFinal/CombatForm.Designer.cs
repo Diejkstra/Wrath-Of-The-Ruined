@@ -183,10 +183,10 @@
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Castellar", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(36, 12);
+            this.label3.Location = new System.Drawing.Point(29, 8);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 26);
+            this.label3.Size = new System.Drawing.Size(86, 33);
             this.label3.TabIndex = 12;
             this.label3.Text = "You";
             // 
@@ -195,10 +195,10 @@
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Castellar", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(309, 12);
+            this.label4.Location = new System.Drawing.Point(299, 8);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(104, 26);
+            this.label4.Size = new System.Drawing.Size(124, 33);
             this.label4.TabIndex = 13;
             this.label4.Text = "Enemy";
             // 
@@ -206,10 +206,10 @@
             // 
             this.lblPlayerStance.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblPlayerStance.AutoSize = true;
-            this.lblPlayerStance.Location = new System.Drawing.Point(32, 160);
+            this.lblPlayerStance.Location = new System.Drawing.Point(19, 158);
             this.lblPlayerStance.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlayerStance.Name = "lblPlayerStance";
-            this.lblPlayerStance.Size = new System.Drawing.Size(80, 13);
+            this.lblPlayerStance.Size = new System.Drawing.Size(106, 17);
             this.lblPlayerStance.TabIndex = 14;
             this.lblPlayerStance.Text = "lblPlayerStance";
             // 
@@ -229,10 +229,10 @@
             // 
             this.lblEnemyStance.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblEnemyStance.AutoSize = true;
-            this.lblEnemyStance.Location = new System.Drawing.Point(319, 160);
+            this.lblEnemyStance.Location = new System.Drawing.Point(306, 158);
             this.lblEnemyStance.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEnemyStance.Name = "lblEnemyStance";
-            this.lblEnemyStance.Size = new System.Drawing.Size(83, 13);
+            this.lblEnemyStance.Size = new System.Drawing.Size(109, 17);
             this.lblEnemyStance.TabIndex = 16;
             this.lblEnemyStance.Text = "lblEnemyStance";
             // 
@@ -240,10 +240,10 @@
             // 
             this.stanceLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.stanceLabel.AutoSize = true;
-            this.stanceLabel.Location = new System.Drawing.Point(195, 160);
+            this.stanceLabel.Location = new System.Drawing.Point(190, 158);
             this.stanceLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.stanceLabel.Name = "stanceLabel";
-            this.stanceLabel.Size = new System.Drawing.Size(41, 13);
+            this.stanceLabel.Size = new System.Drawing.Size(52, 17);
             this.stanceLabel.TabIndex = 15;
             this.stanceLabel.Text = "Stance";
             // 
@@ -352,10 +352,10 @@
             this.CbPlayerCombat.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CbPlayerCombat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CbPlayerCombat.FormattingEnabled = true;
-            this.CbPlayerCombat.Location = new System.Drawing.Point(146, 257);
+            this.CbPlayerCombat.Location = new System.Drawing.Point(146, 255);
             this.CbPlayerCombat.Margin = new System.Windows.Forms.Padding(2);
             this.CbPlayerCombat.Name = "CbPlayerCombat";
-            this.CbPlayerCombat.Size = new System.Drawing.Size(140, 21);
+            this.CbPlayerCombat.Size = new System.Drawing.Size(140, 24);
             this.CbPlayerCombat.TabIndex = 9;
             // 
             // CombatForm

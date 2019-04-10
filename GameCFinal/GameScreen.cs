@@ -2,8 +2,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace WrathOfTheRuined
 {
@@ -1554,81 +1552,86 @@ namespace WrathOfTheRuined
 
         public void RoyalPalace()
         {
-            ActionBox.SelectedIndex = -1;
-
+            BtnContinue.Click -= OutsideTownContinueClick;
+            BtnContinue.Click += RPClick1;
+            ActionBox.Items.Clear();
+            ActionBox.Items.Add("Battle");
+            ActionBox.SelectedIndex = 0;
             lblLoc.Text = "Royal Palace";
-
             TbMain.Text = "The time is now. You have geared up, gained some cash, and are ready to remove the threat to your family." + Environment.NewLine + "You'll have to fight your way through to the king. Do you still have the strength to manage?";
 
-            Creature noble = new Creature(1, 1, 1);
-            if (Combat(player, noble) != 2)
+            void RPClick1(object sender, EventArgs e)
             {
-                Creature knight = new Creature(2, 1, 2);
-                if (Combat(player, knight) != 2)
+                Creature noble = new Creature(1, 1, 1);
+                if (Combat(player, noble) != 2)
                 {
-                    Creature protector = new Creature(2, 2, 1);
-                    if (Combat(player, protector) != 1)
+                    Creature knight = new Creature(2, 1, 2);
+                    if (Combat(player, knight) != 2)
                     {
-                        TbMain.Text = "You have arrived at the throne room. Inside you see the king and his royal protector. The king glances at you and speaks." + Environment.NewLine + "'You've made it this far, but I'm afriad this is where your journey ends.'";
-                        // Continue Button
-
-                        if (player.GBP >= 0)
+                        Creature protector = new Creature(2, 2, 1);
+                        if (Combat(player, protector) != 1)
                         {
-                            TbMain.Text = "'Since you have fought honorably in my kingdom, I shall fight you myself.'" + Environment.NewLine + "Strike against the king and carve your legacy in stone!";
+                            TbMain.Text = "You have arrived at the throne room. Inside you see the king and his royal protector. The king glances at you and speaks." + Environment.NewLine + "'You've made it this far, but I'm afriad this is where your journey ends.'";
+                            // Continue Button
 
-                            Creature king = new Creature(29, 29, 5);
-                            king.CurrentHP = king.MaxHP = 250;
-
-                            if (Combat(player, king) != 2)
+                            if (player.GBP >= 0)
                             {
-                                TbMain.Text = "You have done it! You have defeated the king and can rule in his stead." + Environment.NewLine + "How will you rule over the people? Will you maintain your honor and generosity, or will you make them pay in blood for the genocide of the Vanins?";
-                                MessageBox.Show("Thank you for playing!");
-                                Application.Restart();
+                                TbMain.Text = "'Since you have fought honorably in my kingdom, I shall fight you myself.'" + Environment.NewLine + "Strike against the king and carve your legacy in stone!";
+
+                                Creature king = new Creature(29, 29, 5);
+                                king.CurrentHP = king.MaxHP = 250;
+
+                                if (Combat(player, king) != 2)
+                                {
+                                    TbMain.Text = "You have done it! You have defeated the king and can rule in his stead." + Environment.NewLine + "How will you rule over the people? Will you maintain your honor and generosity, or will you make them pay in blood for the genocide of the Vanins?";
+                                    MessageBox.Show("Thank you for playing!");
+                                    Application.Restart();
+                                }
+                                else
+                                {
+                                    TbMain.Text = "The king was too strong for you to battle and win. You run out of the throne room, having failed the Vanins and your family.";
+                                    MessageBox.Show("Thank you for playing!");
+                                    Application.Restart();
+                                }
                             }
-                            else
+                            else if (player.GBP < 0)
                             {
-                                TbMain.Text = "";
+                                TbMain.Text = "'You are nothing but scum. I will not give you the gift of fighting me. Royal Protector, Remove him.'";
+
+                                Creature royalProtector = new Creature(29, 29, 5);
+                                if (Combat(player, royalProtector) != 2)
+                                {
+                                    TbMain.Text = "You have vanquished the royal protector as the king ran away in fear. You can take the crown by force and rule over the people." + Environment.NewLine + "How will you rule over the people? Will your thirst for blood cloud your judgement, or will you bring peace to the land?";
+                                }
+                                else
+                                {
+                                    MessageBox.Show("In the final moments, you couldn't kill the royal protector, and ran away. Game over.");
+                                }
                                 MessageBox.Show("Thank you for playing!");
                                 Application.Restart();
                             }
                         }
-                        else if (player.GBP < 0)
+                        else
                         {
-                            TbMain.Text = "'You are nothing but scum. I will not give you the gift of fighting me. Royal Protector, Remove him.'";
-
-                            Creature royalProtector = new Creature(29, 29, 5);
-                            if (Combat(player, royalProtector) != 2)
-                            {
-                                TbMain.Text = "You have vanquished the royal protector as the king ran away in fear. You can take the crown by force and rule over the people." + Environment.NewLine + "How will you rule over the people? Will your thirst for blood cloud your judgement, or will you bring peace to the land?";
-                            }
-                            else
-                            {
-                                MessageBox.Show("In the final moments, you couldn't kill the royal protector, and ran away. Game over.");
-                            }
-                            MessageBox.Show("Thank you for playing!");
+                            //ran away fighting the protector
+                            MessageBox.Show("You ran away during the fight. Game over.");
                             Application.Restart();
                         }
                     }
                     else
                     {
-                        //ran away fighting the protector
-                        MessageBox.Show("Thank you for playing!");
+                        //ran away fighting the knight
+                        MessageBox.Show("You ran away during the fight. Game over.");
                         Application.Restart();
                     }
+
                 }
                 else
                 {
-                    //ran away fighting the knight
-                    MessageBox.Show("Thank you for playing!");
+                    //ran away on fighting the noble
+                    MessageBox.Show("You ran away during the fight. Game over.");
                     Application.Restart();
                 }
-
-            }
-            else
-            {
-                //ran away on fighting the noble
-                MessageBox.Show("Thank you for playing!");
-                Application.Restart();
             }
         }
 
