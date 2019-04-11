@@ -29,14 +29,11 @@ namespace Engine
             Endurance = 100;
             Strength = 5;
             MDamage = 20;
-            sword = new Sword();
-            armor = new Armor();
-            staff = new Staff();
+            sword = new Sword(SwordID);
+            armor = new Armor(ArmorID);
+            staff = new Staff(StaffID);
             stance = new Stance();
             CurrentHP = MaxHP;
-            sword.AssignSwordStats(SwordID);
-            armor.AssignArmorStats(ArmorID);
-            staff.AssignStaffStats(StaffID);
         }
 
         public int CalculatePhysicalAttack()

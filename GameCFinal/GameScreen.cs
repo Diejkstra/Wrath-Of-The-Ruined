@@ -7,7 +7,7 @@ namespace WrathOfTheRuined
 {
     public partial class GameScreen : Form
     {
-        private Player player;
+        public Player player;
         public int progress = 0;
         public bool[] townSlaughtered = new bool[4];  //Array tracking which towns are slaughtered. townID matched the array.
         public bool[] questComplete = new bool[8];   //Array tracking which quests are complete. questID matches the array.
@@ -23,24 +23,36 @@ namespace WrathOfTheRuined
 
             if (player.Name == "Tully")
             {
-                player.sword.AssignSwordStats(100);
-                player.staff.AssignStaffStats(100);
-                player.armor.AssignArmorStats(100);
+                Sword sword = new Sword(100);
+                Staff staff = new Staff(100);
+                Armor armor = new Armor(100);
+                player.sword = sword;
+                player.staff = staff;
+                player.armor = armor;
                 player.Gold = 50000;
                 player.GBP = 100000;
+                player.Inventory.Clear();
+                player.Inventory.Add(sword);
+                player.Inventory.Add(staff);
+                player.Inventory.Add(armor);
             }
 
             if (player.Name == "Tom")
             {
-                player.sword.AssignSwordStats(200);
-                player.staff.AssignStaffStats(100);
-                player.armor.AssignArmorStats(200);
+                Sword sword = new Sword(200);
+                Staff staff = new Staff(100);
+                Armor armor = new Armor(200);
+                player.sword = sword;
+                player.staff = staff;
+                player.armor = armor;
                 player.Gold = 50000;
                 player.GBP = 100000;
+                player.Inventory.Clear();
+                player.Inventory.Add(sword);
+                player.Inventory.Add(staff);
+                player.Inventory.Add(armor);
             }
-
-            listBoxPlayerInventory.DataSource = player.Inventory;
-            listBoxPlayerInventory.DisplayMember = "Name";
+            ShowData(player);
             GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
             //actual game code
             TbMain.Text = "Hello " + player.Name + ". You have been asleep for a long time. Have you forgotten who you are? You are a proud member of the Vanin race. I hope you know how to survive." + Environment.NewLine +
@@ -49,6 +61,13 @@ namespace WrathOfTheRuined
             "Your kind was feared because of the immense potential you hold. Your race has the ability to absorb part of the skill and wisdom from those you defeat. After several horrific wars, your kind has learned to live peacefully with Humans.";
             TbMain.AppendText(Environment.NewLine + Environment.NewLine + "Or so you thought.");
             TbMain.AppendText(Environment.NewLine + Environment.NewLine + "(Press Continue)");
+        }
+
+        private void ShowData(Player player)
+        {
+            listBoxPlayerInventory.DataSource = null;
+            listBoxPlayerInventory.DataSource = player.Inventory;
+            listBoxPlayerInventory.DisplayMember = "Name";
         }
 
         public void GetNameInput()
@@ -92,6 +111,9 @@ namespace WrathOfTheRuined
             lblPlayerXP.Text = player.ExperiencePoints.ToString();
             lblPlayerGold.Text = player.Gold.ToString();
             lblPlayerGBP.Text = player.GBP.ToString();
+            lblEquippedSword.Text = player.sword.Name.ToString();
+            lblEquippedStaff.Text = player.staff.Name.ToString();
+            lblEquippedArmor.Text = player.armor.Name.ToString();
             lblLoc.Text = "Wilderness";
         }
 
@@ -134,6 +156,62 @@ namespace WrathOfTheRuined
             }
         }
 
+        private void equipButton_Click(object sender, EventArgs e)
+        {
+            if (listBoxPlayerInventory.SelectedItem != null)
+            {
+                Item item = listBoxPlayerInventory.SelectedItem as Item;
+                if( item is Sword )
+                {
+                    Sword sword = item as Sword;
+                    if(sword == player.sword)
+                    {
+                        player.sword = new Sword(-1);
+                        TbMain.Text = "You unequipped the " + sword.Name + ".";
+                    }
+                    else
+                    {
+                        player.sword = sword;
+                        TbMain.Text = "You equipped the " + sword.Name + ".";
+                    }
+                    lblEquippedSword.Text = player.sword.Name.ToString();
+                }
+                else if (item is Staff)
+                {
+                    Staff staff = item as Staff;
+                    if(staff == player.staff)
+                    {
+                        player.staff = new Staff(-1);
+                        TbMain.Text = "You unequipped the " + staff.Name + ".";
+                    }
+                    else
+                    {
+                        player.staff = staff;
+                        TbMain.Text = "You equipped the " + staff.Name + ".";
+                    }
+                    lblEquippedStaff.Text = player.staff.Name.ToString();
+                }
+                else if (item is Armor)
+                {
+                    Armor armor = item as Armor;
+                    if(armor == player.armor)
+                    {
+                        player.armor = new Armor(-1);
+                        TbMain.Text = "You unequipped the " + armor.Name + ".";
+                    }
+                    else
+                    {
+                        player.armor = armor;
+                        TbMain.Text = "You equipped the " + armor.Name + ".";
+                    }
+                    lblEquippedArmor.Text = player.armor.Name.ToString();
+                }
+                else
+                    TbMain.Text = "You cannot equip the " + item.Name + ".";
+                ActionBox.SelectedIndex = -1;
+            }
+        }
+
         public void Town(int townID)
         {
             Town Town = new Town(townID);
@@ -163,6 +241,7 @@ namespace WrathOfTheRuined
                             Store(player, Town.TownID, 1);
                             ActionBox.Items.Clear();
                             ActionBox.SelectedIndex = -1;
+                            BtnContinue.PerformClick();
                             break;
                         case 2:
                             TbMain.Text = "You decide to slaughter the town.";
@@ -202,6 +281,7 @@ namespace WrathOfTheRuined
                             lblPlayerGold.Text = player.Gold.ToString();
                             lblPlayerGBP.Text = player.GBP.ToString();
                             lblLoc.Text = Town.Name;
+                            listBoxPlayerInventory.Refresh();
                             TbMain.Text = "You are standing in the " + Town.Descriptor + " of " + Town.Name + ".";
 
                             ActionBox.Items.Clear();
@@ -1708,6 +1788,12 @@ namespace WrathOfTheRuined
             Store.EnterStore(player, townID, storeType);
             DialogResult = Store.ShowDialog();
             Show();
+        }
+
+        private void listBoxPlayerInventory_DataSourceChanged(object sender, EventArgs e)
+        {
+            listBoxPlayerInventory.DataSource = null;
+            listBoxPlayerInventory.DataSource = player.Inventory;
         }
     }
 }

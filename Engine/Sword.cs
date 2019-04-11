@@ -6,7 +6,7 @@
         public int MaxSwordDamage { get; set; }  //dagger = 5, dagger+5 = 10, bronze = 5, bent+5 = 10, etc.
 
 
-        public void AssignSwordStats(int SwordID)
+        public Sword(int SwordID)
         {
             ID = SwordID;
             switch (SwordID)
@@ -92,17 +92,18 @@
                     BaseSwordDamage = 999;
                     MaxSwordDamage = 1000;
                     Name = "Wireshark";
+                    Price = 100000;
                     break;
                 case 200:
                     BaseSwordDamage = 999;
                     MaxSwordDamage = 1000;
                     Name = "Go To Help Night";
+                    Price = 100000;
                     break;
                 default:
                     Name = "Error";
                     break;
             }
-            StoreName = Name + " - " + Price + "gp";
         }
     }
 }

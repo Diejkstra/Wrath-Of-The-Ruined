@@ -5,7 +5,7 @@
         public int BaseStaffDamage { get; set; }
         public int MaxStaffDamage { get; set; }
 
-        public void AssignStaffStats(int StaffID)
+        public Staff(int StaffID)
         {
             ID = StaffID;
             switch (StaffID)
@@ -85,12 +85,12 @@
                     BaseStaffDamage = 999;
                     MaxStaffDamage = 1000;
                     Name = "Yes";
+                    Price = 100000;
                     break;
                 default:
                     Name = "Error";
                     break;
             }
-            StoreName = Name + " - " + Price + "gp";
         }
     }
 }

@@ -15,7 +15,6 @@
                     HealthGain = 15;
                     break;
             }
-            StoreName = Name + " - " + Price + "gp";
         }
     }
 }

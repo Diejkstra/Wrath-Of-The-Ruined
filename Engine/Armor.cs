@@ -4,7 +4,7 @@
     {
         public int ArmorPoints { get; set; }
 
-        public void AssignArmorStats(int ArmorID)
+        public Armor(int ArmorID)
         {
             ID = ArmorID;
             switch (ArmorID)
@@ -47,17 +47,18 @@
                 case 100:
                     Name = "Black T-Shirt";
                     ArmorPoints = 1001;
+                    Price = 100000;
                     break;
                 case 200:
-                    Name = "Short Sleeve T-Shirt with a DSU logo";
+                    Name = "Short Sleeve T-Shirt w/ DSU logo";
                     ArmorPoints = 1001;
+                    Price = 100000;
                     break;
                 default:
                     Name = "Error";
                     ArmorPoints = 0;
                     break;
             }
-            StoreName = Name + " - " + Price + "gp";
         }
     }
 }

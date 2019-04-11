@@ -39,6 +39,8 @@
             this.listBoxPlayerInv = new System.Windows.Forms.ListBox();
             this.buyButton = new System.Windows.Forms.Button();
             this.leaveButton = new System.Windows.Forms.Button();
+            this.lblPlayerValue = new System.Windows.Forms.Label();
+            this.lblStoreValue = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblGold
@@ -139,7 +141,7 @@
             // 
             // leaveButton
             // 
-            this.leaveButton.Location = new System.Drawing.Point(39, 328);
+            this.leaveButton.Location = new System.Drawing.Point(155, 361);
             this.leaveButton.Name = "leaveButton";
             this.leaveButton.Size = new System.Drawing.Size(214, 23);
             this.leaveButton.TabIndex = 10;
@@ -147,11 +149,33 @@
             this.leaveButton.UseVisualStyleBackColor = true;
             this.leaveButton.Click += new System.EventHandler(this.leaveButton_Click);
             // 
+            // lblPlayerValue
+            // 
+            this.lblPlayerValue.AutoSize = true;
+            this.lblPlayerValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlayerValue.Location = new System.Drawing.Point(36, 325);
+            this.lblPlayerValue.Name = "lblPlayerValue";
+            this.lblPlayerValue.Size = new System.Drawing.Size(80, 18);
+            this.lblPlayerValue.TabIndex = 11;
+            this.lblPlayerValue.Text = "Item Value:";
+            // 
+            // lblStoreValue
+            // 
+            this.lblStoreValue.AutoSize = true;
+            this.lblStoreValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStoreValue.Location = new System.Drawing.Point(276, 325);
+            this.lblStoreValue.Name = "lblStoreValue";
+            this.lblStoreValue.Size = new System.Drawing.Size(80, 18);
+            this.lblStoreValue.TabIndex = 12;
+            this.lblStoreValue.Text = "Item Value:";
+            // 
             // StoreForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(521, 378);
+            this.ClientSize = new System.Drawing.Size(521, 396);
+            this.Controls.Add(this.lblStoreValue);
+            this.Controls.Add(this.lblPlayerValue);
             this.Controls.Add(this.leaveButton);
             this.Controls.Add(this.buyButton);
             this.Controls.Add(this.listBoxPlayerInv);
@@ -185,5 +209,7 @@
         private System.Windows.Forms.ListBox listBoxPlayerInv;
         private System.Windows.Forms.Button buyButton;
         private System.Windows.Forms.Button leaveButton;
+        private System.Windows.Forms.Label lblPlayerValue;
+        private System.Windows.Forms.Label lblStoreValue;
     }
 }
