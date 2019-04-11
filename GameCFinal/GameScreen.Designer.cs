@@ -31,7 +31,6 @@
             this.lblPlayerXP = new System.Windows.Forms.Label();
             this.lblPlayerGold = new System.Windows.Forms.Label();
             this.lblPlayerGBP = new System.Windows.Forms.Label();
-            this.DgQuests = new System.Windows.Forms.DataGridView();
             this.TbMain = new System.Windows.Forms.RichTextBox();
             this.ActionBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,13 +39,7 @@
             this.lblXP = new System.Windows.Forms.Label();
             this.lblGold = new System.Windows.Forms.Label();
             this.lblGBP = new System.Windows.Forms.Label();
-            this.lblSword = new System.Windows.Forms.Label();
-            this.lblStaff = new System.Windows.Forms.Label();
-            this.lblArmor = new System.Windows.Forms.Label();
-            this.lblPlayerSword = new System.Windows.Forms.Label();
-            this.lblPlayerStaff = new System.Windows.Forms.Label();
-            this.lblPlayerArmor = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.DgQuests)).BeginInit();
+            this.listBoxPlayerInventory = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // lblPlayerXP
@@ -78,16 +71,6 @@
             this.lblPlayerGBP.Size = new System.Drawing.Size(68, 13);
             this.lblPlayerGBP.TabIndex = 2;
             this.lblPlayerGBP.Text = "lblPlayerGBP";
-            // 
-            // DgQuests
-            // 
-            this.DgQuests.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DgQuests.Location = new System.Drawing.Point(18, 275);
-            this.DgQuests.Margin = new System.Windows.Forms.Padding(2);
-            this.DgQuests.Name = "DgQuests";
-            this.DgQuests.RowTemplate.Height = 28;
-            this.DgQuests.Size = new System.Drawing.Size(160, 149);
-            this.DgQuests.TabIndex = 3;
             // 
             // TbMain
             // 
@@ -167,71 +150,22 @@
             this.lblGBP.TabIndex = 12;
             this.lblGBP.Text = "GBP:";
             // 
-            // lblSword
+            // listBoxPlayerInventory
             // 
-            this.lblSword.AutoSize = true;
-            this.lblSword.Location = new System.Drawing.Point(15, 69);
-            this.lblSword.Name = "lblSword";
-            this.lblSword.Size = new System.Drawing.Size(40, 13);
-            this.lblSword.TabIndex = 13;
-            this.lblSword.Text = "Sword:";
-            // 
-            // lblStaff
-            // 
-            this.lblStaff.AutoSize = true;
-            this.lblStaff.Location = new System.Drawing.Point(15, 82);
-            this.lblStaff.Name = "lblStaff";
-            this.lblStaff.Size = new System.Drawing.Size(32, 13);
-            this.lblStaff.TabIndex = 14;
-            this.lblStaff.Text = "Staff:";
-            // 
-            // lblArmor
-            // 
-            this.lblArmor.AutoSize = true;
-            this.lblArmor.Location = new System.Drawing.Point(15, 95);
-            this.lblArmor.Name = "lblArmor";
-            this.lblArmor.Size = new System.Drawing.Size(37, 13);
-            this.lblArmor.TabIndex = 15;
-            this.lblArmor.Text = "Armor:";
-            // 
-            // lblPlayerSword
-            // 
-            this.lblPlayerSword.AutoSize = true;
-            this.lblPlayerSword.Location = new System.Drawing.Point(52, 69);
-            this.lblPlayerSword.Name = "lblPlayerSword";
-            this.lblPlayerSword.Size = new System.Drawing.Size(76, 13);
-            this.lblPlayerSword.TabIndex = 16;
-            this.lblPlayerSword.Text = "lblPlayerSword";
-            // 
-            // lblPlayerStaff
-            // 
-            this.lblPlayerStaff.AutoSize = true;
-            this.lblPlayerStaff.Location = new System.Drawing.Point(52, 82);
-            this.lblPlayerStaff.Name = "lblPlayerStaff";
-            this.lblPlayerStaff.Size = new System.Drawing.Size(68, 13);
-            this.lblPlayerStaff.TabIndex = 17;
-            this.lblPlayerStaff.Text = "lblPlayerStaff";
-            // 
-            // lblPlayerArmor
-            // 
-            this.lblPlayerArmor.AutoSize = true;
-            this.lblPlayerArmor.Location = new System.Drawing.Point(52, 95);
-            this.lblPlayerArmor.Name = "lblPlayerArmor";
-            this.lblPlayerArmor.Size = new System.Drawing.Size(73, 13);
-            this.lblPlayerArmor.TabIndex = 18;
-            this.lblPlayerArmor.Text = "lblPlayerArmor";
+            this.listBoxPlayerInventory.BackColor = System.Drawing.SystemColors.Control;
+            this.listBoxPlayerInventory.FormattingEnabled = true;
+            this.listBoxPlayerInventory.Location = new System.Drawing.Point(18, 225);
+            this.listBoxPlayerInventory.Name = "listBoxPlayerInventory";
+            this.listBoxPlayerInventory.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.listBoxPlayerInventory.Size = new System.Drawing.Size(207, 238);
+            this.listBoxPlayerInventory.TabIndex = 19;
             // 
             // GameScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(519, 484);
-            this.Controls.Add(this.lblPlayerArmor);
-            this.Controls.Add(this.lblPlayerStaff);
-            this.Controls.Add(this.lblPlayerSword);
-            this.Controls.Add(this.lblArmor);
-            this.Controls.Add(this.lblStaff);
-            this.Controls.Add(this.lblSword);
+            this.ClientSize = new System.Drawing.Size(516, 484);
+            this.Controls.Add(this.listBoxPlayerInventory);
             this.Controls.Add(this.lblGBP);
             this.Controls.Add(this.lblGold);
             this.Controls.Add(this.lblXP);
@@ -240,7 +174,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ActionBox);
             this.Controls.Add(this.TbMain);
-            this.Controls.Add(this.DgQuests);
             this.Controls.Add(this.lblPlayerGBP);
             this.Controls.Add(this.lblPlayerGold);
             this.Controls.Add(this.lblPlayerXP);
@@ -250,7 +183,6 @@
             this.Text = "Wrath of the Ruined";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Game_FormClosed);
             this.Load += new System.EventHandler(this.Game_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.DgQuests)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -261,7 +193,6 @@
         private System.Windows.Forms.Label lblPlayerXP;
         private System.Windows.Forms.Label lblPlayerGold;
         private System.Windows.Forms.Label lblPlayerGBP;
-        private System.Windows.Forms.DataGridView DgQuests;
         private System.Windows.Forms.RichTextBox TbMain;
         private System.Windows.Forms.ComboBox ActionBox;
         private System.Windows.Forms.Label label1;
@@ -270,11 +201,6 @@
         private System.Windows.Forms.Label lblXP;
         private System.Windows.Forms.Label lblGold;
         private System.Windows.Forms.Label lblGBP;
-        private System.Windows.Forms.Label lblSword;
-        private System.Windows.Forms.Label lblStaff;
-        private System.Windows.Forms.Label lblArmor;
-        private System.Windows.Forms.Label lblPlayerSword;
-        private System.Windows.Forms.Label lblPlayerStaff;
-        private System.Windows.Forms.Label lblPlayerArmor;
+        private System.Windows.Forms.ListBox listBoxPlayerInventory;
     }
 }

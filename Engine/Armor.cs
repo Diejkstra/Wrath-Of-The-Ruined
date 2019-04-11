@@ -1,69 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Engine
+﻿namespace Engine
 {
-    public class Armor
+    public class Armor : Item
     {
-        public string ArmorName { get; set; }
-        public int ArmorID { get; set; }
         public int ArmorPoints { get; set; }
-        public int Price { get; set; }
 
-        public void AssignArmorStats(int ID)
+        public void AssignArmorStats(int ArmorID)
         {
-            ArmorID = ID;
-            switch (ID)
+            ID = ArmorID;
+            switch (ArmorID)
             {
                 case -1:
-                    ArmorName = "None";
+                    Name = "None";
                     ArmorPoints = 0;
                     Price = 0;
                     break;
                 case 0:
-                    ArmorName = "Cloth Armor";
+                    Name = "Cloth Armor";
                     ArmorPoints = 10;
                     Price = 10;
                     break;
                 case 1:
-                    ArmorName = "Leather Armor";
+                    Name = "Leather Armor";
                     ArmorPoints = 20;
                     Price = 30;
                     break;
                 case 2:
-                    ArmorName = "Chain Mail";
+                    Name = "Chain Mail";
                     ArmorPoints = 30;
                     Price = 50;
                     break;
                 case 3:
-                    ArmorName = "Iron Plate Armor";
+                    Name = "Iron Plate Armor";
                     ArmorPoints = 40;
                     Price = 75;
                     break;
                 case 4:
-                    ArmorName = "Steel Plate Armor";
+                    Name = "Steel Plate Armor";
                     ArmorPoints = 50;
                     Price = 150;
                     break;
                 case 5:
-                    ArmorName = "Silver Plate Armor";
+                    Name = "Silver Plate Armor";
                     ArmorPoints = 60;
                     Price = 500;
                     break;
                 case 100:
-                    ArmorName = "Black T-Shirt";
+                    Name = "Black T-Shirt";
                     ArmorPoints = 1001;
                     break;
                 case 200:
-                    ArmorName = "Short Sleeve T-Shirt with a DSU logo";
+                    Name = "Short Sleeve T-Shirt with a DSU logo";
                     ArmorPoints = 1001;
                     break;
                 default:
-                    ArmorName = "Error";
+                    Name = "Error";
                     ArmorPoints = 0;
                     break;
             }
+            StoreName = Name + " - " + Price + "gp";
         }
     }
 }

@@ -135,14 +135,14 @@ namespace WrathOfTheRuined
             void CombatRefresh()
             {
                 lblPlayerHealth.Text = player.CurrentHP.ToString();
-                lblPlayerWeapon.Text = player.sword.SwordName.ToString();
-                lblPlayerStaff.Text = player.staff.StaffName.ToString();
-                lblPlayerArmor.Text = player.armor.ArmorName.ToString();
+                lblPlayerWeapon.Text = player.sword.Name.ToString();
+                lblPlayerStaff.Text = player.staff.Name.ToString();
+                lblPlayerArmor.Text = player.armor.Name.ToString();
                 lblPlayerStance.Text = player.stance.stanceName;
                 lblEnemyHealth.Text = enemy.CurrentHP.ToString();
-                lblEnemyWeapon.Text = enemy.sword.SwordName.ToString();
-                lblEnemyStaff.Text = enemy.staff.StaffName.ToString();
-                lblEnemyArmor.Text = enemy.armor.ArmorName.ToString();
+                lblEnemyWeapon.Text = enemy.sword.Name.ToString();
+                lblEnemyStaff.Text = enemy.staff.Name.ToString();
+                lblEnemyArmor.Text = enemy.armor.Name.ToString();
                 lblEnemyStance.Text = enemy.stance.stanceName;
             }
 

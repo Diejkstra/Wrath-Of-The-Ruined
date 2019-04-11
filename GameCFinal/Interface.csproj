@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StoreForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StoreForm.Designer.cs">
+      <DependentUpon>StoreForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ChangeStanceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="StoreForm.resx">
+      <DependentUpon>StoreForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ChangeStanceForm.resx">
       <DependentUpon>ChangeStanceForm.cs</DependentUpon>
     </EmbeddedResource>

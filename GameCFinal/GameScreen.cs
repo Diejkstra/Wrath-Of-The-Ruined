@@ -39,6 +39,8 @@ namespace WrathOfTheRuined
                 player.GBP = 100000;
             }
 
+            listBoxPlayerInventory.DataSource = player.Inventory;
+            listBoxPlayerInventory.DisplayMember = "Name";
             GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
             //actual game code
             TbMain.Text = "Hello " + player.Name + ". You have been asleep for a long time. Have you forgotten who you are? You are a proud member of the Vanin race. I hope you know how to survive." + Environment.NewLine +
@@ -57,7 +59,7 @@ namespace WrathOfTheRuined
             if (NameInput.ShowDialog(this) == DialogResult.OK)
             {
                 // Read the contents of testDialog's TextBox.
-                this.player.Name = NameInput.PlayerNameInputBox.Text;
+                player.Name = NameInput.PlayerNameInputBox.Text;
             }
             NameInput.Dispose();
         }
@@ -90,9 +92,6 @@ namespace WrathOfTheRuined
             lblPlayerXP.Text = player.ExperiencePoints.ToString();
             lblPlayerGold.Text = player.Gold.ToString();
             lblPlayerGBP.Text = player.GBP.ToString();
-            lblPlayerSword.Text = player.sword.SwordName;
-            lblPlayerStaff.Text = player.staff.StaffName;
-            lblPlayerArmor.Text = player.armor.ArmorName;
             lblLoc.Text = "Wilderness";
         }
 
@@ -161,7 +160,7 @@ namespace WrathOfTheRuined
                             ActionBox.Items.Add("Leave Quest Board");
                             break;
                         case 1:
-                            TbMain.Text = "Seems like the blacksmith isn't here right now.";
+                            Store(player, Town.TownID, 1);
                             ActionBox.Items.Clear();
                             ActionBox.SelectedIndex = -1;
                             break;
@@ -219,9 +218,6 @@ namespace WrathOfTheRuined
                     lblPlayerXP.Text = player.ExperiencePoints.ToString();
                     lblPlayerGold.Text = player.Gold.ToString();
                     lblPlayerGBP.Text = player.GBP.ToString();
-                    lblPlayerSword.Text = player.sword.SwordName;
-                    lblPlayerStaff.Text = player.staff.StaffName;
-                    lblPlayerArmor.Text = player.armor.ArmorName;
                     lblLoc.Text = Town.Name;
                     TbMain.Text = "You are standing in the remains of " + Town.Name + ".";
                     ActionBox.Items.Clear();
@@ -974,8 +970,9 @@ namespace WrathOfTheRuined
                                                     player.Gold -= 5;
                                                     TbMain.Text = "The baker smiles at you, and informs you that a pie is comin' right up. In nearly no time flat, you are given a classic Venzorian Pizza Pie, the most round food you can think of.";
                                                     lblPlayerGold.Text = player.Gold.ToString();
+                                                    Consumable pizza = new Consumable(0);
+                                                    player.Inventory.Add(pizza);
                                                     ActionBox.SelectedIndex = -1;
-                                                    //Add Pizza To Inventory
                                                 }
                                                 else
                                                 {
@@ -1702,6 +1699,15 @@ namespace WrathOfTheRuined
                 GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
             }
             return result;
+        }
+
+        public void Store(Player player, int townID, int storeType)
+        {
+            Hide();
+            StoreForm Store = new StoreForm();
+            Store.EnterStore(player, townID, storeType);
+            DialogResult = Store.ShowDialog();
+            Show();
         }
     }
 }
