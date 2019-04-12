@@ -49,12 +49,12 @@ namespace WrathOfTheRuined
                     }
                     else if (player.CurrentHP > 0 && enemy.CurrentHP <= 0)
                     {
-                        MessageBox.Show("You have defeated the enemy.");
+                        MessageBox.Show("You have defeated the enemy and found " + enemy.GoldDrop + " gp.");
                         player.CurrentHP = player.MaxHP;
                         player.Gold += enemy.GoldDrop;
                         player.Strength += (enemy.Strength / 5);
                         player.Intellect += (enemy.Intellect / 5);
-                        return 1;
+                        return 1; 
                     }
                     else if (player.CurrentHP <= 0 && enemy.CurrentHP > 0)
                     {

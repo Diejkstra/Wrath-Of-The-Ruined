@@ -244,11 +244,17 @@ namespace WrathOfTheRuined
                             BtnContinue.PerformClick();
                             break;
                         case 2:
+                            Store(player, Town.TownID, 2);
+                            ActionBox.Items.Clear();
+                            ActionBox.SelectedIndex = -1;
+                            BtnContinue.PerformClick();
+                            break;
+                        case 3:
                             TbMain.Text = "You decide to slaughter the town.";
                             ActionBox.Items.Clear();
                             ActionBox.SelectedIndex = -1;
                             break;
-                        case 3:
+                        case 4:
                             TbMain.Text = Town.DepartureString;
                             ActionBox.Items.Clear();
                             ActionBox.SelectedIndex = -1;
@@ -257,7 +263,7 @@ namespace WrathOfTheRuined
                             BtnContinue.Click -= InsideTownContinueClick;
                             BtnContinue.Click += OutsideTownContinueClick;
                             break;
-                        case 4:
+                        case 5:
                             if(Town.TownID == 0)
                             {
                                 TbMain.Text = "You cannot head back home, your familiy needs you to finish what the humans have started.";
@@ -285,8 +291,9 @@ namespace WrathOfTheRuined
                             TbMain.Text = "You are standing in the " + Town.Descriptor + " of " + Town.Name + ".";
 
                             ActionBox.Items.Clear();
-                            ActionBox.Items.Add("Check Quest Board");
+                            ActionBox.Items.Add("Check quest board");
                             ActionBox.Items.Add("Visit the blacksmith");
+                            ActionBox.Items.Add("Visit the apothecary");
                             ActionBox.Items.Add("Slaughter everyone");
                             ActionBox.Items.Add("Leave for next town");
                             ActionBox.Items.Add("Leave for previous town");
@@ -1787,6 +1794,9 @@ namespace WrathOfTheRuined
             StoreForm Store = new StoreForm();
             Store.EnterStore(player, townID, storeType);
             DialogResult = Store.ShowDialog();
+            lblEquippedSword.Text = player.sword.Name.ToString();
+            lblEquippedStaff.Text = player.staff.Name.ToString();
+            lblEquippedArmor.Text = player.armor.Name.ToString();
             Show();
         }
 
