@@ -5,6 +5,8 @@
         public int BaseStaffDamage { get; set; }
         public int MaxStaffDamage { get; set; }
 
+        public Staff() { }
+
         public Staff(int StaffID)
         {
             ID = StaffID;

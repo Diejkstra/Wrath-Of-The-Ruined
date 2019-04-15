@@ -30,7 +30,7 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.PlayerNameInputBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.InputLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -40,7 +40,7 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.PlayerNameInputBox, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.InputLabel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button1, 0, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(-2, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -61,15 +61,15 @@
             this.PlayerNameInputBox.TabIndex = 0;
             this.PlayerNameInputBox.TextChanged += new System.EventHandler(this.PlayerNameInputBox_TextChanged);
             // 
-            // label1
+            // InputLabel
             // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(76, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(128, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Enter your Name";
+            this.InputLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.InputLabel.AutoSize = true;
+            this.InputLabel.Location = new System.Drawing.Point(76, 14);
+            this.InputLabel.Name = "InputLabel";
+            this.InputLabel.Size = new System.Drawing.Size(128, 20);
+            this.InputLabel.TabIndex = 1;
+            this.InputLabel.Text = "Enter your Name";
             // 
             // button1
             // 
@@ -102,7 +102,7 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public System.Windows.Forms.TextBox PlayerNameInputBox;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label InputLabel;
         private System.Windows.Forms.Button button1;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Engine
 {
+    [Serializable]
     public class Creature
     {
         public int AP { get; set; } //Base Armor Points
@@ -35,6 +36,8 @@ namespace Engine
             stance = new Stance();
             CurrentHP = MaxHP;
         }
+
+        public Creature() { }
 
         public int CalculatePhysicalAttack()
         {

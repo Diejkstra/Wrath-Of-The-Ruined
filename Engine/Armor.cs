@@ -4,6 +4,8 @@
     {
         public int ArmorPoints { get; set; }
 
+        public Armor() { }
+
         public Armor(int ArmorID)
         {
             ID = ArmorID;

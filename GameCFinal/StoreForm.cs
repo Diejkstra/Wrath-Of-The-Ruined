@@ -139,10 +139,10 @@ namespace WrathOfTheRuined
                 if (listBoxStoreInv.SelectedItem != null)
                 {
                     Item item = listBoxStoreInv.SelectedItem as Item;
-                    item.Price = Convert.ToInt32(item.Price * 1.5 * priceChange);
-                    if (player.Gold >= item.Price)
+                    int price = Convert.ToInt32(item.Price * 1.5);
+                    if (player.Gold >= price)
                     {
-                        player.Gold -= item.Price;
+                        player.Gold -= price;
                         lblPlayerGold.Text = player.Gold.ToString();
                         player.Inventory.Add(item);
                         StoreInv.Remove(item);
@@ -163,8 +163,8 @@ namespace WrathOfTheRuined
                         player.staff = new Staff(-1);
                     if (player.armor == item)
                         player.armor = new Armor(-1);
-                    Convert.ToInt32(item.Price * .5 / priceChange);
-                    player.Gold += item.Price;
+                    int price = Convert.ToInt32(item.Price * .5 / priceChange);
+                    player.Gold += price;
                     lblPlayerGold.Text = player.Gold.ToString();
                     player.Inventory.Remove(item);
                     StoreInv.Add(item);
@@ -178,7 +178,7 @@ namespace WrathOfTheRuined
                 if (listBoxStoreInv.SelectedItem != null)
                 {
                     Item item = listBoxStoreInv.SelectedItem as Item;
-                    int value = Convert.ToInt32(item.Price * 1.5 * priceChange);
+                    int value = Convert.ToInt32(item.Price * 1.5);
                     lblStoreValue.Text = "Item Value: " + value + " gp";
                 }
             }

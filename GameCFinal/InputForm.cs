@@ -12,9 +12,10 @@ namespace WrathOfTheRuined
 {
     public partial class InputForm : Form
     {
-        public InputForm()
+        public InputForm(string inputlabeltext)
         {
             InitializeComponent();
+            InputLabel.Text = inputlabeltext;
         }
 
         public void PlayerNameInputBox_TextChanged(object sender, EventArgs e)

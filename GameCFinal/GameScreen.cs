@@ -1,25 +1,30 @@
 ﻿using Engine;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace WrathOfTheRuined
 {
     public partial class GameScreen : Form
     {
         public Player player;
-        public int progress = 0;
-        public bool[] townSlaughtered = new bool[4];  //Array tracking which towns are slaughtered. townID matched the array.
-        public bool[] questComplete = new bool[8];   //Array tracking which quests are complete. questID matches the array.
 
         Music GameScreenMusic = new Music();
 
-        public GameScreen()
+        public GameScreen() //NewGame
         {
             InitializeComponent();
 
             player = new Player(0, 0, 0);
-            GetNameInput();
+
+            InputForm NameInput = new InputForm("Enter your Name:");
+
+            if (NameInput.ShowDialog(this) == DialogResult.OK)
+                player.Name = NameInput.PlayerNameInputBox.Text;
+            NameInput.Dispose();
 
             if (player.Name == "Tully")
             {
@@ -63,24 +68,19 @@ namespace WrathOfTheRuined
             TbMain.AppendText(Environment.NewLine + Environment.NewLine + "(Press Continue)");
         }
 
+        public GameScreen(Player loadedPlayer)    //LoadGame
+        {
+            player = loadedPlayer;
+            InitializeComponent();
+            ShowData(player);
+            GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
+        }
+
         private void ShowData(Player player)
         {
             listBoxPlayerInventory.DataSource = null;
             listBoxPlayerInventory.DataSource = player.Inventory;
             listBoxPlayerInventory.DisplayMember = "Name";
-        }
-
-        public void GetNameInput()
-        {
-            InputForm NameInput = new InputForm();
-
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            if (NameInput.ShowDialog(this) == DialogResult.OK)
-            {
-                // Read the contents of testDialog's TextBox.
-                player.Name = NameInput.PlayerNameInputBox.Text;
-            }
-            NameInput.Dispose();
         }
 
         public void GameTutorial()
@@ -101,7 +101,7 @@ namespace WrathOfTheRuined
             TbMain.Text = "You are walking in the wilderness and an enemy approaches." + Environment.NewLine + "You draw your weapon";
             Creature enemy = new Creature(0, 0, 0);
             Combat(player, enemy);
-            progress++;
+            player.progress++;
             TbMain.Text = "Will you protect your family, or will you tremble as your cowardess takes hold of you?" + Environment.NewLine +
                 "You arm yourself with what scraps your family has left and you head off to the first town Lancaster. Do you help the locals out of the kindness of your heart, or for power and money?" + Environment.NewLine;
         }
@@ -124,7 +124,7 @@ namespace WrathOfTheRuined
 
         private void OutsideTownContinueClick(object sender, EventArgs e)
         {
-            switch (progress)
+            switch (player.progress)
             {
                 case 0:
                     GameTutorial();
@@ -222,7 +222,7 @@ namespace WrathOfTheRuined
 
             void InsideTownContinueClick(object sender, EventArgs e)
             {
-                if (!townSlaughtered[Town.TownID])
+                if (!player.townSlaughtered[Town.TownID])
                 {
                     switch (ActionBox.SelectedIndex)
                     {
@@ -258,7 +258,7 @@ namespace WrathOfTheRuined
                             TbMain.Text = Town.DepartureString;
                             ActionBox.Items.Clear();
                             ActionBox.SelectedIndex = -1;
-                            progress++;
+                            player.progress++;
                             player.Direction = true;
                             BtnContinue.Click -= InsideTownContinueClick;
                             BtnContinue.Click += OutsideTownContinueClick;
@@ -275,7 +275,7 @@ namespace WrathOfTheRuined
                                 TbMain.Text = "You start heading back towards " + Town.PreviousTownName + ", you have unfinished business to attend to.";
                                 ActionBox.Items.Clear();
                                 ActionBox.SelectedIndex = -1;
-                                progress--;
+                                player.progress--;
                                 player.Direction = false;
                                 BtnContinue.Click -= InsideTownContinueClick;
                                 BtnContinue.Click += OutsideTownContinueClick;
@@ -321,7 +321,7 @@ namespace WrathOfTheRuined
                                 TbMain.Text = Town.DepartureString;
                                 ActionBox.Items.Clear();
                                 ActionBox.SelectedIndex = -1;
-                                progress++;
+                                player.progress++;
                                 player.Direction = true;
                                 BtnContinue.Click -= InsideTownClick2;
                                 BtnContinue.Click += OutsideTownContinueClick;
@@ -338,7 +338,7 @@ namespace WrathOfTheRuined
                                     TbMain.Text = "You start heading back towards " + Town.PreviousTownName + ", you have unfinished business to attend to.";
                                     ActionBox.Items.Clear();
                                     ActionBox.SelectedIndex = -1;
-                                    progress--;
+                                    player.progress--;
                                     player.Direction = false;
                                     BtnContinue.Click -= InsideTownClick2;
                                     BtnContinue.Click += OutsideTownContinueClick;
@@ -356,7 +356,7 @@ namespace WrathOfTheRuined
                 switch (ActionBox.SelectedIndex)
                 {
                     case 0:
-                        if(!questComplete[Town.Quest1.ID])
+                        if(!player.questComplete[Town.Quest1.ID])
                         {
                             TbMain.Text = Town.Quest1.startString;
                             ActionBox.Items.Clear();
@@ -376,7 +376,7 @@ namespace WrathOfTheRuined
                         }
                         break;
                     case 1:
-                        if (!questComplete[Town.Quest2.ID])
+                        if (!player.questComplete[Town.Quest2.ID])
                         {
                             TbMain.Text = Town.Quest2.startString;
                             ActionBox.Items.Clear();
@@ -435,7 +435,7 @@ namespace WrathOfTheRuined
                                                 TbMain.Text = "You go to the address that was posted on the flyer, and walk the dog back to his owner. The dog jumps into the owner having not seen him for who knows how long, and nearly knocks him off his feet. The owner gives you 10 gold pieces as thanks." + Environment.NewLine + "+10 Gold, +5 GPB" + Environment.NewLine + "Quest Complete";
                                                 ActionBox.Items.Clear();
                                                 ActionBox.SelectedIndex = -1;
-                                                questComplete[0] = true;
+                                                player.questComplete[0] = true;
                                                 player.Gold += 10;
                                                 player.GBP += 5;
                                                 lblPlayerGold.Text = player.Gold.ToString();
@@ -446,7 +446,7 @@ namespace WrathOfTheRuined
                                                 TbMain.Text = "You pull out your sword, and strike the dog right on his head, killing it nearly instantly." + Environment.NewLine + "-5 GBP" + Environment.NewLine + "Quest Complete";
                                                 ActionBox.Items.Clear();
                                                 ActionBox.SelectedIndex = -1;
-                                                questComplete[0] = true;
+                                                player.questComplete[0] = true;
                                                 player.GBP -= 5;
                                                 BtnContinue.Click -= Quest0Click1;
                                                 BtnContinue.Click += InsideTownContinueClick;
@@ -479,7 +479,7 @@ namespace WrathOfTheRuined
                                                 TbMain.Text = "You pull out your sword, and strike the dog right on his head, killing it nearly instantly. After skinning the dog, you start a small fire, cook the meat, then you eat it." + Environment.NewLine + "-10 GBP" + Environment.NewLine + "Quest Complete";
                                                 ActionBox.Items.Clear();
                                                 ActionBox.SelectedIndex = -1;
-                                                questComplete[0] = true;
+                                                player.questComplete[0] = true;
                                                 player.GBP -= 10;
                                                 BtnContinue.Click -= Quest0Click2;
                                                 BtnContinue.Click += InsideTownContinueClick;
@@ -522,7 +522,7 @@ namespace WrathOfTheRuined
                                                 TbMain.Text = "After putting in all of this effort, why not keep the teddy bear? You deserve it." + Environment.NewLine + "-3 GBP" + Environment.NewLine + "Quest Complete";
                                                 ActionBox.Items.Clear();
                                                 ActionBox.SelectedIndex = -1;
-                                                questComplete[1] = true;
+                                                player.questComplete[1] = true;
                                                 player.GBP -= 3;
                                                 BtnContinue.Click -= Quest1Click1;
                                                 BtnContinue.Click += InsideTownContinueClick;
@@ -545,7 +545,7 @@ namespace WrathOfTheRuined
                                                             TbMain.Text = "You give the stuffed animal to the father, who thanks you. He then hands his daughter the teddy bear and you can see she is happy to be reunited, despite the poor shape that the teddy bear is in." + Environment.NewLine + "+3 GBP" + Environment.NewLine + "Quest Complete";
                                                             ActionBox.Items.Clear();
                                                             ActionBox.SelectedIndex = -1;
-                                                            questComplete[1] = true;
+                                                            player.questComplete[1] = true;
                                                             player.GBP += 3;
                                                             BtnContinue.Click -= Quest1Click2;
                                                             BtnContinue.Click += InsideTownContinueClick;
@@ -554,7 +554,7 @@ namespace WrathOfTheRuined
                                                             TbMain.Text = "The father looks at you quizzically, but shortly thereafter, seems to realize that you must have put in some time into searching for the stuffed animal. He pulls out a coin pouch, takes out five gold pieces, and hands them over. You then hand over the teddy bear to the father. He then hands his daughter the teddy bear and you can see she is happy to be reunited, despite the poor shape that the teddy bear is in." + Environment.NewLine + "+5 Gold, +1 GBP" + Environment.NewLine + "Quest Complete";
                                                             ActionBox.Items.Clear();
                                                             ActionBox.SelectedIndex = -1;
-                                                            questComplete[1] = true;
+                                                            player.questComplete[1] = true;
                                                             player.GBP += 1;
                                                             player.Gold += 5;
                                                             lblPlayerGold.Text = player.Gold.ToString();
@@ -565,7 +565,7 @@ namespace WrathOfTheRuined
                                                             TbMain.Text = "After seeing the father and his daughter, you realize the father seems to spoil his daughter, and you reconsider giving the teddy bear back. The father looks appaulled that you even bothered to come back at all. He walks his daughter back into the house, trying to explain to her what just happened. You hope she learned a valuable lesson." + Environment.NewLine + "-4 GBP" + Environment.NewLine + "Quest Complete";
                                                             ActionBox.Items.Clear();
                                                             ActionBox.SelectedIndex = -1;
-                                                            questComplete[1] = true;
+                                                            player.questComplete[1] = true;
                                                             player.GBP -= 4;
                                                             BtnContinue.Click -= Quest1Click2;
                                                             BtnContinue.Click += InsideTownContinueClick;
@@ -574,7 +574,7 @@ namespace WrathOfTheRuined
                                                             TbMain.Text = "After meeting the father, you can tell what kind of scum he is. His daughter is clearly spoiled, and you know the town would be better off without these two in it. As you pull out your sword, the father screams in fear, but the screams fall on deaf ears." + Environment.NewLine + Environment.NewLine + "The child had no gold, but the father had some, he certainly won't be needing it anytime soon. You leave the house, knowing there is very little time before someone finds the bodies." + Environment.NewLine + "+75 Gold, -25 GPB" + Environment.NewLine + "Quest Complete";
                                                             ActionBox.Items.Clear();
                                                             ActionBox.SelectedIndex = -1;
-                                                            questComplete[1] = true;
+                                                            player.questComplete[1] = true;
                                                             player.Gold += 75;
                                                             player.GBP -= 25;
                                                             lblPlayerGold.Text = player.Gold.ToString();
@@ -659,7 +659,7 @@ namespace WrathOfTheRuined
                                                                                     TbMain.Text = "Obviously the leader thug has never learned how to properly vent his feelings. You give him 50 gold pieces in the hopes that his family can make use of it. The other two men explain that they're employee's of the poor blacksmith, and this donation means a lot to them. They promise to put the money to good use, and then they leave the bar, hopefully to go back to work." + Environment.NewLine + Environment.NewLine + "Upon returning to the original blacksmith, you tell him of the other blacksmith's inability to attract business. The blacksmith thinks about this, and tosses out a few ideas to help his competitor, one being a merger between the two. He gives you money to cover the donation, and some more on top of it, because the problem seems to have been solved." + Environment.NewLine + "+50 Gold, +15 GBP" + Environment.NewLine + "Quest Complete";
                                                                                     ActionBox.Items.Clear();
                                                                                     ActionBox.SelectedIndex = -1;
-                                                                                    questComplete[2] = true;
+                                                                                    player.questComplete[2] = true;
                                                                                     player.Gold += 50;
                                                                                     player.GBP += 15;
                                                                                     lblPlayerGold.Text = player.Gold.ToString();
@@ -670,7 +670,7 @@ namespace WrathOfTheRuined
                                                                                     TbMain.Text = "Obviously the leader thug has never learned how to properly vent his feelings. You tell him that instead of sitting at the bar, or beating up the competition, they should probably be working if his family business is really failing. The man thinks about it, and reluctantly agrees with you. The three men leave the bar, clearly still angry, but hopefully they can clear their heads and get back to honest work." + Environment.NewLine + Environment.NewLine + "Upon returning to the original blacksmith, he is happy to hear that they are back to work, but fears he may still be beaten up in the future. Either way, the problem is solved in the short term. He hands you some gold in thanks, and returns to his work." + Environment.NewLine + "+75 Gold, +10 GBP" + Environment.NewLine + "Quest Complete";
                                                                                     ActionBox.Items.Clear(); ;
                                                                                     ActionBox.SelectedIndex = -1;
-                                                                                    questComplete[2] = true;
+                                                                                    player.questComplete[2] = true;
                                                                                     player.Gold += 75;
                                                                                     player.GBP += 10;
                                                                                     lblPlayerGold.Text = player.Gold.ToString();
@@ -702,7 +702,7 @@ namespace WrathOfTheRuined
                                                                                     TbMain.Text = "You start kicking the one on the ground. This casues one of the two thugs that are standing to run at you, fists swinging. The one that was being kicked has no strength left to fight, but the other two thugs put up a good fight. At the end of the brawl, the three thugs lay nearly motionless on the ground. Seems like they got the message." + Environment.NewLine + Environment.NewLine + "Upon telling the blacksmith of the news, he seems slightly worried, but nonetheless glad the threat has been taken care of. He pays you some gold, and continues with his work." + Environment.NewLine + "+75 Gold, +5GBP" + Environment.NewLine + "Quest Complete";
                                                                                     ActionBox.Items.Clear();
                                                                                     ActionBox.SelectedIndex = -1;
-                                                                                    questComplete[2] = true;
+                                                                                    player.questComplete[2] = true;
                                                                                     player.Gold += 75;
                                                                                     player.GBP += 5;
                                                                                     lblPlayerGold.Text = player.Gold.ToString();
@@ -727,7 +727,7 @@ namespace WrathOfTheRuined
                                                                                             {
                                                                                                 BtnContinue.Click -= Quest2Click7;
                                                                                                 TbMain.Text = "After killing the thugs, you run from the bar back to the blacksmith. The blacksmith looks horrified that you are covered in blood. He never meant for you to kill them. Frightened, he tosses his coin pouch at you, and pushes you outside and locks the door behind you." + Environment.NewLine + "+150 Gold, -30GBP";
-                                                                                                questComplete[2] = true;
+                                                                                                player.questComplete[2] = true;
                                                                                                 player.Gold += 150;
                                                                                                 player.GBP -= 30;
                                                                                                 lblPlayerGold.Text = player.Gold.ToString();
@@ -737,7 +737,7 @@ namespace WrathOfTheRuined
                                                                                             {
                                                                                                 BtnContinue.Click -= Quest2Click7;
                                                                                                 TbMain.Text = "Having ran from the last thug, you return to the blacksmith. You tell him that they attacked you, but you managed to kill two before needing to run away. He thanks you for trying to help him, but did not wish for you to kill anyone. However, given that you said they attacked you, he understands. He gives you some gold for trying." + Environment.NewLine + "+100 Gold, -20GBP";
-                                                                                                questComplete[2] = true;
+                                                                                                player.questComplete[2] = true;
                                                                                                 player.Gold += 100;
                                                                                                 player.GBP -= 20;
                                                                                                 lblPlayerGold.Text = player.Gold.ToString();
@@ -748,7 +748,7 @@ namespace WrathOfTheRuined
                                                                                         {
                                                                                             BtnContinue.Click -= Quest2Click7;
                                                                                             TbMain.Text = "Having ran from the last two thugs, you return to the blacksmith. You tell him that they attacked you, but you managed to kill one before needing to run away. He thanks you for trying to help him, but did not wish for you to kill anyone. However, given that you said they attacked you, he understands. He gives you some gold for trying." + Environment.NewLine + "+50 Gold, -10GBP";
-                                                                                            questComplete[2] = true;
+                                                                                            player.questComplete[2] = true;
                                                                                             player.Gold += 50;
                                                                                             player.GBP -= 10;
                                                                                             BtnContinue.Click += InsideTownContinueClick;
@@ -765,7 +765,7 @@ namespace WrathOfTheRuined
                                                             TbMain.Text = "He is saddened, but understands, this is quite a lot to ask of someone. He sighs, and goes back to his work." + Environment.NewLine + "Quest Complete";
                                                             ActionBox.Items.Clear();
                                                             ActionBox.SelectedIndex = -1;
-                                                            questComplete[2] = true;
+                                                            player.questComplete[2] = true;
                                                             BtnContinue.Click -= Quest2Click2;
                                                             BtnContinue.Click += Quest2Click8;
                                                             void Quest2Click8(object sender_3, EventArgs e_3)
@@ -898,7 +898,7 @@ namespace WrathOfTheRuined
                                                                     TbMain.Text = "Despite all odds, you manage to kill every last bandit. This should take care of the bandit problem. After searching the camp for some extra gold, you walk back to town with the good news." + Environment.NewLine + "+150 Gold, +50GBP" + Environment.NewLine + "Quest Complete";
                                                                     ActionBox.Items.Clear();
                                                                     ActionBox.SelectedIndex = -1;
-                                                                    questComplete[3] = true;
+                                                                    player.questComplete[3] = true;
                                                                     player.Gold += 150;
                                                                     player.GBP += 50;
                                                                     BtnContinue.Click -= Quest3Click3;
@@ -911,7 +911,7 @@ namespace WrathOfTheRuined
                                                                         TbMain.Text = "Sometime during the battle, you decide this might not end well for you. However, you managed to kill a few of them before needing to run away. When you get to town, you tell the guards the bandit camp has seen some losses, and shouldn't pose a great threat to Doveport for the time being. The guards thank you for the help." + Environment.NewLine + "+25 GBP" + Environment.NewLine + "Quest Complete";
                                                                         ActionBox.Items.Clear();
                                                                         ActionBox.SelectedIndex = -1;
-                                                                        questComplete[3] = true;
+                                                                        player.questComplete[3] = true;
                                                                         player.GBP += 25;
                                                                         BtnContinue.Click -= Quest3Click3;
                                                                         BtnContinue.Click += InsideTownContinueClick;
@@ -922,7 +922,7 @@ namespace WrathOfTheRuined
                                                                         ActionBox.Items.Clear();
                                                                         ActionBox.SelectedIndex = -1;
                                                                         player.GBP += 5;
-                                                                        questComplete[3] = true;
+                                                                        player.questComplete[3] = true;
                                                                         BtnContinue.Click -= Quest3Click3;
                                                                         BtnContinue.Click += InsideTownContinueClick;
                                                                     }
@@ -934,7 +934,7 @@ namespace WrathOfTheRuined
                                                             {
                                                                 TbMain.Text = "You pull out a large gold pouch, and toss it towards the camp. 500 gold pieces slam into the dirt, and the guardsman drops everything to start grabbing the gold. A mini frenzy has broken loose, which causes the bandit leader to appear. He thanks you for the gold, and tells you the bandit camp will move on from Doveport. You start the walk home, slightly saddened by the loss of gold. You tell the guards of your payment, and that the bandits should no longer be a threat to the town" + Environment.NewLine + "-500 Gold, +50GBP" + Environment.NewLine + "Quest Complete";
                                                                 ActionBox.SelectedIndex = -1;
-                                                                questComplete[3] = true;
+                                                                player.questComplete[3] = true;
                                                                 player.Gold -= 500;
                                                                 player.GBP += 50;
                                                                 BtnContinue.Click -= Quest3Click2;
@@ -975,10 +975,10 @@ namespace WrathOfTheRuined
                                                                     TbMain.Text = "After the siege is over, most of the townsfolk have fled to Lancaster, or have died protecting their belongings. The nine of you scrounge around and come up with enough gold to split about 400 gold each, and 750 for the leader. You and the bandits then part ways, having taken everything this town has to offer." + Environment.NewLine + "+400 Gold, -75GBP" + Environment.NewLine + "Quest Complete";
                                                                     ActionBox.Items.Clear();
                                                                     ActionBox.SelectedIndex = -1;
-                                                                    questComplete[3] = true;
+                                                                    player.questComplete[3] = true;
                                                                     player.Gold += 400;
                                                                     player.GBP -= 75;
-                                                                    townSlaughtered[1] = true;
+                                                                    player.townSlaughtered[1] = true;
                                                                     BtnContinue.Click -= Quest3Click4;
                                                                     BtnContinue.Click += InsideTownContinueClick;
                                                                 }
@@ -987,10 +987,10 @@ namespace WrathOfTheRuined
                                                                     TbMain.Text = "For whatever reason, you have fled from Doveport, and cannot bring yourself to look behind you.";
                                                                     ActionBox.Items.Clear();
                                                                     ActionBox.SelectedIndex = -1;
-                                                                    questComplete[3] = true;
+                                                                    player.questComplete[3] = true;
                                                                     player.GBP -= 50;
-                                                                    townSlaughtered[1] = true;
-                                                                    progress++;
+                                                                    player.townSlaughtered[1] = true;
+                                                                    player.progress++;
                                                                     player.Direction = true;
                                                                     BtnContinue.Click -= Quest3Click4;
                                                                     BtnContinue.Click += OutsideTownContinueClick;
@@ -1068,7 +1068,7 @@ namespace WrathOfTheRuined
                                                 }
                                                 break;
                                             case 1:
-                                                if (!townSlaughtered[1])
+                                                if (!player.townSlaughtered[1])
                                                 {
                                                     TbMain.Text = "The baker tells you that you need to deliver one of his pies to Doveport. His normal delivery person is no where to be found.";
                                                     ActionBox.Items.Clear();
@@ -1116,9 +1116,9 @@ namespace WrathOfTheRuined
                                                                                     TbMain.Text = "The pizza smelled too good to be true. You open up the delivery bag, and open up the box the pizza is in. And you see it in all of it's glory. The perfectly melted Meblon Cheese, Venzorian Pepperoni slices, and the garlic crust is to die for. Before you know it, the pizza is nothing but crumbs. You ditch the bag, and head into Doveport, one pizza fewer than when you started this journey." + Environment.NewLine + "-10 GBP" + Environment.NewLine + "Quest Complete";
                                                                                     ActionBox.Items.Clear();
                                                                                     ActionBox.SelectedIndex = -1;
-                                                                                    questComplete[4] = true;
+                                                                                    player.questComplete[4] = true;
                                                                                     player.GBP -= 10;
-                                                                                    progress -= 2;
+                                                                                    player.progress -= 2;
                                                                                     BtnContinue.Click -= Quest4Click4;
                                                                                     BtnContinue.Click += OutsideTownContinueClick;
                                                                                     break;
@@ -1126,10 +1126,10 @@ namespace WrathOfTheRuined
                                                                                     TbMain.Text = "This pizza is strictly for the Doveport citizen that placed the order. You come to grips with this unfortunate fact, and keep heading towards Doveport. After finally reaching the town, you go to the address listed on the order. You knock on the door, and hear someone yell pizza's here. He opens the door, and you deliver the pie. A single tear falls from one eye, and the man sees it, and understands. He gives you a gold pouch as compensation. He thanks you, and before he shuts the door, you see that no one else is inside." + Environment.NewLine + "+ 30 Gold, +15 GBP" + Environment.NewLine + "Quest Complete"; ;
                                                                                     ActionBox.Items.Clear();
                                                                                     ActionBox.SelectedIndex = -1;
-                                                                                    questComplete[4] = true;
+                                                                                    player.questComplete[4] = true;
                                                                                     player.GBP += 15;
                                                                                     player.Gold += 30;
-                                                                                    progress -= 2;
+                                                                                    player.progress -= 2;
                                                                                     lblPlayerGold.Text = player.Gold.ToString();
                                                                                     BtnContinue.Click -= Quest4Click4;
                                                                                     BtnContinue.Click += OutsideTownContinueClick;
@@ -1142,7 +1142,7 @@ namespace WrathOfTheRuined
                                                                         TbMain.Text = "The battle was too intense, and you had to abandon the pie to the remaining bandits. Hopefully they enjoy it..." + Environment.NewLine + "You run back to Venzor as fast as possible." + Environment.NewLine + "Quest Complete";
                                                                         ActionBox.Items.Clear();
                                                                         ActionBox.SelectedIndex = -1;
-                                                                        questComplete[4] = true;
+                                                                        player.questComplete[4] = true;
                                                                         BtnContinue.Click -= Quest4Click3;
                                                                         BtnContinue.Click += InsideTownContinueClick;
                                                                     }
@@ -1166,7 +1166,7 @@ namespace WrathOfTheRuined
                                                     TbMain.Text = "The baker tells you that you need to deliver one of his pies to Doveport. You then mention that you just came from Doveport, and that it is not in the mood to recieve pizza anytime soon. The baker is confused by this, and you then explain that the town, for whatever reason, has been slaughtered. The color drains from his face, and he sits down. He apologizes, and closes up shop for the day." + Environment.NewLine + "Quest Complete";
                                                     ActionBox.Items.Clear();
                                                     ActionBox.SelectedIndex = -1;
-                                                    questComplete[4] = true;
+                                                    player.questComplete[4] = true;
                                                     BtnContinue.Click -= Quest4Click1;
                                                     BtnContinue.Click += InsideTownContinueClick;
                                                     GameScreenMusic.StopMusic(GameScreenMusic.soundplayer);
@@ -1246,7 +1246,7 @@ namespace WrathOfTheRuined
                                                             {
                                                                 TbMain.Text = "You cut down the bears, and their huge bodies lay slumped in the dirt. Searching the cave, you find the remains of a few hikers, almost all of their belongings clawed and ruined. You decide to head back into the city and let them know that the bears are taken care of." + Environment.NewLine + "+30 GBP" + Environment.NewLine + "Quest Complete";
                                                                 player.GBP += 30;
-                                                                questComplete[5] = true;
+                                                                player.questComplete[5] = true;
                                                                 ActionBox.Items.Clear();
                                                                 ActionBox.SelectedIndex = -1;
                                                                 BtnContinue.Click -= Quest5Click2;
@@ -1300,7 +1300,7 @@ namespace WrathOfTheRuined
                                     player.GBP -= 10;
                                     lblPlayerGBP.Text = player.GBP.ToString();
                                     lblPlayerGold.Text = player.Gold.ToString();
-                                    questComplete[6] = true;
+                                    player.questComplete[6] = true;
                                     ActionBox.Items.Clear();
                                     ActionBox.SelectedIndex = -1;
                                     BtnContinue.Click -= Quest6Start;
@@ -1393,7 +1393,7 @@ namespace WrathOfTheRuined
                                                                                                             TbMain.Text = "In a very confusing turn of events, you tell the noblewoman that she should continue the relationship with the tanner. She seems happy that you aren't going to kill her, but is still angry that you broke into her home. With this, you go to the balcony, and jump to the vacant building. While not the most elegent solution, you seem content with the outcome." + Environment.NewLine + " + 10 GBP" + Environment.NewLine + "Quest Complete";
                                                                                                             player.GBP += 10;
                                                                                                             lblPlayerGBP.Text = player.GBP.ToString();
-                                                                                                            questComplete[6] = true;
+                                                                                                            player.questComplete[6] = true;
                                                                                                             ActionBox.Items.Clear();
                                                                                                             BtnContinue.Click -= Quest6Click7;
                                                                                                             BtnContinue.Click += OutsideTownContinueClick;
@@ -1402,7 +1402,7 @@ namespace WrathOfTheRuined
                                                                                                             TbMain.Text = "You politely remind the noblewoman the consequences of her actions if she chooses to continue with her relationship. This frightens the noblewoman and the maid again. And with this, you go to the balcony and jump to the vacant building. Upon further reflection, you realize you told the noblewoman what she already knew, but only after breaking into her home." + Environment.NewLine + "-3 GBP" + Environment.NewLine + "Quest Complete";
                                                                                                             player.GBP -= 3;
                                                                                                             lblPlayerGBP.Text = player.GBP.ToString();
-                                                                                                            questComplete[6] = true;
+                                                                                                            player.questComplete[6] = true;
                                                                                                             ActionBox.Items.Clear();
                                                                                                             BtnContinue.Click -= Quest6Click7;
                                                                                                             BtnContinue.Click += OutsideTownContinueClick;
@@ -1414,7 +1414,7 @@ namespace WrathOfTheRuined
                                                                                                 TbMain.Text = "In an attempt to end this quickly, you tell her to forget about the tanner. Hearing the maid approach, you run to the balcony and jump to the vacant building. Hopefully she forgets about the tanner, it is probably best for the both of them." + Environment.NewLine + "+5 GBP" + Environment.NewLine + "Quest Complete";
                                                                                                 player.GBP += 5;
                                                                                                 lblPlayerGBP.Text = player.GBP.ToString();
-                                                                                                questComplete[6] = true;
+                                                                                                player.questComplete[6] = true;
                                                                                                 ActionBox.Items.Clear();
                                                                                                 BtnContinue.Click -= Quest6Click6;
                                                                                                 BtnContinue.Click += OutsideTownContinueClick;
@@ -1423,7 +1423,7 @@ namespace WrathOfTheRuined
                                                                                                 TbMain.Text = "Seeing no other choice, you bring out your weapon, and kill the noblewoman. In a few more seconds, the maid appears. However, by the time this happens, you are already outside running away." + Environment.NewLine + "-25 GBP" + Environment.NewLine + "Quest Complete";
                                                                                                 player.GBP -= 25;
                                                                                                 lblPlayerGBP.Text = player.GBP.ToString();
-                                                                                                questComplete[6] = true;
+                                                                                                player.questComplete[6] = true;
                                                                                                 ActionBox.Items.Clear();
                                                                                                 BtnContinue.Click -= Quest6Click6;
                                                                                                 BtnContinue.Click += OutsideTownContinueClick;
@@ -1437,7 +1437,7 @@ namespace WrathOfTheRuined
                                                                                     player.GBP -= 25;
                                                                                     lblPlayerGold.Text = player.Gold.ToString();
                                                                                     lblPlayerGBP.Text = player.GBP.ToString();
-                                                                                    questComplete[6] = true;
+                                                                                    player.questComplete[6] = true;
                                                                                     ActionBox.Items.Clear();
                                                                                     BtnContinue.Click -= Quest6Click4;
                                                                                     BtnContinue.Click += OutsideTownContinueClick;
@@ -1474,7 +1474,7 @@ namespace WrathOfTheRuined
                                                                                                 ActionBox.Items.Clear();
                                                                                                 player.GBP += 15;
                                                                                                 lblGBP.Text = player.GBP.ToString();
-                                                                                                questComplete[6] = true;
+                                                                                                player.questComplete[6] = true;
                                                                                                 ActionBox.Items.Clear();
                                                                                                 BtnContinue.Click -= Quest6Click8;
                                                                                                 BtnContinue.Click += OutsideTownContinueClick;
@@ -1484,7 +1484,7 @@ namespace WrathOfTheRuined
                                                                                                 ActionBox.Items.Clear();
                                                                                                 player.GBP += 15;
                                                                                                 lblGBP.Text = player.GBP.ToString();
-                                                                                                questComplete[6] = true;
+                                                                                                player.questComplete[6] = true;
                                                                                                 ActionBox.Items.Clear();
                                                                                                 BtnContinue.Click -= Quest6Click8;
                                                                                                 BtnContinue.Click += OutsideTownContinueClick;
@@ -1515,7 +1515,7 @@ namespace WrathOfTheRuined
                                                                                             TbMain.Text = "After killing the guards, you run from the scene of the crime. Hopefully the noblewoman learns a valuable lesson from this." + Environment.NewLine + "-50 GBP" + Environment.NewLine + "Quest Complete"; ;
                                                                                             player.GBP -= 50;
                                                                                             lblPlayerGBP.Text = player.GBP.ToString();
-                                                                                            questComplete[6] = true;
+                                                                                            player.questComplete[6] = true;
                                                                                             ActionBox.Items.Clear();
                                                                                             ActionBox.SelectedIndex = -1;
                                                                                             BtnContinue.Click += OutsideTownContinueClick;
@@ -1525,7 +1525,7 @@ namespace WrathOfTheRuined
                                                                                             TbMain.Text = "After seeing more guards round the corner, you figure its time to leave. You push the guard you were locked in combat with to the ground, and head in a dead sprint to the outskirts of town, and lay low for a day or two. Hopefully the noblewoman has learned something from this." + Environment.NewLine + "-40 GBP" + Environment.NewLine + "Quest Complete"; ;
                                                                                             player.GBP -= 40;
                                                                                             lblPlayerGBP.Text = player.GBP.ToString();
-                                                                                            questComplete[6] = true;
+                                                                                            player.questComplete[6] = true;
                                                                                             ActionBox.Items.Clear();
                                                                                             ActionBox.SelectedIndex = -1;
                                                                                             BtnContinue.Click += OutsideTownContinueClick;
@@ -1545,7 +1545,7 @@ namespace WrathOfTheRuined
                                                 TbMain.Text = "You pull out your weapon, and the young tanner is obviously frightened by this. He stops curing the animal skins to bring out his dagger. However, in his haste to pull out his dagger, he lets go and flings it across the room. Seeing an opportunity to teach him a lesson, you strike quickly. The noblewoman should have know better than this, but you have done the noblewoman a favor. You walk back into the city." + Environment.NewLine + "-25 GBP" + Environment.NewLine + "Quest Complete";
                                                 player.GBP -= 25;
                                                 lblPlayerGBP.Text = player.GBP.ToString();
-                                                questComplete[6] = true;
+                                                player.questComplete[6] = true;
                                                 ActionBox.Items.Clear();
                                                 ActionBox.SelectedIndex = -1;
                                                 BtnContinue.Click -= Quest6Click1;
@@ -1598,8 +1598,8 @@ namespace WrathOfTheRuined
                                             TbMain.Text = "After a long and arduous battle, De Santo lays dead on the ground. Numerous other bodies lay dead, including one of your teammates. However, the menace that has been Armando has finally been silenced. The team takes everything they can from the barn, which was about 500 gold, and splits it evenly between the four of you. After telling the guards that Armando has been slain, the guards also give your team the reward, which is split up evenly." + Environment.NewLine + "+750 Gold, +100 GBP" + Environment.NewLine + "Quest Complete";
                                             ActionBox.Items.Clear();
                                             ActionBox.SelectedIndex = -1;
-                                            progress = 1;
-                                            questComplete[7] = true;
+                                            player.progress = 1;
+                                            player.questComplete[7] = true;
                                             player.Gold += 750;
                                             player.GBP += 100;
                                             lblPlayerGold.Text = player.Gold.ToString();
@@ -1612,8 +1612,8 @@ namespace WrathOfTheRuined
                                             TbMain.Text = "Looking around you, you see that this is a losing battle. You rally whats left of the team, and run back into town. Knowing that their location has been compromised, Armando and his gang are sure to relocate, and who knows where they'll go this time..." + Environment.NewLine + "Quest Complete";
                                             ActionBox.Items.Clear();
                                             ActionBox.SelectedIndex = -1;
-                                            progress = 1;
-                                            questComplete[7] = true;
+                                            player.progress = 1;
+                                            player.questComplete[7] = true;
                                             BtnContinue.Click -= Quest7Click1;
                                             BtnContinue.Click += OutsideTownContinueClick;
                                         }
@@ -1760,9 +1760,9 @@ namespace WrathOfTheRuined
                 TbMain.Text = "The foe encountered in the wilderness has defeated you but spared your life. You hang your head low whilst walking towards the nearest town.";
 
             if (player.Direction)  //true = fowards, false = backwards
-                progress++;
+                player.progress++;
             else
-                progress--;
+                player.progress--;
         }
 
         public int Combat(Player player, Creature enemy)
@@ -1804,6 +1804,33 @@ namespace WrathOfTheRuined
         {
             listBoxPlayerInventory.DataSource = null;
             listBoxPlayerInventory.DataSource = player.Inventory;
+        }
+
+        public static void WriteXML(Player player, string SaveFileName)
+        {
+            string pathString = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Wrath Of The Ruined";
+            System.IO.Directory.CreateDirectory(pathString);
+            System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Player));
+
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Wrath Of The Ruined//" + SaveFileName + ".xml";
+            System.IO.FileStream file = System.IO.File.Create(path);
+
+            writer.Serialize(file, player);
+            file.Close();
+        }
+
+        private void BtnSaveGame_Click(object sender, EventArgs e)
+        {
+            InputForm NameInput = new InputForm("Enter Save File Name:");
+
+            if (NameInput.ShowDialog(this) == DialogResult.OK)
+            {
+                // Read the contents of testDialog's TextBox.
+                string filename = NameInput.PlayerNameInputBox.Text;
+                WriteXML(player, filename);
+            }
+            NameInput.Dispose();
         }
     }
 }

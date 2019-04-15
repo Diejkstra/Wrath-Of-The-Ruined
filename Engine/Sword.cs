@@ -5,6 +5,7 @@
         public int BaseSwordDamage { get; set; } //dagger = 1, bronze = 10, etc
         public int MaxSwordDamage { get; set; }  //dagger = 5, dagger+5 = 10, bronze = 5, bent+5 = 10, etc.
 
+        public Sword() { }
 
         public Sword(int SwordID)
         {
