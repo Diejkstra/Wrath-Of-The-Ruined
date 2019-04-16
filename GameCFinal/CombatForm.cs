@@ -96,7 +96,29 @@ namespace WrathOfTheRuined
                     }
                     else if (CbPlayerCombat.SelectedIndex == 3)
                     {
-                        MessageBox.Show("WIP :(");
+                        Hide();
+                        UseItemForm UseItem = new UseItemForm();
+                        UseItem.ChooseItem(player);
+                        if (UseItem.ShowDialog(this) == DialogResult.OK)
+                        {
+                            if(UseItem.UseThisItem != null)
+                            {
+                                player.CurrentHP += UseItem.UseThisItem.HealthGain;
+                                int healed = 0;
+                                if (player.CurrentHP > player.MaxHP)
+                                {
+                                    healed = UseItem.UseThisItem.HealthGain - (player.CurrentHP - player.MaxHP);
+                                    player.CurrentHP = player.MaxHP;
+                                }
+                                else
+                                    healed = UseItem.UseThisItem.HealthGain;
+                                typePlayerText = "You used the " + UseItem.UseThisItem.Name + " and healed " + healed + " health.";
+                                typeEnemyText = "";
+                                Thread t = new Thread(Typewrite);
+                                t.Start();
+                            }
+                        }
+                        UseItem.Dispose();
                     }
                     else if (CbPlayerCombat.SelectedIndex == 4)
                     {

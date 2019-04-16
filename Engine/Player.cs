@@ -29,6 +29,7 @@ namespace Engine
             Inventory.Add(sword);
             Inventory.Add(staff);
             Inventory.Add(armor);
+            Inventory.Add(new Consumable(1));
         }
     }
 }

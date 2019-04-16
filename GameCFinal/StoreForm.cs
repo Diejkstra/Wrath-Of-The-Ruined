@@ -99,6 +99,7 @@ namespace WrathOfTheRuined
                         StoreInv.Add(new Staff(7));
                         StoreInv.Add(new Staff(8));
                         StoreInv.Add(new Staff(12));
+                        StoreInv.Add(new Consumable(1));
                         break;
                     case 1:
                         StoreInv.Add(new Staff(3));
@@ -108,6 +109,7 @@ namespace WrathOfTheRuined
                         StoreInv.Add(new Staff(10));
                         StoreInv.Add(new Staff(11));
                         StoreInv.Add(new Staff(18));
+                        StoreInv.Add(new Consumable(2));
                         break;
                     case 2:
                         StoreInv.Add(new Staff(13));
@@ -117,6 +119,7 @@ namespace WrathOfTheRuined
                         StoreInv.Add(new Staff(20));
                         StoreInv.Add(new Staff(21));
                         StoreInv.Add(new Staff(22));
+                        StoreInv.Add(new Consumable(3));
                         break;
                     case 3:
                         StoreInv.Add(new Staff(23));
@@ -126,6 +129,7 @@ namespace WrathOfTheRuined
                         StoreInv.Add(new Staff(27));
                         StoreInv.Add(new Staff(28));
                         StoreInv.Add(new Staff(29));
+                        StoreInv.Add(new Consumable(4));
                         break;
                 }
             }
