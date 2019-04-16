@@ -1,5 +1,8 @@
-﻿namespace Engine
+﻿using System;
+
+namespace Engine
 {
+    [Serializable]
     public class Item
     {
         public string Name { get; set; }

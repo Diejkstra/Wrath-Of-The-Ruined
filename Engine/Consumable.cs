@@ -3,6 +3,8 @@
     public class Consumable : Item
     {
         public int HealthGain { get; set; }
+        
+        public Consumable() { }
 
         public Consumable(int ConsumableID)
         {

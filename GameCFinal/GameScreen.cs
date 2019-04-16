@@ -1945,8 +1945,10 @@ namespace WrathOfTheRuined
         {
             string pathString = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Wrath Of The Ruined";
             System.IO.Directory.CreateDirectory(pathString);
+            Type[] extratypes = new Type[1];
+            extratypes[0] = typeof(Consumable);
             System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(Player));
+                new System.Xml.Serialization.XmlSerializer(typeof(Player), extratypes);
 
             var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Wrath Of The Ruined//" + SaveFileName + ".xml";
             System.IO.FileStream file = System.IO.File.Create(path);
