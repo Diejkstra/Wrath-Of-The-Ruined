@@ -21,15 +21,15 @@ namespace Engine
                 {
                     stanceMaxP_DMG = Convert.ToInt32(Math.Round( .25 * (player.CalculatePhysicalAttack() + player.sword.MaxSwordDamage)));
                     stanceMinP_DMG = Convert.ToInt32(Math.Round(.25 * (player.CalculatePhysicalAttack() + player.sword.BaseSwordDamage)));
-                    totalArmor = Convert.ToInt32(Math.Round(2.5 * (player.AP + player.armor.ArmorPoints)));
-                    totalMR = Convert.ToInt32(Math.Round(2.5 * player.MR));
+                    totalArmor = Convert.ToInt32(Math.Round(1.5 * (player.AP + player.armor.ArmorPoints)));
+                    totalMR = Convert.ToInt32(Math.Round(1.5 * player.MR));
                 }
                 else if (player.Endurance < 60 && player.Endurance >= 30)
                 {
                     stanceMaxP_DMG = Convert.ToInt32(Math.Round(.25 * (player.CalculatePhysicalAttack() + player.sword.MaxSwordDamage)));
                     stanceMinP_DMG = Convert.ToInt32(Math.Round(.25 * (player.CalculatePhysicalAttack() + player.sword.BaseSwordDamage)));
-                    totalArmor = Convert.ToInt32(Math.Round(1.75 * (player.AP + player.armor.ArmorPoints)));
-                    totalMR = Convert.ToInt32(Math.Round(1.75 * player.MR));
+                    totalArmor = Convert.ToInt32(Math.Round(1.25 * (player.AP + player.armor.ArmorPoints)));
+                    totalMR = Convert.ToInt32(Math.Round(1.25 * player.MR));
                 }
                 else if (player.Endurance < 20 && player.Endurance >= 0)
                 {
@@ -38,8 +38,8 @@ namespace Engine
                     totalArmor = Convert.ToInt32(Math.Round(1.0 * (player.AP + player.armor.ArmorPoints)));
                     totalMR = Convert.ToInt32(Math.Round(1.0 * player.MR));
                 }
-                stanceMaxM_DMG = player.CalculateMagicalAttack() + player.staff.MaxStaffDamage;
-                stanceMinM_DMG = player.CalculateMagicalAttack() + player.staff.BaseStaffDamage;
+                stanceMaxM_DMG = Convert.ToInt32(Math.Round(.75 * player.CalculateMagicalAttack() + player.staff.MaxStaffDamage));
+                stanceMinM_DMG = Convert.ToInt32(Math.Round(.75 * player.CalculateMagicalAttack() + player.staff.BaseStaffDamage));
                 stanceName = "Defensive";
                 stanceNum = newStance;
             }
@@ -83,8 +83,8 @@ namespace Engine
                     stanceMaxP_DMG = player.CalculatePhysicalAttack() + player.sword.MaxSwordDamage;
                     stanceMinP_DMG = player.CalculatePhysicalAttack() + player.sword.BaseSwordDamage;
                 }
-                stanceMaxM_DMG = player.CalculateMagicalAttack() + player.staff.MaxStaffDamage;
-                stanceMinM_DMG = player.CalculateMagicalAttack() + player.staff.BaseStaffDamage;
+                stanceMaxM_DMG = Convert.ToInt32(Math.Round(1.25 * player.CalculateMagicalAttack() + player.staff.MaxStaffDamage));
+                stanceMinM_DMG = Convert.ToInt32(Math.Round(1.25 * player.CalculateMagicalAttack() + player.staff.BaseStaffDamage));
                 totalArmor = Convert.ToInt32(Math.Round(.25 * (player.AP + player.armor.ArmorPoints)));
                 totalMR = Convert.ToInt32(Math.Round(.25 * player.MR));
                 stanceName = "Aggressive";

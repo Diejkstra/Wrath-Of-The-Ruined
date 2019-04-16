@@ -18,13 +18,20 @@ namespace WrathOfTheRuined
         {
             InitializeComponent();
 
-            player = new Player(0, 0, 0);
-
-            InputForm NameInput = new InputForm("Enter your Name:");
-
-            if (NameInput.ShowDialog(this) == DialogResult.OK)
-                player.Name = NameInput.PlayerNameInputBox.Text;
-            NameInput.Dispose();
+            NewCharacterForm NewCharacter = new NewCharacterForm();
+            if (NewCharacter.ShowDialog(this) == DialogResult.OK)
+            {
+                player = new Player(0, 0, 0)
+                {
+                    Name = NewCharacter.nameTextBox.Text,
+                    MaxHP = Convert.ToInt32(NewCharacter.numMaxHP.Value),
+                    Strength = Convert.ToInt32(NewCharacter.numStrength.Value),
+                    Intellect = Convert.ToInt32(NewCharacter.numIntellect.Value),
+                    AP = Convert.ToInt32(NewCharacter.numAP.Value),
+                    MR = Convert.ToInt32(NewCharacter.numMR.Value)
+                };
+            }
+            NewCharacter.Dispose();
 
             if (player.Name == "Tully")
             {
@@ -35,14 +42,13 @@ namespace WrathOfTheRuined
                 player.staff = staff;
                 player.armor = armor;
                 player.Gold = 50000;
-                player.GBP = 100000;
+                player.GBP = -100000;
                 player.Inventory.Clear();
                 player.Inventory.Add(sword);
                 player.Inventory.Add(staff);
                 player.Inventory.Add(armor);
             }
-
-            if (player.Name == "Tom")
+            else if (player.Name == "Tom")
             {
                 Sword sword = new Sword(200);
                 Staff staff = new Staff(100);
@@ -57,9 +63,10 @@ namespace WrathOfTheRuined
                 player.Inventory.Add(staff);
                 player.Inventory.Add(armor);
             }
+
             ShowData(player);
             GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
-            //actual game code
+
             TbMain.Text = "Hello " + player.Name + ". You have been asleep for a long time. Have you forgotten who you are? You are a proud member of the Vanin race. I hope you know how to survive." + Environment.NewLine +
             "You awake after a year long hibernation. While it is not unusual for a Vanin to have long slumber periods, a year is unheard of." + Environment.NewLine +
             "Your family is huddled around you, amazed that you have awoken. They break the news that the rest of the Vanins have been slaughtered by order of the King. " + Environment.NewLine +
@@ -86,20 +93,17 @@ namespace WrathOfTheRuined
         public void GameTutorial()
         {
             MessageBox.Show("Welcome to Wrath of the Ruined. This is a tutorial to teach you the basics of of the game.", "Tutorial");
-            lblPlayerXP.BackColor = Color.GreenYellow;
             lblPlayerGold.BackColor = Color.Gold;
             lblPlayerGBP.BackColor = Color.SkyBlue;
-            MessageBox.Show("Highlighted in Green is your XP counter. As you progress you will gain XP." + Environment.NewLine +
-                Environment.NewLine + "Yellow is your amount of Gold. You can use gold to buy items from shops in towns." + Environment.NewLine +
+            MessageBox.Show("Highlighted in yellow is your amount of Gold. You can use gold to buy items from shops in towns." + Environment.NewLine +
                 Environment.NewLine + "Blue is your Good Boy Points counter. The more Good Boy Points you have, the more honorable you are.", "Tutorial");
-            lblPlayerXP.BackColor = Color.Transparent;
             lblPlayerGold.BackColor = Color.Transparent;
             lblPlayerGBP.BackColor = Color.Transparent;
             lblLoc.BackColor = Color.Red;
             MessageBox.Show("Highlighted in Red is your current location.", "Tutorial");
             lblLoc.BackColor = Color.Transparent;
             TbMain.Text = "You are walking in the wilderness and an enemy approaches." + Environment.NewLine + "You draw your weapon";
-            Creature enemy = new Creature(0, 0, 0);
+            Enemy enemy = new Enemy(0, 0, 0, 0, 0);
             Combat(player, enemy);
             player.progress++;
             TbMain.Text = "Will you protect your family, or will you tremble as your cowardess takes hold of you?" + Environment.NewLine +
@@ -108,7 +112,7 @@ namespace WrathOfTheRuined
 
         private void Game_Load(object sender, EventArgs e)
         {
-            lblPlayerXP.Text = player.ExperiencePoints.ToString();
+            progressBarXP.Value = player.XP;
             lblPlayerGold.Text = player.Gold.ToString();
             lblPlayerGBP.Text = player.GBP.ToString();
             lblEquippedSword.Text = player.sword.Name.ToString();
@@ -200,7 +204,7 @@ namespace WrathOfTheRuined
                         TbMain.Text = "You unequipped the " + armor.Name + ".";
                     }
                     else
-                    {
+                    {   
                         player.armor = armor;
                         TbMain.Text = "You equipped the " + armor.Name + ".";
                     }
@@ -283,7 +287,7 @@ namespace WrathOfTheRuined
                             }
                             break;
                         default:
-                            lblPlayerXP.Text = player.ExperiencePoints.ToString();
+                            progressBarXP.Value = player.XP;
                             lblPlayerGold.Text = player.Gold.ToString();
                             lblPlayerGBP.Text = player.GBP.ToString();
                             lblLoc.Text = Town.Name;
@@ -302,7 +306,7 @@ namespace WrathOfTheRuined
                 }
                 else
                 {
-                    lblPlayerXP.Text = player.ExperiencePoints.ToString();
+                    progressBarXP.Value = player.XP;
                     lblPlayerGold.Text = player.Gold.ToString();
                     lblPlayerGBP.Text = player.GBP.ToString();
                     lblLoc.Text = Town.Name;
@@ -717,8 +721,8 @@ namespace WrathOfTheRuined
                                                                                     BtnContinue.Click += Quest2Click7;
                                                                                     void Quest2Click7(object sender_5, EventArgs e_5)
                                                                                     {
-                                                                                        Creature thug1 = new Creature(3, -1, 0);
-                                                                                        Creature thug2 = new Creature(5, -1, 1);
+                                                                                        Enemy thug1 = new Enemy(3, -1, 0, 5, 5);
+                                                                                        Enemy thug2 = new Enemy(5, -1, 1, 5, 5);
                                                                                         int combatresult = Combat(player, thug1);
                                                                                         if( combatresult == 1)
                                                                                         {
@@ -857,14 +861,14 @@ namespace WrathOfTheRuined
                                                     switch (ActionBox.SelectedIndex)
                                                     {
                                                         case 0:
-                                                            Creature bandit1 = new Creature(5, 0, 1);
-                                                            Creature bandit2 = new Creature(5, 0, 2);
-                                                            Creature bandit3 = new Creature(7, 0, 1);
-                                                            Creature bandit4 = new Creature(7, 0, 2);
-                                                            Creature bandit5 = new Creature(11, 0, 2);
-                                                            Creature bandit6 = new Creature(11, 0, 3);
-                                                            Creature bandit7 = new Creature(15, 0, 3);
-                                                            Creature banditLeader = new Creature(20, 0, 3);
+                                                            Enemy bandit1 = new Enemy(5, 0, 1, 0, 10);
+                                                            Enemy bandit2 = new Enemy(5, 0, 2, 0, 10);
+                                                            Enemy bandit3 = new Enemy(7, 0, 1, 10, 15);
+                                                            Enemy bandit4 = new Enemy(7, 0, 2, 15, 35);
+                                                            Enemy bandit5 = new Enemy(11, 0, 2, 20, 50);
+                                                            Enemy bandit6 = new Enemy(11, 0, 3, 75, 70);
+                                                            Enemy bandit7 = new Enemy(15, 0, 3, 100, 100);
+                                                            Enemy banditLeader = new Enemy(20, 0, 3, 150, 100);
 
                                                             TbMain.Text = "You pull out yor blade, and the guardsman charges at you, screaming. This alerts the rest of the camp to your motive. A very difficult battle against over half a dozen bandits has started.";
                                                             BtnContinue.Click -= Quest3Click2;
@@ -947,11 +951,11 @@ namespace WrathOfTheRuined
                                                             }
                                                             break;
                                                         case 2:
-                                                            Creature citizen1 = new Creature(3, 0, 1);
-                                                            Creature citizen2 = new Creature(5, 0, 1);
-                                                            Creature citizen3 = new Creature(7, 0, 1);
-                                                            Creature guard1 = new Creature(11, 0, 2);
-                                                            Creature guard2 = new Creature(11, 0, 2);
+                                                            Enemy citizen1 = new Enemy(3, 0, 1, 15, 35);
+                                                            Enemy citizen2 = new Enemy(5, 0, 1, 20, 40);
+                                                            Enemy citizen3 = new Enemy(7, 0, 1, 25, 40);
+                                                            Enemy guard1 = new Enemy(11, 0, 2, 50, 25);
+                                                            Enemy guard2 = new Enemy(11, 0, 2, 50, 25);
 
                                                             TbMain.Text = "The bandit guardsman is confused by this, but tells you to wait there. He comes back with the bandit leader, and he looks you over. The leader seems impressed, and allows you to join in the raid on Doveport, which will take place tonight. You spend the rest of the day preparing for the raid. At around 2:00 AM, the band sets off towards Doveport, and begins the pillage.";
                                                             BtnContinue.Click -= Quest3Click2;
@@ -1082,9 +1086,9 @@ namespace WrathOfTheRuined
                                                         switch (ActionBox.SelectedIndex)
                                                         {
                                                             case 0:
-                                                                Creature bandit1 = new Creature(10, 0, 1);
-                                                                Creature bandit2 = new Creature(10, 0, 2);
-                                                                Creature bandit3 = new Creature(15, 0, 2);
+                                                                Enemy bandit1 = new Enemy(10, 0, 1, 10, 10);
+                                                                Enemy bandit2 = new Enemy(10, 0, 2, 10, 10);
+                                                                Enemy bandit3 = new Enemy(15, 0, 2, 10, 10);
 
                                                                 TbMain.Text = "You accept his job offer. He gets the pie out of the oven, and tosses it into a delivery bag. He gives you the address, and you are on your way. In the wilderness between Venzor and Doveport, you are confronted by bandits that wish to steal the pie.";
                                                                 BtnContinue.Click -= Quest4Click2;
@@ -1227,9 +1231,9 @@ namespace WrathOfTheRuined
                                                             BtnContinue.Click += OutsideTownContinueClick;
                                                             break;
                                                         case 1:
-                                                            Creature Bear1 = new Creature(30, -1, -1);
-                                                            Creature Bear2 = new Creature(30, -1, -1);
-                                                            Creature Bear3 = new Creature(30, -1, -1);
+                                                            Enemy Bear1 = new Enemy(30, -1, -1, 0, 100);
+                                                            Enemy Bear2 = new Enemy(30, -1, -1, 0, 100);
+                                                            Enemy Bear3 = new Enemy(30, -1, -1, 0, 100);
                                                             Bear1.MaxHP = 450;
                                                             Bear2.MaxHP = 450;
                                                             Bear3.MaxHP = 450;
@@ -1494,9 +1498,9 @@ namespace WrathOfTheRuined
                                                                                     break;
                                                                                 case 1:
                                                                                     TbMain.Text = "Pulling out your weapon, you stab and cover her mouth at the same time. However, as you are in the front door, facing a fairly busy street, someone sees this happen, and screams. Your cover is blown, and you are confronted by Fallholtian guards.";
-                                                                                    Creature Guard1 = new Creature(20, -1, 4);
-                                                                                    Creature Guard2 = new Creature(20, -1, 4);
-                                                                                    Creature Guard3 = new Creature(20, -1, 4);
+                                                                                    Enemy Guard1 = new Enemy(20, -1, 4, 20, 50);
+                                                                                    Enemy Guard2 = new Enemy(20, -1, 4, 30, 75);
+                                                                                    Enemy Guard3 = new Enemy(20, -1, 4, 40, 90);
                                                                                     BtnContinue.Click -= Quest6Click5;
                                                                                     BtnContinue.Click += Quest6Click9;
                                                                                     ActionBox.Items.Clear();
@@ -1582,10 +1586,10 @@ namespace WrathOfTheRuined
                                     BtnContinue.Click += Quest7Click1;
                                     void Quest7Click1(object sender_1, EventArgs e_1)
                                     {
-                                        Creature lackey1 = new Creature(20, -1, 4);
-                                        Creature lackey2 = new Creature(24, -1, 4);
-                                        Creature lackey3 = new Creature(26, -1, 4);
-                                        Creature Armando = new Creature(29, -1, 5);
+                                        Enemy lackey1 = new Enemy(20, -1, 4, 20, 20);
+                                        Enemy lackey2 = new Enemy(24, -1, 4, 20, 20);
+                                        Enemy lackey3 = new Enemy(26, -1, 4, 20 ,20);
+                                        Enemy Armando = new Enemy(29, -1, 5, 20, 20);
                                         int result = Combat(player, lackey1);
                                         if(result != 2)
                                             result = Combat(player, lackey2);
@@ -1642,57 +1646,89 @@ namespace WrathOfTheRuined
             ActionBox.Items.Add("Battle");
             ActionBox.SelectedIndex = 0;
             lblLoc.Text = "Royal Palace";
-            TbMain.Text = "The time is now. You have geared up, gained some cash, and are ready to remove the threat to your family." + Environment.NewLine + "You'll have to fight your way through to the king. Do you still have the strength to manage?";
+            TbMain.Text = "You have geared up, gained some cash, and are ready to remove the threat to your family." + Environment.NewLine + "You'll have to fight your way through to the king. Do you still have the strength to manage? Before you can answer this question, 3 royal knights run at you and begin an attack.";
 
             void RPClick1(object sender, EventArgs e)
             {
-                Creature noble = new Creature(1, 1, 1);
-                if (Combat(player, noble) != 2)
+                Enemy knight1 = new Enemy(1, 1, 1, 0, 0);
+                if (Combat(player, knight1) != 2)
                 {
-                    Creature knight = new Creature(2, 1, 2);
-                    if (Combat(player, knight) != 2)
+                    Enemy knight2 = new Enemy(2, 1, 2, 0, 0);
+                    if (Combat(player, knight2) != 2)
                     {
-                        Creature protector = new Creature(2, 2, 1);
-                        if (Combat(player, protector) != 1)
+                        Enemy knight3 = new Enemy(2, 2, 1, 0, 0);
+                        if (Combat(player, knight3) != 2)
                         {
-                            TbMain.Text = "You have arrived at the throne room. Inside you see the king and his royal protector. The king glances at you and speaks." + Environment.NewLine + "'You've made it this far, but I'm afriad this is where your journey ends.'";
-                            // Continue Button
-
-                            if (player.GBP >= 0)
+                            TbMain.Text = "After slaying the three knights, you have arrive at the throne room. Inside you see the king and his royal protector. The king glances at you and speaks." + Environment.NewLine + "'You've made it this far, but I'm afriad this is where your journey ends.'";
+                            BtnContinue.Click -= RPClick1;
+                            BtnContinue.Click += RPClick2;
+                            ActionBox.Items.Clear();
+                            ActionBox.SelectedIndex = -1;
+                            void RPClick2(object sender_1, EventArgs e_1)
                             {
-                                TbMain.Text = "'Since you have fought honorably in my kingdom, I shall fight you myself.'" + Environment.NewLine + "Strike against the king and carve your legacy in stone!";
+                                if (player.GBP >= 0)
+                                {
+                                    TbMain.Text = "'Since you have fought honorably in my kingdom, I shall fight you myself.'" + Environment.NewLine + "Strike against the king and carve your legacy in stone!";
+                                    BtnContinue.Click -= RPClick2;
+                                    BtnContinue.Click += RPClick3;
+                                    void RPClick3(object sender_2, EventArgs e_2)
+                                    {
+                                        Enemy king = new Enemy(29, 29, 5, 250, 250);
+                                        king.CurrentHP = king.MaxHP = 250;
 
-                                Creature king = new Creature(29, 29, 5);
-                                king.CurrentHP = king.MaxHP = 250;
-
-                                if (Combat(player, king) != 2)
-                                {
-                                    TbMain.Text = "You have done it! You have defeated the king and can rule in his stead." + Environment.NewLine + "How will you rule over the people? Will you maintain your honor and generosity, or will you make them pay in blood for the genocide of the Vanins?";
-                                    MessageBox.Show("Thank you for playing!");
-                                    Application.Restart();
+                                        if (Combat(player, king) != 2)
+                                        {
+                                            TbMain.Text = "You have done it! You have defeated the king and can rule in his stead." + Environment.NewLine + "How will you rule over the people? Will you maintain your honor and generosity, or will you make them pay in blood for the genocide of the Vanins?";
+                                            BtnContinue.Click -= RPClick3;
+                                            BtnContinue.Click += RPClick4;
+                                            ActionBox.Items.Add("The End");
+                                            ActionBox.SelectedIndex = 0;
+                                            void RPClick4(object sender_3, EventArgs e_3)
+                                            {
+                                                MessageBox.Show("Thank you for playing!");
+                                                Application.Restart();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            TbMain.Text = "The king was too strong for you to battle and win. You run out of the throne room, having failed the Vanins and your family.";
+                                            BtnContinue.Click -= RPClick3;
+                                            BtnContinue.Click += RPClick5;
+                                            ActionBox.Items.Add("The End");
+                                            ActionBox.SelectedIndex = 0;
+                                            void RPClick5 (object sender_3, EventArgs e_3)
+                                            {
+                                                MessageBox.Show("Thank you for playing!");
+                                                Application.Restart();
+                                            }
+                                        }
+                                    }
                                 }
-                                else
+                                else if (player.GBP < 0)
                                 {
-                                    TbMain.Text = "The king was too strong for you to battle and win. You run out of the throne room, having failed the Vanins and your family.";
-                                    MessageBox.Show("Thank you for playing!");
-                                    Application.Restart();
+                                    TbMain.Text = "'You are nothing but scum. I will not give you the gift of fighting me. Royal Protector, Remove him.'";
+                                    BtnContinue.Click -= RPClick2;
+                                    BtnContinue.Click += RPClick6;
+                                    void RPClick6(object sender_2, EventArgs e_2)
+                                    {
+                                        Enemy royalProtector = new Enemy(29, 29, 5, 250, 250);
+                                        if (Combat(player, royalProtector) != 2)
+                                        {
+                                            TbMain.Text = "You have vanquished the royal protector as the king ran away in fear. You can take the crown by force and rule over the people." + Environment.NewLine + "How will you rule over the people? Will your thirst for blood cloud your judgement, or will you bring peace to the land?";
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("In the final moments, you couldn't kill the royal protector, and ran away. Game over.");
+                                        }
+                                        BtnContinue.Click -= RPClick6;
+                                        BtnContinue.Click += RPClick7;
+                                        void RPClick7(object sender_3, EventArgs e_3)
+                                        {
+                                            MessageBox.Show("Thank you for playing!");
+                                            Application.Restart();
+                                        }
+                                    }
                                 }
-                            }
-                            else if (player.GBP < 0)
-                            {
-                                TbMain.Text = "'You are nothing but scum. I will not give you the gift of fighting me. Royal Protector, Remove him.'";
-
-                                Creature royalProtector = new Creature(29, 29, 5);
-                                if (Combat(player, royalProtector) != 2)
-                                {
-                                    TbMain.Text = "You have vanquished the royal protector as the king ran away in fear. You can take the crown by force and rule over the people." + Environment.NewLine + "How will you rule over the people? Will your thirst for blood cloud your judgement, or will you bring peace to the land?";
-                                }
-                                else
-                                {
-                                    MessageBox.Show("In the final moments, you couldn't kill the royal protector, and ran away. Game over.");
-                                }
-                                MessageBox.Show("Thank you for playing!");
-                                Application.Restart();
                             }
                         }
                         else
@@ -1742,12 +1778,10 @@ namespace WrathOfTheRuined
                     setEnemyStaff = -1;
                     break;
             }
-            
 
-            Creature enemy = new Creature(setEnemySword, setEnemyStaff, setEnemyArmor)
-            {
-                GoldDrop = 30 + ( difficulty * 5 )
-            };
+
+            Enemy enemy = new Enemy(setEnemySword, setEnemyStaff, setEnemyArmor, 30 + (difficulty * 5), 30 + (difficulty * 5));
+
             lblLoc.Text = "Wilderness";
             int result = Combat(player, enemy);
             if (result == 1)
@@ -1765,7 +1799,7 @@ namespace WrathOfTheRuined
                 player.progress--;
         }
 
-        public int Combat(Player player, Creature enemy)
+        public int Combat(Player player, Enemy enemy)
         {
             GameScreenMusic.StopMusic(GameScreenMusic.soundplayer);
             Music CombatMusic = new Music();
@@ -1785,6 +1819,12 @@ namespace WrathOfTheRuined
                 Show();
                 GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
             }
+            if(player.XP >= player.MaxXP)
+            {
+                Levelup();
+            }
+            progressBarXP.Maximum = player.MaxXP;
+            progressBarXP.Value = player.XP;
             return result;
         }
 
@@ -1797,6 +1837,101 @@ namespace WrathOfTheRuined
             lblEquippedSword.Text = player.sword.Name.ToString();
             lblEquippedStaff.Text = player.staff.Name.ToString();
             lblEquippedArmor.Text = player.armor.Name.ToString();
+            Show();
+        }
+
+        public void Levelup()
+        {
+            player.Level++;
+            player.XP -= player.MaxXP;
+            switch (player.Level)
+            {
+                case 1:
+                    player.MaxXP = 100;
+                    break;
+                case 2:
+                    player.MaxXP = 400;
+                    break;
+                case 3:
+                    player.MaxXP = 900;
+                    break;
+                case 4:
+                    player.MaxXP = 1600;
+                    break;
+                case 5:
+                    player.MaxXP = 25100;
+                    break;
+                case 6:
+                    player.MaxXP = 3600;
+                    break;
+                case 7:
+                    player.MaxXP = 4900;
+                    break;
+                case 8:
+                    player.MaxXP = 6400;
+                    break;
+                case 9:
+                    player.MaxXP = 8100;
+                    break;
+                case 10:
+                    player.MaxXP = 10000;
+                    break;
+                case 11:
+                    player.MaxXP = 12100;
+                    break;
+                case 12:
+                    player.MaxXP = 14400;
+                    break;
+                case 13:
+                    player.MaxXP = 16900;
+                    break;
+                case 14:
+                    player.MaxXP = 19600;
+                    break;
+                case 15:
+                    player.MaxXP = 22500;
+                    break;
+                case 16:
+                    player.MaxXP = 25600;
+                    break;
+                case 17:
+                    player.MaxXP = 28900;
+                    break;
+                case 18:
+                    player.MaxXP = 32400;
+                    break;
+                case 19:
+                    player.MaxXP = 36100;
+                    break;
+                default:
+                    player.MaxXP = 40000;
+                    break;
+            }
+            player.Level++;
+            Hide();
+            LevelUpForm LevelUp = new LevelUpForm();
+            if (LevelUp.ShowDialog(this) == DialogResult.OK)
+            {
+                switch (LevelUp.increasedStat)
+                {
+                    case 1:
+                        player.MaxHP += 5;
+                        break;
+                    case 2:
+                        player.Strength += 1;
+                        break;
+                    case 3:
+                        player.Intellect += 1;
+                        break;
+                    case 4:
+                        player.AP += 1;
+                        break;
+                    case 5:
+                        player.MR += 1;
+                        break;
+                }
+            }
+            LevelUp.Dispose();
             Show();
         }
 

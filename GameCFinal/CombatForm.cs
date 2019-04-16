@@ -12,7 +12,7 @@ namespace WrathOfTheRuined
             InitializeComponent();
         }
 
-        public int StartCombat(Player player, Creature enemy)
+        public int StartCombat(Player player, Enemy enemy)
         {
             int charIndex = 0;
             string typePlayerText = "";
@@ -22,7 +22,7 @@ namespace WrathOfTheRuined
 
             player.stance.ChangeStance(player, 2);
             enemy.stance.ChangeStance(enemy, 2);
-
+            player.CurrentHP = player.MaxHP;
             MessageBox.Show("An enemy approaches, you draw your weapon...");
             CombatRefresh();
 
@@ -50,8 +50,8 @@ namespace WrathOfTheRuined
                     else if (player.CurrentHP > 0 && enemy.CurrentHP <= 0)
                     {
                         MessageBox.Show("You have defeated the enemy and found " + enemy.GoldDrop + " gp.");
-                        player.CurrentHP = player.MaxHP;
                         player.Gold += enemy.GoldDrop;
+                        player.XP += enemy.XPValue;
                         player.Strength += (enemy.Strength / 5);
                         player.Intellect += (enemy.Intellect / 5);
                         return 1; 
@@ -105,19 +105,18 @@ namespace WrathOfTheRuined
                             GoldLost = player.Gold;
                         MessageBox.Show("As you ran away you dropped " + GoldLost + " Gold.");
                         player.Gold -= GoldLost;
-                        player.CurrentHP = player.MaxHP;
                     }
                 }
 
                 if (enemy.CurrentHP > 0 && (CbPlayerCombat.SelectedIndex == 0 || CbPlayerCombat.SelectedIndex == 2))
                 {
-                    if (player.stance.stanceNum == 3)
+                    if (player.stance.stanceNum == 1 || player.stance.stanceNum == 3)
                     {
                         if (player.Endurance >= 10)
                             player.Endurance -= 10;
                         player.stance.ChangeStance(player, player.stance.stanceNum);
                     }
-                    if (player.stance.stanceNum == 1)
+                    if (player.stance.stanceNum == 2)
                     {
                         if (player.Endurance <= 90)
                             player.Endurance += 10;

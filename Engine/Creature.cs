@@ -14,7 +14,6 @@ namespace Engine
         public int Strength { get; set; }
         public int Intellect { get; set; }
         public int Endurance { get; set; }
-        public int GoldDrop { get; set; }
         public Stance stance;
         public Sword sword;
         public Armor armor;

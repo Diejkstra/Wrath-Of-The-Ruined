@@ -46,6 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LevelUpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LevelUpForm.Designer.cs">
+      <DependentUpon>LevelUpForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewCharacterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewCharacterForm.Designer.cs">
+      <DependentUpon>NewCharacterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +97,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="LevelUpForm.resx">
+      <DependentUpon>LevelUpForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewCharacterForm.resx">
+      <DependentUpon>NewCharacterForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StoreForm.resx">
       <DependentUpon>StoreForm.cs</DependentUpon>
     </EmbeddedResource>
