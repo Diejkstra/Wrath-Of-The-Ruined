@@ -121,6 +121,7 @@ namespace WrathOfTheRuined
                                     healed = UseItem.UseThisItem.HealthGain;
                                 typePlayerText = "You used the " + UseItem.UseThisItem.Name + " and healed " + healed + " health.";
                                 typeEnemyText = "";
+                                player.Inventory.Remove(UseItem.UseThisItem);
                                 Thread t = new Thread(Typewrite);
                                 t.Start();
                             }

@@ -109,6 +109,7 @@ namespace WrathOfTheRuined
 
         private void Game_Load(object sender, EventArgs e)
         {
+            progressBarXP.Maximum = player.MaxXP;
             progressBarXP.Value = player.XP;
             lblPlayerGold.Text = player.Gold.ToString();
             lblPlayerGBP.Text = player.GBP.ToString();
@@ -116,6 +117,7 @@ namespace WrathOfTheRuined
             lblEquippedStaff.Text = player.staff.Name.ToString();
             lblEquippedArmor.Text = player.armor.Name.ToString();
             lblLoc.Text = "Wilderness";
+            BtnContinue.PerformClick();
         }
 
         private void Game_FormClosed(object sender, FormClosedEventArgs e)
@@ -1370,6 +1372,10 @@ namespace WrathOfTheRuined
                                                             TbMain.Text = "He breathes a sigh of relief. While a bit confused as to why you are here just to tell him this, he is happy that you haven't killed him. You tell each other goodbye, and make you way back to town." + Environment.NewLine + "+15 GBP" + Environment.NewLine + "Quest Complete";
                                                             ActionBox.Items.Clear();
                                                             ActionBox.SelectedIndex = -1;
+                                                            player.GBP += 15;
+                                                            player.questComplete[6] = true;
+                                                            BtnContinue.Click -= Quest6Click2;
+                                                            BtnContinue.Click += OutsideTownContinueClick;
                                                             break;
                                                         case 2:
                                                             TbMain.Text = "He refuses at first, but eventually, he tells you where she lives. He asks you to spare her life. Eventually, you find the noblewoman's home in the city. It's quite densely populated here, with many buildings every which way; a crime here most certainly be noticed.";
