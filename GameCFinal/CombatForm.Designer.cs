@@ -37,8 +37,8 @@
             this.lblEnemyHealth = new System.Windows.Forms.Label();
             this.lblEnemyArmor = new System.Windows.Forms.Label();
             this.lblEnemyWeapon = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lblPlayerName = new System.Windows.Forms.Label();
+            this.lblEnemyName = new System.Windows.Forms.Label();
             this.lblPlayerStance = new System.Windows.Forms.Label();
             this.btnPlayer = new System.Windows.Forms.Button();
             this.lblEnemyStance = new System.Windows.Forms.Label();
@@ -178,38 +178,38 @@
             this.lblEnemyWeapon.Text = "lblEnemyWeapon";
             this.lblEnemyWeapon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label3
+            // lblPlayerName
             // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Castellar", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(29, 8);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(86, 33);
-            this.label3.TabIndex = 12;
-            this.label3.Text = "You";
+            this.lblPlayerName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblPlayerName.AutoSize = true;
+            this.lblPlayerName.Font = new System.Drawing.Font("Castellar", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlayerName.Location = new System.Drawing.Point(36, 12);
+            this.lblPlayerName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblPlayerName.Name = "lblPlayerName";
+            this.lblPlayerName.Size = new System.Drawing.Size(71, 26);
+            this.lblPlayerName.TabIndex = 12;
+            this.lblPlayerName.Text = "You";
             // 
-            // label4
+            // lblEnemyName
             // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Castellar", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(299, 8);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(124, 33);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Enemy";
+            this.lblEnemyName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblEnemyName.AutoSize = true;
+            this.lblEnemyName.Font = new System.Drawing.Font("Castellar", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEnemyName.Location = new System.Drawing.Point(292, 0);
+            this.lblEnemyName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblEnemyName.Name = "lblEnemyName";
+            this.lblEnemyName.Size = new System.Drawing.Size(138, 50);
+            this.lblEnemyName.TabIndex = 13;
+            this.lblEnemyName.Text = "This is a really long name";
             // 
             // lblPlayerStance
             // 
             this.lblPlayerStance.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblPlayerStance.AutoSize = true;
-            this.lblPlayerStance.Location = new System.Drawing.Point(19, 158);
+            this.lblPlayerStance.Location = new System.Drawing.Point(32, 160);
             this.lblPlayerStance.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlayerStance.Name = "lblPlayerStance";
-            this.lblPlayerStance.Size = new System.Drawing.Size(106, 17);
+            this.lblPlayerStance.Size = new System.Drawing.Size(80, 13);
             this.lblPlayerStance.TabIndex = 14;
             this.lblPlayerStance.Text = "lblPlayerStance";
             // 
@@ -229,10 +229,10 @@
             // 
             this.lblEnemyStance.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblEnemyStance.AutoSize = true;
-            this.lblEnemyStance.Location = new System.Drawing.Point(306, 158);
+            this.lblEnemyStance.Location = new System.Drawing.Point(319, 160);
             this.lblEnemyStance.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEnemyStance.Name = "lblEnemyStance";
-            this.lblEnemyStance.Size = new System.Drawing.Size(109, 17);
+            this.lblEnemyStance.Size = new System.Drawing.Size(83, 13);
             this.lblEnemyStance.TabIndex = 16;
             this.lblEnemyStance.Text = "lblEnemyStance";
             // 
@@ -240,10 +240,10 @@
             // 
             this.stanceLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.stanceLabel.AutoSize = true;
-            this.stanceLabel.Location = new System.Drawing.Point(190, 158);
+            this.stanceLabel.Location = new System.Drawing.Point(195, 160);
             this.stanceLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.stanceLabel.Name = "stanceLabel";
-            this.stanceLabel.Size = new System.Drawing.Size(52, 17);
+            this.stanceLabel.Size = new System.Drawing.Size(41, 13);
             this.stanceLabel.TabIndex = 15;
             this.stanceLabel.Text = "Stance";
             // 
@@ -256,8 +256,8 @@
             this.tableLayoutPanel1.Controls.Add(this.lblPlayerHealth, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.healthLabel, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblEnemyHealth, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblEnemyName, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblPlayerName, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblPlayerStance, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.stanceLabel, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.lblEnemyStance, 2, 5);
@@ -352,10 +352,10 @@
             this.CbPlayerCombat.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CbPlayerCombat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CbPlayerCombat.FormattingEnabled = true;
-            this.CbPlayerCombat.Location = new System.Drawing.Point(146, 255);
+            this.CbPlayerCombat.Location = new System.Drawing.Point(146, 257);
             this.CbPlayerCombat.Margin = new System.Windows.Forms.Padding(2);
             this.CbPlayerCombat.Name = "CbPlayerCombat";
-            this.CbPlayerCombat.Size = new System.Drawing.Size(140, 24);
+            this.CbPlayerCombat.Size = new System.Drawing.Size(140, 21);
             this.CbPlayerCombat.TabIndex = 9;
             // 
             // CombatForm
@@ -385,8 +385,8 @@
         public System.Windows.Forms.Label lblEnemyHealth;
         public System.Windows.Forms.Label lblEnemyArmor;
         public System.Windows.Forms.Label lblEnemyWeapon;
-        public System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.Label lblPlayerName;
+        private System.Windows.Forms.Label lblEnemyName;
         public System.Windows.Forms.Label lblPlayerStance;
         public System.Windows.Forms.Button btnPlayer;
         public System.Windows.Forms.Label lblEnemyStance;

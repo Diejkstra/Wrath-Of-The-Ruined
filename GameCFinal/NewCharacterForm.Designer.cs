@@ -107,6 +107,7 @@
             // nameTextBox
             // 
             this.nameTextBox.Location = new System.Drawing.Point(90, 12);
+            this.nameTextBox.MaxLength = 20;
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(120, 20);
             this.nameTextBox.TabIndex = 6;
@@ -158,7 +159,7 @@
             this.numStrength.Size = new System.Drawing.Size(120, 20);
             this.numStrength.TabIndex = 8;
             this.numStrength.Value = new decimal(new int[] {
-            5,
+            10,
             0,
             0,
             0});
@@ -182,7 +183,7 @@
             this.numIntellect.Size = new System.Drawing.Size(120, 20);
             this.numIntellect.TabIndex = 9;
             this.numIntellect.Value = new decimal(new int[] {
-            5,
+            10,
             0,
             0,
             0});

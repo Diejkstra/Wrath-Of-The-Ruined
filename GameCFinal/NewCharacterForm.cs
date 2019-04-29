@@ -11,8 +11,8 @@ namespace WrathOfTheRuined
         }
 
         Decimal OldMaxHP = 150;
-        Decimal OldStrength = 5;
-        Decimal OldIntellect = 5;
+        Decimal OldStrength = 10;
+        Decimal OldIntellect = 10;
         Decimal OldAP = 10;
         Decimal OldMR = 10;
         int StatPoints = 0;

@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Update="Town.cs">
+      <Generator> </Generator>
+    </Compile>
+  </ItemGroup>
+
 </Project>

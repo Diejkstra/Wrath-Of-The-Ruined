@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Engine;
 
@@ -37,9 +31,10 @@ namespace WrathOfTheRuined
             }
             NameInput.Dispose();
             var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Wrath Of The Ruined//" + LoadFileName + ".xml";
-
+            Type[] extratypes = new Type[1];
+            extratypes[0] = typeof(Consumable);
             System.Xml.Serialization.XmlSerializer reader =
-                new System.Xml.Serialization.XmlSerializer(typeof(Player));
+                new System.Xml.Serialization.XmlSerializer(typeof(Player), extratypes);
             System.IO.StreamReader file = new System.IO.StreamReader(@path);
             Player player = (Player)reader.Deserialize(file);
             file.Close();
@@ -51,7 +46,7 @@ namespace WrathOfTheRuined
 
         private void BtnQuit_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Thanks for Playing!");
+            MessageBox.Show("Thanks for Playing!"); 
             Application.Exit();
         }
 

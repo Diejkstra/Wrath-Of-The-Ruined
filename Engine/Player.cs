@@ -4,7 +4,6 @@ namespace Engine
 {
     public class Player : Creature
     {
-        public string Name { get; set; }
         public int Level { get; set; }
         public int XP { get; set; }
         public int MaxXP { get; set; }

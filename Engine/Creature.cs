@@ -5,6 +5,7 @@ namespace Engine
     [Serializable]
     public class Creature
     {
+        public string Name { get; set; }
         public int AP { get; set; } //Base Armor Points
         public int MR { get; set; } //Base Magic Resist
         public int MaxHP { get; set; }
