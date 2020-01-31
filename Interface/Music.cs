@@ -11,13 +11,12 @@ namespace WrathOfTheRuined
     {
         public SoundPlayer soundplayer;
 
-        public SoundPlayer StartMusic(string songName)
+        public SoundPlayer StartMusic(System.IO.UnmanagedMemoryStream song)
         {
-            string songPath = "Songs/";
-            songPath += songName;
-            songPath += ".wav";
-            SoundPlayer Music = new SoundPlayer();
-            Music.SoundLocation = songPath;
+            SoundPlayer Music = new SoundPlayer
+            {
+                Stream = song
+            };
             Music.PlayLooping();
             return Music;
         }

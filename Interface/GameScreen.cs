@@ -1,4 +1,5 @@
 ﻿using Engine;
+using Interface.Properties;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,8 +9,7 @@ namespace WrathOfTheRuined
     public partial class GameScreen : Form
     {
         public Player player;
-
-        Music GameScreenMusic = new Music();
+        readonly Music GameScreenMusic = new Music();
 
         public GameScreen() //NewGame
         {
@@ -28,6 +28,7 @@ namespace WrathOfTheRuined
                     MR = Convert.ToInt32(NewCharacter.numMR.Value)
                 };
             }
+
             NewCharacter.Dispose();
 
             if (player.Name == "Tully")
@@ -61,8 +62,8 @@ namespace WrathOfTheRuined
                 player.Inventory.Add(armor);
             }
 
-            ShowData(player);
-            GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
+            ShowData();
+            GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.Mellow);
 
             TbMain.Text = "Hello " + player.Name + ". You have been asleep for a long time. Have you forgotten who you are? You are a proud member of the Vanin race. I hope you know how to survive." + Environment.NewLine +
             "You awake after a year long hibernation. While it is not unusual for a Vanin to have long slumber periods, a year is unheard of." + Environment.NewLine +
@@ -76,15 +77,29 @@ namespace WrathOfTheRuined
         {
             player = loadedPlayer;
             InitializeComponent();
-            ShowData(player);
-            GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
+            ShowData();
+            GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.Mellow);
         }
 
-        private void ShowData(Player player)
+        private void ShowData()
         {
             listBoxPlayerInventory.DataSource = null;
             listBoxPlayerInventory.DataSource = player.Inventory;
             listBoxPlayerInventory.DisplayMember = "Name";
+        }
+
+        private void GameIntro()
+        {
+            ShowData();
+            GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.Mellow);
+
+            TbMain.Text = "Hello " + player.Name + ". You have been asleep for a long time. Have you forgotten who you are? You are a proud member of the Vanin race. I hope you know how to survive." + Environment.NewLine +
+            "You awake after a year long hibernation. While it is not unusual for a Vanin to have long slumber periods, a year is unheard of." + Environment.NewLine +
+            "Your family is huddled around you, amazed that you have awoken. They break the news that the rest of the Vanins have been slaughtered by order of the King. " + Environment.NewLine +
+            "Your kind was feared because of the immense potential you hold. Your race has the ability to absorb part of the skill and wisdom from those you defeat. After several horrific wars, your kind has learned to live peacefully with Humans.";
+            TbMain.AppendText(Environment.NewLine + Environment.NewLine + "Or so you thought.");
+            TbMain.AppendText(Environment.NewLine + Environment.NewLine + "(Press Continue)");
+            player.progress++;
         }
 
         public void GameTutorial()
@@ -102,6 +117,7 @@ namespace WrathOfTheRuined
             TbMain.Text = "You are walking in the wilderness and an enemy approaches." + Environment.NewLine + "You draw your weapon";
             Enemy enemy = new Enemy("Bandit", 0, 0, 0, 0, 0);
             Combat(player, enemy);
+            ShowData();
             player.progress++;
             TbMain.Text = "Will you protect your family, or will you tremble as your cowardess takes hold of you?" + Environment.NewLine +
                 "You arm yourself with what scraps your family has left and you head off to the first town Lancaster. Do you help the locals out of the kindness of your heart, or for power and money?" + Environment.NewLine;
@@ -130,30 +146,33 @@ namespace WrathOfTheRuined
             switch (player.progress)
             {
                 case 0:
-                    GameTutorial();
+                    GameIntro();
                     break;
                 case 1:
-                    Town(0);
+                    GameTutorial();
                     break;
                 case 2:
-                    Wilderness(1);
+                    Town(0);
                     break;
                 case 3:
-                    Town(1);
+                    Wilderness(1);
                     break;
                 case 4:
-                    Wilderness(5);
+                    Town(1);
                     break;
                 case 5:
-                    Town(2);
+                    Wilderness(5);
                     break;
                 case 6:
-                    Wilderness(8);
+                    Town(2);
                     break;
                 case 7:
-                    Town(3);
+                    Wilderness(8);
                     break;
                 case 8:
+                    Town(3);
+                    break;
+                case 9:
                     RoyalPalace();
                     break;
             }
@@ -1073,7 +1092,7 @@ namespace WrathOfTheRuined
                             {
                                 case 0:
                                     GameScreenMusic.StopMusic(GameScreenMusic.soundplayer);
-                                    GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("PizzaThyme");
+                                    GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.PizzaThyme);
                                     TbMain.Text = "Eventually you find the baker that posted the request. You step into the bakery, and smell all sorts of delicious smells from freshly baked bread, to the all-to-familiar scent of Venzorian Pizza. The baker greets you happily.";
                                     ActionBox.Items.Clear();
                                     ActionBox.Items.Add("Order One Venzorian Pizza (-5 gp)");
@@ -1189,7 +1208,7 @@ namespace WrathOfTheRuined
                                                                 BtnContinue.Click -= Quest4Click2;
                                                                 BtnContinue.Click += OutsideTownContinueClick;
                                                                 GameScreenMusic.StopMusic(GameScreenMusic.soundplayer);
-                                                                GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
+                                                                GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.Mellow);
                                                                 break;
                                                         }
                                                     }
@@ -1203,7 +1222,7 @@ namespace WrathOfTheRuined
                                                     BtnContinue.Click -= Quest4Click1;
                                                     BtnContinue.Click += InsideTownContinueClick;
                                                     GameScreenMusic.StopMusic(GameScreenMusic.soundplayer);
-                                                    GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
+                                                    GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.Mellow);
                                                 }
                                                 break;
                                         }
@@ -1836,21 +1855,21 @@ namespace WrathOfTheRuined
         {
             GameScreenMusic.StopMusic(GameScreenMusic.soundplayer);
             Music CombatMusic = new Music();
-            CombatMusic.soundplayer = CombatMusic.StartMusic("Battle");
+            CombatMusic.soundplayer = CombatMusic.StartMusic(Resources.Battle);
             Hide();
             CombatForm combatF = new CombatForm();
             int result = combatF.StartCombat(player, enemy);
             CombatMusic.StopMusic(CombatMusic.soundplayer);
             if (result == 0)
             {
-                GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("GameOver");
+                GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.GameOver);
                 MessageBox.Show("You have died, Game Over.");
                 Application.Restart();
             }
             else if (result == 1 || result == 2)
             {
                 Show();
-                GameScreenMusic.soundplayer = GameScreenMusic.StartMusic("Mellow");
+                GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.Mellow);
             }
             if(player.XP >= player.MaxXP)
             {
@@ -1976,14 +1995,12 @@ namespace WrathOfTheRuined
 
         public static void WriteXML(Player player, string SaveFileName)
         {
-            string pathString = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Wrath Of The Ruined";
-            System.IO.Directory.CreateDirectory(pathString);
             Type[] extratypes = new Type[1];
             extratypes[0] = typeof(Consumable);
             System.Xml.Serialization.XmlSerializer writer =
                 new System.Xml.Serialization.XmlSerializer(typeof(Player), extratypes);
 
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Wrath Of The Ruined//" + SaveFileName + ".xml";
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Wrath of the Ruined//" + SaveFileName + ".xml";
             System.IO.FileStream file = System.IO.File.Create(path);
 
             writer.Serialize(file, player);

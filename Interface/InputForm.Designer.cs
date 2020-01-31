@@ -28,81 +28,81 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InputForm));
             this.PlayerNameInputBox = new System.Windows.Forms.TextBox();
             this.InputLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.PlayerNameInputBox, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.InputLabel, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 0, 2);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(-2, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(281, 144);
-            this.tableLayoutPanel1.TabIndex = 0;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // PlayerNameInputBox
             // 
             this.PlayerNameInputBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.PlayerNameInputBox.Location = new System.Drawing.Point(37, 59);
+            this.PlayerNameInputBox.Location = new System.Drawing.Point(16, 28);
+            this.PlayerNameInputBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PlayerNameInputBox.Name = "PlayerNameInputBox";
-            this.PlayerNameInputBox.Size = new System.Drawing.Size(206, 26);
+            this.PlayerNameInputBox.Size = new System.Drawing.Size(188, 22);
             this.PlayerNameInputBox.TabIndex = 0;
-            this.PlayerNameInputBox.TextChanged += new System.EventHandler(this.PlayerNameInputBox_TextChanged);
             // 
             // InputLabel
             // 
             this.InputLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.InputLabel.AutoSize = true;
-            this.InputLabel.Location = new System.Drawing.Point(76, 14);
+            this.InputLabel.Location = new System.Drawing.Point(13, 9);
             this.InputLabel.Name = "InputLabel";
-            this.InputLabel.Size = new System.Drawing.Size(128, 20);
+            this.InputLabel.Size = new System.Drawing.Size(115, 17);
             this.InputLabel.TabIndex = 1;
             this.InputLabel.Text = "Enter your Name";
+            this.InputLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button1.Location = new System.Drawing.Point(90, 101);
+            this.button1.Location = new System.Drawing.Point(16, 54);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(101, 37);
+            this.button1.Size = new System.Drawing.Size(92, 27);
             this.button1.TabIndex = 2;
             this.button1.Text = "Continue";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button2
+            // 
+            this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button2.Location = new System.Drawing.Point(112, 54);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(92, 27);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "Cancel";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // InputForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(278, 144);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.ClientSize = new System.Drawing.Size(218, 90);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.InputLabel);
+            this.Controls.Add(this.PlayerNameInputBox);
+            this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "InputForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "InputForm";
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public System.Windows.Forms.TextBox PlayerNameInputBox;
         private System.Windows.Forms.Label InputLabel;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }

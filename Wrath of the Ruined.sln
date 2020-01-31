@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "GameCFinal\Interface.csproj", "{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine", "Engine\Engine.csproj", "{E9F065C2-1B11-4124-A967-9D2842C292A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WrathOfTheRuined", "Interface\WrathOfTheRuined.csproj", "{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "WrathOfTheRuinedSetup\WrathOfTheRuinedSetup.vdproj", "{13B9F99D-0148-477C-B62A-561069829428}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +15,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E9F065C2-1B11-4124-A967-9D2842C292A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E9F065C2-1B11-4124-A967-9D2842C292A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9F065C2-1B11-4124-A967-9D2842C292A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9F065C2-1B11-4124-A967-9D2842C292A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD78CA60-9734-4422-832B-4A0F1AD9DCCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13B9F99D-0148-477C-B62A-561069829428}.Debug|Any CPU.ActiveCfg = Debug
+		{13B9F99D-0148-477C-B62A-561069829428}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

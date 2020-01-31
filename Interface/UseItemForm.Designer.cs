@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UseItemForm));
             this.listBoxPlayerInv = new System.Windows.Forms.ListBox();
             this.buttonUseItem = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
@@ -36,20 +37,23 @@
             // listBoxPlayerInv
             // 
             this.listBoxPlayerInv.FormattingEnabled = true;
+            this.listBoxPlayerInv.ItemHeight = 16;
             this.listBoxPlayerInv.Items.AddRange(new object[] {
             "Item1 - Price",
             "Item2 - Price",
             "Item3 - Price"});
-            this.listBoxPlayerInv.Location = new System.Drawing.Point(12, 12);
+            this.listBoxPlayerInv.Location = new System.Drawing.Point(16, 15);
+            this.listBoxPlayerInv.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listBoxPlayerInv.Name = "listBoxPlayerInv";
-            this.listBoxPlayerInv.Size = new System.Drawing.Size(214, 212);
+            this.listBoxPlayerInv.Size = new System.Drawing.Size(284, 260);
             this.listBoxPlayerInv.TabIndex = 9;
             // 
             // buttonUseItem
             // 
-            this.buttonUseItem.Location = new System.Drawing.Point(12, 230);
+            this.buttonUseItem.Location = new System.Drawing.Point(16, 283);
+            this.buttonUseItem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonUseItem.Name = "buttonUseItem";
-            this.buttonUseItem.Size = new System.Drawing.Size(214, 23);
+            this.buttonUseItem.Size = new System.Drawing.Size(285, 28);
             this.buttonUseItem.TabIndex = 11;
             this.buttonUseItem.Text = "Use Item";
             this.buttonUseItem.UseVisualStyleBackColor = true;
@@ -57,9 +61,10 @@
             // 
             // buttonExit
             // 
-            this.buttonExit.Location = new System.Drawing.Point(12, 259);
+            this.buttonExit.Location = new System.Drawing.Point(16, 319);
+            this.buttonExit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(214, 23);
+            this.buttonExit.Size = new System.Drawing.Size(285, 28);
             this.buttonExit.TabIndex = 12;
             this.buttonExit.Text = "Go Back";
             this.buttonExit.UseVisualStyleBackColor = true;
@@ -67,13 +72,15 @@
             // 
             // UseItemForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(239, 291);
+            this.ClientSize = new System.Drawing.Size(319, 358);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonUseItem);
             this.Controls.Add(this.listBoxPlayerInv);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "UseItemForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "UseItemForm";

@@ -18,19 +18,14 @@ namespace WrathOfTheRuined
             InputLabel.Text = inputlabeltext;
         }
 
-        public void PlayerNameInputBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-
+            DialogResult = DialogResult.Cancel;
         }
     }
 }
