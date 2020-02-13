@@ -77,7 +77,7 @@
             this.TbMain.Name = "TbMain";
             this.TbMain.ReadOnly = true;
             this.TbMain.Size = new System.Drawing.Size(324, 333);
-            this.TbMain.TabIndex = 4;
+            this.TbMain.TabIndex = 22;
             this.TbMain.Text = "";
             // 
             // ActionBox
@@ -88,7 +88,7 @@
             this.ActionBox.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.ActionBox.Name = "ActionBox";
             this.ActionBox.Size = new System.Drawing.Size(252, 24);
-            this.ActionBox.TabIndex = 6;
+            this.ActionBox.TabIndex = 2;
             // 
             // label1
             // 
@@ -105,7 +105,7 @@
             this.BtnContinue.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.BtnContinue.Name = "BtnContinue";
             this.BtnContinue.Size = new System.Drawing.Size(127, 28);
-            this.BtnContinue.TabIndex = 8;
+            this.BtnContinue.TabIndex = 1;
             this.BtnContinue.Text = "Continue";
             this.BtnContinue.UseVisualStyleBackColor = true;
             this.BtnContinue.Click += new System.EventHandler(this.OutsideTownContinueClick);
@@ -155,10 +155,10 @@
             this.listBoxPlayerInventory.FormattingEnabled = true;
             this.listBoxPlayerInventory.ItemHeight = 16;
             this.listBoxPlayerInventory.Location = new System.Drawing.Point(24, 191);
-            this.listBoxPlayerInventory.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listBoxPlayerInventory.Margin = new System.Windows.Forms.Padding(4);
             this.listBoxPlayerInventory.Name = "listBoxPlayerInventory";
             this.listBoxPlayerInventory.Size = new System.Drawing.Size(260, 324);
-            this.listBoxPlayerInventory.TabIndex = 19;
+            this.listBoxPlayerInventory.TabIndex = 20;
             this.listBoxPlayerInventory.DataSourceChanged += new System.EventHandler(this.listBoxPlayerInventory_DataSourceChanged);
             // 
             // equipButton
@@ -167,7 +167,7 @@
             this.equipButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.equipButton.Name = "equipButton";
             this.equipButton.Size = new System.Drawing.Size(127, 28);
-            this.equipButton.TabIndex = 20;
+            this.equipButton.TabIndex = 3;
             this.equipButton.Text = "Equip Item";
             this.equipButton.UseVisualStyleBackColor = true;
             this.equipButton.Click += new System.EventHandler(this.equipButton_Click);
@@ -245,7 +245,7 @@
             this.BtnSaveGame.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.BtnSaveGame.Name = "BtnSaveGame";
             this.BtnSaveGame.Size = new System.Drawing.Size(127, 28);
-            this.BtnSaveGame.TabIndex = 28;
+            this.BtnSaveGame.TabIndex = 4;
             this.BtnSaveGame.Text = "Save Game";
             this.BtnSaveGame.UseVisualStyleBackColor = true;
             this.BtnSaveGame.Click += new System.EventHandler(this.BtnSaveGame_Click);
@@ -253,11 +253,11 @@
             // progressBarXP
             // 
             this.progressBarXP.Location = new System.Drawing.Point(147, 22);
-            this.progressBarXP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressBarXP.Margin = new System.Windows.Forms.Padding(4);
             this.progressBarXP.Name = "progressBarXP";
             this.progressBarXP.Size = new System.Drawing.Size(133, 16);
             this.progressBarXP.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBarXP.TabIndex = 29;
+            this.progressBarXP.TabIndex = 21;
             // 
             // GameScreen
             // 

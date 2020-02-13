@@ -41,15 +41,15 @@
             this.lblPlayerName = new System.Windows.Forms.Label();
             this.lblEnemyName = new System.Windows.Forms.Label();
             this.lblPlayerStance = new System.Windows.Forms.Label();
-            this.btnPlayer = new System.Windows.Forms.Button();
             this.lblEnemyStance = new System.Windows.Forms.Label();
             this.stanceLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblPlayerStaff = new System.Windows.Forms.Label();
             this.lblStaff = new System.Windows.Forms.Label();
             this.lblEnemyStaff = new System.Windows.Forms.Label();
-            this.txtbx = new System.Windows.Forms.TextBox();
             this.CbPlayerCombat = new System.Windows.Forms.ComboBox();
+            this.actionButton = new System.Windows.Forms.Button();
+            this.lblActions = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -183,11 +183,11 @@
             // 
             this.lblPlayerName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblPlayerName.AutoSize = true;
-            this.lblPlayerName.Font = new System.Drawing.Font("Castellar", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPlayerName.Location = new System.Drawing.Point(29, 8);
+            this.lblPlayerName.Font = new System.Drawing.Font("Copperplate Gothic Bold", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlayerName.Location = new System.Drawing.Point(40, 12);
             this.lblPlayerName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlayerName.Name = "lblPlayerName";
-            this.lblPlayerName.Size = new System.Drawing.Size(86, 33);
+            this.lblPlayerName.Size = new System.Drawing.Size(63, 26);
             this.lblPlayerName.TabIndex = 12;
             this.lblPlayerName.Text = "You";
             // 
@@ -195,11 +195,11 @@
             // 
             this.lblEnemyName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblEnemyName.AutoSize = true;
-            this.lblEnemyName.Font = new System.Drawing.Font("Castellar", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEnemyName.Location = new System.Drawing.Point(293, 0);
+            this.lblEnemyName.Font = new System.Drawing.Font("Copperplate Gothic Bold", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEnemyName.Location = new System.Drawing.Point(299, 0);
             this.lblEnemyName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEnemyName.Name = "lblEnemyName";
-            this.lblEnemyName.Size = new System.Drawing.Size(135, 50);
+            this.lblEnemyName.Size = new System.Drawing.Size(124, 50);
             this.lblEnemyName.TabIndex = 13;
             this.lblEnemyName.Text = "This is a really long name";
             // 
@@ -213,18 +213,6 @@
             this.lblPlayerStance.Size = new System.Drawing.Size(106, 17);
             this.lblPlayerStance.TabIndex = 14;
             this.lblPlayerStance.Text = "lblPlayerStance";
-            // 
-            // btnPlayer
-            // 
-            this.btnPlayer.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnPlayer.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnPlayer.Location = new System.Drawing.Point(166, 218);
-            this.btnPlayer.Margin = new System.Windows.Forms.Padding(2);
-            this.btnPlayer.Name = "btnPlayer";
-            this.btnPlayer.Size = new System.Drawing.Size(100, 29);
-            this.btnPlayer.TabIndex = 11;
-            this.btnPlayer.Text = "Select Action";
-            this.btnPlayer.UseVisualStyleBackColor = true;
             // 
             // lblEnemyStance
             // 
@@ -271,9 +259,9 @@
             this.tableLayoutPanel1.Controls.Add(this.lblPlayerStaff, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.lblStaff, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.lblEnemyStaff, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.txtbx, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.CbPlayerCombat, 1, 8);
-            this.tableLayoutPanel1.Controls.Add(this.btnPlayer, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.actionButton, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.lblActions, 0, 6);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(11, 11);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -332,37 +320,53 @@
             this.lblEnemyStaff.Text = "lblEnemyStaff";
             this.lblEnemyStaff.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // txtbx
-            // 
-            this.txtbx.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtbx.BackColor = System.Drawing.SystemColors.Control;
-            this.txtbx.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tableLayoutPanel1.SetColumnSpan(this.txtbx, 3);
-            this.txtbx.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtbx.Location = new System.Drawing.Point(3, 187);
-            this.txtbx.Margin = new System.Windows.Forms.Padding(0);
-            this.txtbx.Multiline = true;
-            this.txtbx.Name = "txtbx";
-            this.txtbx.Size = new System.Drawing.Size(427, 20);
-            this.txtbx.TabIndex = 20;
-            this.txtbx.Text = "txtbx";
-            this.txtbx.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // CbPlayerCombat
             // 
             this.CbPlayerCombat.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CbPlayerCombat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CbPlayerCombat.FormattingEnabled = true;
+            this.CbPlayerCombat.Items.AddRange(new object[] {
+            "1. Attack",
+            "2. Change Stance",
+            "3. Magic",
+            "4. Use Item",
+            "5. Run Away"});
             this.CbPlayerCombat.Location = new System.Drawing.Point(146, 255);
             this.CbPlayerCombat.Margin = new System.Windows.Forms.Padding(2);
             this.CbPlayerCombat.Name = "CbPlayerCombat";
             this.CbPlayerCombat.Size = new System.Drawing.Size(140, 24);
-            this.CbPlayerCombat.TabIndex = 9;
+            this.CbPlayerCombat.TabIndex = 2;
+            // 
+            // actionButton
+            // 
+            this.actionButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.actionButton.Location = new System.Drawing.Point(166, 218);
+            this.actionButton.Margin = new System.Windows.Forms.Padding(2);
+            this.actionButton.Name = "actionButton";
+            this.actionButton.Size = new System.Drawing.Size(100, 29);
+            this.actionButton.TabIndex = 1;
+            this.actionButton.Text = "Select Action";
+            this.actionButton.UseVisualStyleBackColor = true;
+            this.actionButton.Click += new System.EventHandler(this.actionButton_Click);
+            // 
+            // lblActions
+            // 
+            this.lblActions.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblActions.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.lblActions, 3);
+            this.lblActions.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblActions.Location = new System.Drawing.Point(171, 185);
+            this.lblActions.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblActions.Name = "lblActions";
+            this.lblActions.Size = new System.Drawing.Size(91, 24);
+            this.lblActions.TabIndex = 20;
+            this.lblActions.Text = "lblActions";
+            this.lblActions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // CombatForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(453, 305);
+            this.ClientSize = new System.Drawing.Size(456, 310);
             this.ControlBox = false;
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -390,14 +394,14 @@
         public System.Windows.Forms.Label lblPlayerName;
         private System.Windows.Forms.Label lblEnemyName;
         public System.Windows.Forms.Label lblPlayerStance;
-        public System.Windows.Forms.Button btnPlayer;
         public System.Windows.Forms.Label lblEnemyStance;
         private System.Windows.Forms.Label stanceLabel;
         public System.Windows.Forms.Label lblPlayerStaff;
         public System.Windows.Forms.Label lblStaff;
         public System.Windows.Forms.Label lblEnemyStaff;
-        public System.Windows.Forms.TextBox txtbx;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public System.Windows.Forms.ComboBox CbPlayerCombat;
+        public System.Windows.Forms.Button actionButton;
+        public System.Windows.Forms.Label lblActions;
     }
 }

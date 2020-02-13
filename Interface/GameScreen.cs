@@ -152,27 +152,36 @@ namespace WrathOfTheRuined
                     GameTutorial();
                     break;
                 case 2:
-                    Town(0);
+                    Town(0); //Lancaster
                     break;
                 case 3:
                     Wilderness(1);
                     break;
                 case 4:
-                    Town(1);
+                    Town(1); //Doveport
                     break;
                 case 5:
-                    Wilderness(5);
+                    Wilderness(6);
                     break;
                 case 6:
-                    Town(2);
-                    break;
-                case 7:
                     Wilderness(8);
                     break;
+                case 7:
+                    Town(2); //Venzor
+                    break;
                 case 8:
-                    Town(3);
+                    Wilderness(12);
                     break;
                 case 9:
+                    Wilderness(14);
+                    break;
+                case 10:
+                    Wilderness(15);
+                    break;
+                case 11:
+                    Town(3); //Fallholt
+                    break;
+                case 12:
                     RoyalPalace();
                     break;
             }
@@ -347,8 +356,8 @@ namespace WrathOfTheRuined
                             ActionBox.Items.Add("Visit the blacksmith");
                             ActionBox.Items.Add("Visit the apothecary");
                             ActionBox.Items.Add("Slaughter everyone");
-                            ActionBox.Items.Add("Leave for next town");
-                            ActionBox.Items.Add("Leave for previous town");
+                            ActionBox.Items.Add("Leave for " + Town.NextTownName);
+                            ActionBox.Items.Add("Leave for " + Town.PreviousTownName);
                             break;
                     }
                 }
@@ -360,8 +369,8 @@ namespace WrathOfTheRuined
                     lblLoc.Text = Town.Name;
                     TbMain.Text = "You are standing in the remains of " + Town.Name + ".";
                     ActionBox.Items.Clear();
-                    ActionBox.Items.Add("Leave for next town");
-                    ActionBox.Items.Add("Leave for previous town");
+                    ActionBox.Items.Add("Leave for " + Town.NextTownName);
+                    ActionBox.Items.Add("Leave for " + Town.PreviousTownName);
                     ActionBox.SelectedIndex = -1;
                     BtnContinue.Click -= InsideTownContinueClick;
                     BtnContinue.Click += InsideTownClick2;
@@ -1170,7 +1179,7 @@ namespace WrathOfTheRuined
                                                                                     ActionBox.SelectedIndex = -1;
                                                                                     player.questComplete[4] = true;
                                                                                     player.GBP -= 10;
-                                                                                    player.progress -= 2;
+                                                                                    player.progress -= 4;
                                                                                     BtnContinue.Click -= Quest4Click4;
                                                                                     BtnContinue.Click += OutsideTownContinueClick;
                                                                                     break;
@@ -1181,7 +1190,7 @@ namespace WrathOfTheRuined
                                                                                     player.questComplete[4] = true;
                                                                                     player.GBP += 15;
                                                                                     player.Gold += 30;
-                                                                                    player.progress -= 2;
+                                                                                    player.progress -= 4;
                                                                                     lblPlayerGold.Text = player.Gold.ToString();
                                                                                     BtnContinue.Click -= Quest4Click4;
                                                                                     BtnContinue.Click += OutsideTownContinueClick;
@@ -1654,7 +1663,8 @@ namespace WrathOfTheRuined
                                             TbMain.Text = "After a long and arduous battle, De Santo lays dead on the ground. Numerous other bodies lay dead, including one of your teammates. However, the menace that has been Armando has finally been silenced. The team takes everything they can from the barn, which was about 500 gold, and splits it evenly between the four of you. After telling the guards that Armando has been slain, the guards also give your team the reward, which is split up evenly." + Environment.NewLine + "+750 Gold, +100 GBP" + Environment.NewLine + "Quest Complete";
                                             ActionBox.Items.Clear();
                                             ActionBox.SelectedIndex = -1;
-                                            player.progress = 1;
+                                            player.progress = 2
+                                                ;
                                             player.questComplete[7] = true;
                                             player.Gold += 750;
                                             player.GBP += 100;
@@ -1838,35 +1848,36 @@ namespace WrathOfTheRuined
             int result = Combat(player, enemy);
             if (result == 1)
             {
-                TbMain.Text = "You traversed through the wilderness, defeated a foe, and are now in sight of a town.";
+                TbMain.Text = "You traversed through some wilderness and defeated a foe.";
+                if (player.Direction)  //true = fowards, false = backwards
+                    player.progress++;
+                else
+                    player.progress--;
             }
             else if ( result == 2 )
-                TbMain.Text = "You ran away from the enemy, and manage to make it to the next town.";
-            else
-                TbMain.Text = "The foe encountered in the wilderness has defeated you but spared your life. You hang your head low whilst walking towards the nearest town.";
-
-            if (player.Direction)  //true = fowards, false = backwards
-                player.progress++;
-            else
-                player.progress--;
+            {
+                TbMain.Text = "You ran away from the enemy and towards the safety of the previous town.";
+                if (player.Direction)  //true = fowards, false = backwards, but now reverse progress to go back to the town you were walking from
+                    player.progress--;
+                else
+                    player.progress++;
+            }
         }
 
         public int Combat(Player player, Enemy enemy)
         {
             GameScreenMusic.StopMusic(GameScreenMusic.soundplayer);
-            Music CombatMusic = new Music();
-            CombatMusic.soundplayer = CombatMusic.StartMusic(Resources.Battle);
             Hide();
-            CombatForm combatF = new CombatForm();
-            int result = combatF.StartCombat(player, enemy);
-            CombatMusic.StopMusic(CombatMusic.soundplayer);
-            if (result == 0)
+            CombatForm combatF = new CombatForm(player, enemy);
+            combatF.ShowDialog();
+            int combatResult = combatF.result;
+            if (combatResult == 0)
             {
                 GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.GameOver);
                 MessageBox.Show("You have died, Game Over.");
                 Application.Restart();
             }
-            else if (result == 1 || result == 2)
+            else if (combatResult == 1 || combatResult == 2)
             {
                 Show();
                 GameScreenMusic.soundplayer = GameScreenMusic.StartMusic(Resources.Mellow);
@@ -1877,7 +1888,8 @@ namespace WrathOfTheRuined
             }
             progressBarXP.Maximum = player.MaxXP;
             progressBarXP.Value = player.XP;
-            return result;
+            combatF.Dispose();
+            return combatResult;
         }
 
         public void Store(Player player, int townID, int storeType)
